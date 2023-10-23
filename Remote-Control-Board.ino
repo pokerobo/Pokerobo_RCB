@@ -2,8 +2,10 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
+#ifndef __RUNNING_LOG_ENABLED__
 #define __RUNNING_LOG_ENABLED__       1
-#define __RF24_BINARY_ENCODING__      1
+#endif
+
 #define __FUNDUINO_JOYSTICK_SHIELD__  0
 
 #if __FUNDUINO_JOYSTICK_SHIELD__
@@ -80,51 +82,59 @@ void loop() {
 
 #if __RUNNING_LOG_ENABLED__
     char log[32] = "";
-    sprintf(log, "M1: %d,%d,%d", pressed, x, y);
-    Serial.println(log);
+    sprintf(log, "%d,%d,%d", pressed, x, y);
+    Serial.print("M1"), Serial.println(log);
 #endif
 
   x = map(x, 0, JOYSTICK_MAX_X, 0, 1024);
   y = map(y, 0, JOYSTICK_MAX_Y, 0, 1024);
 
 #if __RUNNING_LOG_ENABLED__
-    sprintf(log, "M2: %d,%d,%d", pressed, x, y);
-    Serial.println(log);
+    sprintf(log, "%d,%d,%d", pressed, x, y);
+    Serial.print("M2"), Serial.println(log);
 #endif
 
   if (x < MIN_BOUND_X || x > MAX_BOUND_X || y < MIN_BOUND_Y || y > MAX_BOUND_Y) {
-#if __RF24_BINARY_ENCODING__
     uint8_t msg[12] = {};
-    msg[0] = 'J';
-    msg[1] = 'S';
-    encodeInteger(&msg[2], pressed);
-    encodeInteger(&msg[4], x);
-    encodeInteger(&msg[6], y);
-    encodeInteger(&msg[8], count);
-#else
-    char msg[32] = "";
-    sprintf(msg, "JT,%d,%d,%d,%d", pressed, x, y, count);
+    encodeMessage(msg, "JS", pressed, x, y, count);
+    bool ok = radio.write(msg, sizeof(msg));
+    if (ok) {
 #if __RUNNING_LOG_ENABLED__
-    Serial.println(msg);
+      Serial.print("->"), Serial.println("ACK");
 #endif
+    } else {
+#if __RUNNING_LOG_ENABLED__
+      Serial.print("->"), Serial.println("FAIL");
 #endif
-    radio.write(msg, sizeof(msg));
+    }
     delay(5);
   } else {
     delay(3);
   }
 }
 
-void encodeInteger(uint8_t* store, uint16_t value) {
-  store[0] = value & 0xff;
-  store[1] = (value >> 8) & 0xff;
+uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t flags) {
+  buf[0] = cmd[0];
+  buf[1] = cmd[1];
+  encodeInteger(&buf[2], pressed);
+  encodeInteger(&buf[4], x);
+  encodeInteger(&buf[6], y);
+  encodeInteger(&buf[8], flags);
+  return buf;
 }
 
-void encodeInteger(uint8_t* store, uint32_t value) {
+uint8_t* encodeInteger(uint8_t* store, uint16_t value) {
+  store[0] = value & 0xff;
+  store[1] = (value >> 8) & 0xff;
+  return store;
+}
+
+uint8_t* encodeInteger(uint8_t* store, uint32_t value) {
   store[0] = value & 0xff;
   store[1] = (value >> 8) & 0xff;
   store[1] = (value >> 16) & 0xff;
   store[1] = (value >> 24) & 0xff;
+  return store;
 }
 
 uint16_t readButtonStates() {
