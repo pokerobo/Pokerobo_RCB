@@ -1,7 +1,3 @@
-#include <SPI.h>
-#include <nRF24L01.h>
-#include <RF24.h>
-
 #ifndef __RUNNING_LOG_ENABLED__
 #define __RUNNING_LOG_ENABLED__       1
 #endif
@@ -37,8 +33,7 @@
 #define PIN_SELECT_BUTTON 7 // E
 #define PIN_ANALOG_BUTTON 8 // JOYSTICK
 
-#define PIN_CE  9
-#define PIN_CSN 10
+#include "RF24_Tranceiver.h"
 
 int x_axis = A0;
 int y_axis = A1;
@@ -53,12 +48,10 @@ int buttons[] = {
   PIN_ANALOG_BUTTON
 };
 
-const uint64_t address = 0xE8E8F0F0E1LL;
-
 uint32_t count = 0;
 
-RF24 radio(PIN_CE, PIN_CSN);
-RF24* transmitter = &radio;
+RF24Tranceiver transmitterInstance;
+RF24Tranceiver* transmitter = &transmitterInstance;
 
 void setup() {
   for(int i; i <7 ; i++) {
@@ -69,8 +62,6 @@ void setup() {
   Serial.begin(57600);
 
   transmitter->begin();
-  transmitter->openWritingPipe(address);
-  transmitter->stopListening();
 }
 
 void loop() {
