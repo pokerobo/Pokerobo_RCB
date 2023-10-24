@@ -1,8 +1,5 @@
 #include "Joystick_Handler.h"
 
-int x_axis = A0;
-int y_axis = A1;
-
 int buttons[] = {
   PIN_UP_BUTTON,
   PIN_RIGHT_BUTTON,
@@ -13,8 +10,7 @@ int buttons[] = {
   PIN_ANALOG_BUTTON
 };
 
-uint32_t count = 0;
-
+uint16_t readButtonStates();
 uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t flags);
 
 JoystickHandler::JoystickHandler(MessageSender* messageSender) {
@@ -29,12 +25,12 @@ int JoystickHandler::begin() {
 }
 
 int JoystickHandler::loop() {
-  count += 1;
+  _count += 1;
 
   uint16_t pressed = readButtonStates();
 
-  uint16_t x = analogRead(x_axis);
-  uint16_t y = analogRead(y_axis);
+  uint16_t x = analogRead(PIN_JOYSTICK_X_AXIS);
+  uint16_t y = analogRead(PIN_JOYSTICK_Y_AXIS);
 
 #if __RUNNING_LOG_ENABLED__
     char log[32] = "";
@@ -52,7 +48,7 @@ int JoystickHandler::loop() {
 
   if (!(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || pressed) {
     uint8_t msg[12] = {};
-    encodeMessage(msg, "JS", pressed, x, y, count);
+    encodeMessage(msg, "JS", pressed, x, y, _count);
     if (_messageSender != NULL) {
       bool ok = _messageSender->write(msg, sizeof(msg));
       if (ok) {

@@ -16,10 +16,29 @@
 #define JOYSTICK_MAX_Y   950
 #endif
 
+#ifndef MIN_BOUND_X
 #define MIN_BOUND_X      512 - 64
+#endif//MIN_BOUND_X
+
+#ifndef MAX_BOUND_X
 #define MAX_BOUND_X      512 + 64
+#endif//MAX_BOUND_X
+
+#ifndef MIN_BOUND_Y
 #define MIN_BOUND_Y      512 - 64
+#endif//MIN_BOUND_Y
+
+#ifndef MAX_BOUND_Y
 #define MAX_BOUND_Y      512 + 64
+#endif//MAX_BOUND_Y
+
+#ifndef PIN_JOYSTICK_X_AXIS
+#define PIN_JOYSTICK_X_AXIS   A0
+#endif//PIN_JOYSTICK_X_AXIS
+
+#ifndef PIN_JOYSTICK_Y_AXIS
+#define PIN_JOYSTICK_Y_AXIS   A1
+#endif//PIN_JOYSTICK_Y_AXIS
 
 #define BIT_UP_BUTTON     1 << 0
 #define BIT_RIGHT_BUTTON  1 << 1
@@ -37,14 +56,13 @@
 #define PIN_SELECT_BUTTON 7 // E
 #define PIN_ANALOG_BUTTON 8 // JOYSTICK
 
-uint16_t readButtonStates();
-
 class JoystickHandler {
   public:
     JoystickHandler(MessageSender* sender);
     int begin();
     int loop();
   private:
+    uint32_t _count = 0;
     MessageSender* _messageSender;
 };
 
