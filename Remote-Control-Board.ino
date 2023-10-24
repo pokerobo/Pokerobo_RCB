@@ -6,11 +6,11 @@
 #define __RUNNING_LOG_ENABLED__       1
 #endif
 
-#define __FUNDUINO_JOYSTICK_SHIELD__  0
+#define __FUNDUINO_JOYSTICK_SHIELD__  1
 
 #if __FUNDUINO_JOYSTICK_SHIELD__
-#define JOYSTICK_MAX_X   750
-#define JOYSTICK_MAX_Y   750
+#define JOYSTICK_MAX_X   723
+#define JOYSTICK_MAX_Y   723
 #else
 #define JOYSTICK_MAX_X   950
 #define JOYSTICK_MAX_Y   950
@@ -37,8 +37,8 @@
 #define PIN_SELECT_BUTTON 7 // E
 #define PIN_ANALOG_BUTTON 8 // JOYSTICK
 
-#define CE_PIN  9
-#define CSN_PIN 10
+#define PIN_CE  9
+#define PIN_CSN 10
 
 int x_axis = A0;
 int y_axis = A1;
@@ -57,7 +57,7 @@ const uint64_t address = 0xE8E8F0F0E1LL;
 
 uint32_t count = 0;
 
-RF24 radio(CE_PIN,CSN_PIN);
+RF24 radio(PIN_CE, PIN_CSN);
 RF24* transmitter = &radio;
 
 void setup() {
@@ -95,7 +95,7 @@ void loop() {
     Serial.print("M2"), Serial.print(": "), Serial.println(log);
 #endif
 
-  if (x < MIN_BOUND_X || x > MAX_BOUND_X || y < MIN_BOUND_Y || y > MAX_BOUND_Y) {
+  if (!(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || pressed) {
     uint8_t msg[12] = {};
     encodeMessage(msg, "JS", pressed, x, y, count);
     bool ok = transmitter->write(msg, sizeof(msg));
