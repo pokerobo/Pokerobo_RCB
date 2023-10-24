@@ -43,7 +43,7 @@ int JoystickHandler::loop() {
     Serial.print("M2"), Serial.print(": "), Serial.println(log);
 #endif
 
-  if (!(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || pressed) {
+  if (isChanged(x, y, pressed)) {
     uint8_t msg[12] = {};
     encodeMessage(msg, "JS", pressed, x, y, _count);
     if (_messageSender != NULL) {
@@ -64,9 +64,13 @@ int JoystickHandler::loop() {
   }
 }
 
+bool JoystickHandler::isChanged(int16_t x, int16_t y, uint32_t buttons) {
+  return !(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || buttons;
+}
+
 #if !__JOYSTICK_READ_BUTTONS_DEBUG__
 
-uint16_t JoystickHandler::readButtonStatesx() {
+uint16_t JoystickHandler::readButtonStates() {
   uint16_t buttonStates = 0;
 
   for (int i = 0; i < 7; i++) {
