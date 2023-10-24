@@ -60,17 +60,22 @@
 #define PIN_SELECT_BUTTON 7 // E
 #define PIN_ANALOG_BUTTON 8 // JOYSTICK
 
+#define MESSAGE_SENDER_MAX  7
+
 class JoystickHandler {
   public:
-    JoystickHandler(MessageSender* sender);
+    JoystickHandler(MessageSender* messageSender=NULL);
     int begin();
     int loop();
   protected:
+    uint8_t addMessageSender(MessageSender* messageSender);
     uint16_t readButtonStates();
     bool isChanged(int16_t x, int16_t y, uint32_t buttons);
+    byte invokeMessageSender(uint8_t index, MessageSender* messageSender, const void* buf, uint8_t len);
   private:
     uint32_t _count = 0;
-    MessageSender* _messageSender;
+    MessageSender* _messageSenders[MESSAGE_SENDER_MAX] = {};
+    uint8_t _messageSendersTotal = 0;
 };
 
 #endif//__JOYSTICK_HANDLER_H__

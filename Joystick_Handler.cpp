@@ -11,13 +11,24 @@ int buttons[] = {
 };
 
 JoystickHandler::JoystickHandler(MessageSender* messageSender) {
-  _messageSender = messageSender;
+  addMessageSender(messageSender);
+}
+
+uint8_t JoystickHandler::addMessageSender(MessageSender* messageSender) {
+  if (messageSender == NULL) {
+    return false;
+  }
+  if (_messageSendersTotal > MESSAGE_SENDER_MAX) {
+    return false;
+  }
+  _messageSenders[_messageSendersTotal++] = messageSender;
+  return true;
 }
 
 int JoystickHandler::begin() {
   for(int i; i <7 ; i++) {
     pinMode(buttons[i], INPUT);
-    digitalWrite(buttons[i], HIGH);  
+    digitalWrite(buttons[i], HIGH);
   }
 }
 
@@ -46,16 +57,15 @@ int JoystickHandler::loop() {
   if (isChanged(x, y, pressed)) {
     uint8_t msg[12] = {};
     encodeMessage(msg, "JS", pressed, x, y, _count);
-    if (_messageSender != NULL) {
-      bool ok = _messageSender->write(msg, sizeof(msg));
-      if (ok) {
-#if __RUNNING_LOG_ENABLED__
-        Serial.print("->"), Serial.println("OK");
-#endif
+    int8_t countNulls = 0, sumFails = 0, sumOk = 0;
+    for(int i=0; i<_messageSendersTotal; i++) {
+      int8_t status = invokeMessageSender(i+1, _messageSenders[i], msg, sizeof(msg));
+      if (status > 0) {
+        sumOk += status;
+      } else if (status < 0) {
+        sumFails += status;
       } else {
-#if __RUNNING_LOG_ENABLED__
-        Serial.print("->"), Serial.println("FAIL");
-#endif
+        countNulls++;
       }
     }
     return 2;
@@ -66,6 +76,28 @@ int JoystickHandler::loop() {
 
 bool JoystickHandler::isChanged(int16_t x, int16_t y, uint32_t buttons) {
   return !(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || buttons;
+}
+
+byte JoystickHandler::invokeMessageSender(uint8_t index, MessageSender* messageSender, const void* buf, uint8_t len) {
+  if (messageSender != NULL) {
+    uint8_t code = 1 << index;
+    bool ok = messageSender->write(buf, len);
+#if __RUNNING_LOG_ENABLED__
+      Serial.print("#"), Serial.print(_count), Serial.print("->"), Serial.print(index), Serial.print(": ");
+#endif
+    if (ok) {
+#if __RUNNING_LOG_ENABLED__
+      Serial.println("v");
+#endif
+      return code;
+    } else {
+#if __RUNNING_LOG_ENABLED__
+      Serial.println("x");
+#endif
+      return -code;
+    }
+  }
+  return 0;
 }
 
 #if !__JOYSTICK_READ_BUTTONS_DEBUG__
