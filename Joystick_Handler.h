@@ -66,12 +66,12 @@ class JoystickHandler {
   public:
     JoystickHandler(MessageSender* messageSender=NULL);
     int begin();
-    int loop();
+    int check();
+    bool add(MessageSender* messageSender);
   protected:
-    uint8_t addMessageSender(MessageSender* messageSender);
     uint16_t readButtonStates();
     bool isChanged(int16_t x, int16_t y, uint32_t buttons);
-    byte invokeMessageSender(uint8_t index, MessageSender* messageSender, const void* buf, uint8_t len);
+    byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len);
   private:
     uint32_t _count = 0;
     MessageSender* _messageSenders[MESSAGE_SENDER_MAX] = {};

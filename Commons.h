@@ -8,7 +8,11 @@
 #include <Arduino.h>
 
 #ifndef __RUNNING_LOG_ENABLED__
-#define __RUNNING_LOG_ENABLED__       1
+#define __RUNNING_LOG_ENABLED__         1
+#endif
+
+#ifndef __STRICT_MODE__
+#define __STRICT_MODE__                 0
 #endif
 
 #endif

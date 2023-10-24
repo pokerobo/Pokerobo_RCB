@@ -11,16 +11,23 @@ int buttons[] = {
 };
 
 JoystickHandler::JoystickHandler(MessageSender* messageSender) {
-  addMessageSender(messageSender);
+  add(messageSender);
 }
 
-uint8_t JoystickHandler::addMessageSender(MessageSender* messageSender) {
+bool JoystickHandler::add(MessageSender* messageSender) {
   if (messageSender == NULL) {
     return false;
   }
   if (_messageSendersTotal > MESSAGE_SENDER_MAX) {
     return false;
   }
+#if __STRICT_MODE__
+  for(int i=0; i<_messageSendersTotal; i++) {
+    if (_messageSenders[i] == messageSender) {
+      return false;
+    }
+  }
+#endif
   _messageSenders[_messageSendersTotal++] = messageSender;
   return true;
 }
@@ -32,7 +39,7 @@ int JoystickHandler::begin() {
   }
 }
 
-int JoystickHandler::loop() {
+int JoystickHandler::check() {
   _count += 1;
 
   uint16_t pressed = readButtonStates();
@@ -59,7 +66,7 @@ int JoystickHandler::loop() {
     encodeMessage(msg, "JS", pressed, x, y, _count);
     int8_t countNulls = 0, sumFails = 0, sumOk = 0;
     for(int i=0; i<_messageSendersTotal; i++) {
-      int8_t status = invokeMessageSender(i+1, _messageSenders[i], msg, sizeof(msg));
+      int8_t status = invoke(_messageSenders[i], i+1, msg, sizeof(msg));
       if (status > 0) {
         sumOk += status;
       } else if (status < 0) {
@@ -78,7 +85,7 @@ bool JoystickHandler::isChanged(int16_t x, int16_t y, uint32_t buttons) {
   return !(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || buttons;
 }
 
-byte JoystickHandler::invokeMessageSender(uint8_t index, MessageSender* messageSender, const void* buf, uint8_t len) {
+byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len) {
   if (messageSender != NULL) {
     uint8_t code = 1 << index;
     bool ok = messageSender->write(buf, len);
