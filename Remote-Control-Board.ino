@@ -58,6 +58,7 @@ const uint64_t address = 0xE8E8F0F0E1LL;
 uint32_t count = 0;
 
 RF24 radio(CE_PIN,CSN_PIN);
+RF24* transmitter = &radio;
 
 void setup() {
   for(int i; i <7 ; i++) {
@@ -67,9 +68,9 @@ void setup() {
 
   Serial.begin(57600);
 
-  radio.begin();
-  radio.openWritingPipe(address);
-  radio.stopListening();
+  transmitter->begin();
+  transmitter->openWritingPipe(address);
+  transmitter->stopListening();
 }
 
 void loop() {
@@ -83,7 +84,7 @@ void loop() {
 #if __RUNNING_LOG_ENABLED__
     char log[32] = "";
     sprintf(log, "%d,%d,%d", pressed, x, y);
-    Serial.print("M1"), Serial.println(log);
+    Serial.print("M1"), Serial.print(": "), Serial.println(log);
 #endif
 
   x = map(x, 0, JOYSTICK_MAX_X, 0, 1024);
@@ -91,25 +92,25 @@ void loop() {
 
 #if __RUNNING_LOG_ENABLED__
     sprintf(log, "%d,%d,%d", pressed, x, y);
-    Serial.print("M2"), Serial.println(log);
+    Serial.print("M2"), Serial.print(": "), Serial.println(log);
 #endif
 
   if (x < MIN_BOUND_X || x > MAX_BOUND_X || y < MIN_BOUND_Y || y > MAX_BOUND_Y) {
     uint8_t msg[12] = {};
     encodeMessage(msg, "JS", pressed, x, y, count);
-    bool ok = radio.write(msg, sizeof(msg));
+    bool ok = transmitter->write(msg, sizeof(msg));
     if (ok) {
 #if __RUNNING_LOG_ENABLED__
-      Serial.print("->"), Serial.println("ACK");
+      Serial.print("->"), Serial.println("OK");
 #endif
     } else {
 #if __RUNNING_LOG_ENABLED__
       Serial.print("->"), Serial.println("FAIL");
 #endif
     }
-    delay(5);
+    delay(50);
   } else {
-    delay(3);
+    delay(5);
   }
 }
 
