@@ -15,14 +15,14 @@
 const uint64_t address = 0xE8E8F0F0E1LL;
 
 RF24 radio(PIN_CE, PIN_CSN);
-RF24* transmitter = &radio;
+RF24* tranceiver = &radio;
 
 int RF24Tranceiver::begin() {
-  transmitter->begin();
-  transmitter->openWritingPipe(address);
-  transmitter->stopListening();
+  tranceiver->begin();
+  tranceiver->openWritingPipe(address);
+  tranceiver->stopListening();
 }
 
 bool RF24Tranceiver::write(const void* buf, uint8_t len) {
-  return transmitter->write(buf, len);
+  return tranceiver->write(buf, len);
 }
