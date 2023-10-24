@@ -4,11 +4,15 @@
 #include "Commons.h"
 #include "Message_Sender.h"
 
-#ifndef __FUNDUINO_JOYSTICK_SHIELD__
-#define __FUNDUINO_JOYSTICK_SHIELD__  1
-#endif//__FUNDUINO_JOYSTICK_SHIELD__
+#ifndef __JOYSTICK_READ_BUTTONS_DEBUG__
+#define __JOYSTICK_READ_BUTTONS_DEBUG__  0
+#endif//__JOYSTICK_READ_BUTTONS_DEBUG__
 
-#if __FUNDUINO_JOYSTICK_SHIELD__
+#ifndef __JOYSTICK_FUNDUINO_SHIELD__
+#define __JOYSTICK_FUNDUINO_SHIELD__  1
+#endif//__JOYSTICK_FUNDUINO_SHIELD__
+
+#if __JOYSTICK_FUNDUINO_SHIELD__
 #define JOYSTICK_MAX_X   723
 #define JOYSTICK_MAX_Y   723
 #else
@@ -61,6 +65,8 @@ class JoystickHandler {
     JoystickHandler(MessageSender* sender);
     int begin();
     int loop();
+  protected:
+    uint16_t readButtonStates();
   private:
     uint32_t _count = 0;
     MessageSender* _messageSender;

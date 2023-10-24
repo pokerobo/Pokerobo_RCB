@@ -10,8 +10,6 @@ int buttons[] = {
   PIN_ANALOG_BUTTON
 };
 
-uint16_t readButtonStates();
-
 JoystickHandler::JoystickHandler(MessageSender* messageSender) {
   _messageSender = messageSender;
 }
@@ -66,7 +64,9 @@ int JoystickHandler::loop() {
   }
 }
 
-uint16_t readButtonStates() {
+#if !__JOYSTICK_READ_BUTTONS_DEBUG__
+
+uint16_t JoystickHandler::readButtonStatesx() {
   uint16_t buttonStates = 0;
 
   for (int i = 0; i < 7; i++) {
@@ -76,7 +76,9 @@ uint16_t readButtonStates() {
   return buttonStates;
 }
 
-uint16_t readButtonStatesForDebug() {
+#else //__JOYSTICK_READ_BUTTONS_DEBUG__
+
+uint16_t JoystickHandler::readButtonStates() {
   uint16_t pressed = 0;
 
   if(digitalRead(PIN_UP_BUTTON)==LOW) {
@@ -130,3 +132,4 @@ uint16_t readButtonStatesForDebug() {
 
   return pressed;
 }
+#endif //__JOYSTICK_READ_BUTTONS_DEBUG__

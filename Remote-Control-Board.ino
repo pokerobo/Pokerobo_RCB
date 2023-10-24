@@ -1,6 +1,3 @@
-#define __RUNNING_LOG_ENABLED__       1
-#define __FUNDUINO_JOYSTICK_SHIELD__  1
-
 #include "Joystick_Handler.h"
 #include "RF24_Tranceiver.h"
 
