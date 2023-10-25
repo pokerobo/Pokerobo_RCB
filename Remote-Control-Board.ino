@@ -1,13 +1,15 @@
 #include "Joystick_Handler.h"
 #include "RF24_Tranceiver.h"
 
-#define __RF24_TRANCEIVER_MODE__    1
+#define __RF24_TRANCEIVER_MODE__    0
 
 RF24Tranceiver tranceiverInstance;
 RF24Tranceiver* tranceiver = &tranceiverInstance;
 
 JoystickHandler joystickHandlerInstance(&tranceiverInstance);
 JoystickHandler* joystickHandler = &joystickHandlerInstance;
+
+ConsoleMessageRenderer consoleMessageRenderer;
 
 void setup() {
   while (!Serial) delay(100);
@@ -18,6 +20,7 @@ void setup() {
   joystickHandler->begin();
 #else
   tranceiver->begin(RX);
+  tranceiver->add(&consoleMessageRenderer);
 #endif
 }
 
@@ -31,5 +34,6 @@ void loop() {
   }
 #else
   tranceiver->check();
+  delay(50);
 #endif
 }

@@ -1,26 +1,46 @@
 #include "Message_Sender.h"
 
-MessagePacket::MessagePacket(uint16_t buttons, uint16_t x, uint16_t y, uint32_t flags) {
+JoystickAction::JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t flags) {
   _buttons = buttons;
   _x = x;
   _y = y;
   _flags = flags;
 }
 
-uint16_t MessagePacket::getButtons() {
+uint16_t JoystickAction::getButtons() {
   return _buttons;
 }
 
-uint16_t MessagePacket::getX() {
+uint16_t JoystickAction::getX() {
   return _x;
 }
 
-uint16_t MessagePacket::getY() {
+uint16_t JoystickAction::getY() {
   return _y;
 }
 
-uint32_t MessagePacket::getFlags() {
+uint32_t JoystickAction::getFlags() {
   return _flags;
+}
+
+uint8_t JoystickAction::length() {
+  return 12; // 2 + sizeof(uint16_t) + sizeof(uint16_t) + sizeof(uint16_t) + sizeof(uint32_t)
+}
+
+uint8_t* JoystickAction::serialize(uint8_t* buf, uint8_t len) {
+  if (len < length()) {
+    return NULL;
+  }
+  return encodeMessage(buf, "JS", _buttons, _x, _y, _flags);
+}
+
+bool ConsoleMessageRenderer::render(JoystickAction* message) {
+  Serial.print("#"), Serial.print(message->getFlags()), Serial.print(" - ");
+  Serial.print("Buttons"), Serial.print(": "), Serial.print(message->getButtons());
+  Serial.print("; "), Serial.print("X"), Serial.print(": "), Serial.print(message->getX());
+  Serial.print("; "), Serial.print("Y"), Serial.print(": "), Serial.print(message->getY());
+  Serial.println();
+  return true;
 }
 
 uint8_t* encodeInteger(uint8_t* store, uint16_t value) {

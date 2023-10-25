@@ -60,7 +60,13 @@ int RF24Receiver::check() {
   if (_receiver == NULL) {
     return -1;
   }
+
   RF24* _tranceiver = (RF24*)_receiver;
+
+  // resets the IRQ pin to HIGH
+  bool tx_ds, tx_df, rx_dr;
+  _tranceiver->whatHappened(tx_ds, tx_df, rx_dr);
+  // returned data should now be reliable
   if (!_tranceiver->available()) {
     return 0;
   }
@@ -75,15 +81,27 @@ int RF24Receiver::check() {
   bool ok = decodeMessage(msg, "JS", &buttons, &jX, &jY, &count);
 
 #if __RUNNING_LOG_ENABLED__
-  Serial.print("#"), Serial.print(count), Serial.print(" - ");
-  Serial.print("Buttons"), Serial.print(": "), Serial.print(buttons);
-  Serial.print("; "), Serial.print("X"), Serial.print(": "), Serial.print(jX);
-  Serial.print("; "), Serial.print("Y"), Serial.print(": "), Serial.print(jY);
+  Serial.print("decodeMessage -> "), Serial.print(ok);
   Serial.println();
 #endif
 
   if (!ok) {
     return -1;
+  }
+
+  JoystickAction message(buttons, jX, jY, count);
+
+  int8_t countNulls = 0, sumFails = 0, sumOk = 0;
+  for(int i=0; i<_messageRenderersTotal; i++) {
+    Serial.print("Renderer #"), Serial.println(i);
+    int8_t status = invoke(_messageRenderers[i], i+1, &message);
+    if (status > 0) {
+      sumOk += status;
+    } else if (status < 0) {
+      sumFails += status;
+    } else {
+      countNulls++;
+    }
   }
 
   return 0;
@@ -105,4 +123,26 @@ bool RF24Receiver::add(MessageRenderer* messageRenderer) {
 #endif
   _messageRenderers[_messageRenderersTotal++] = messageRenderer;
   return true;
+}
+
+byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message) {
+  if (messageRenderer != NULL) {
+    uint8_t code = 1 << index;
+    bool ok = messageRenderer->render(message);
+#if __RUNNING_LOG_ENABLED__
+      Serial.print("#"), Serial.print(message->getFlags()), Serial.print("->"), Serial.print(index), Serial.print(": ");
+#endif
+    if (ok) {
+#if __RUNNING_LOG_ENABLED__
+      Serial.println("v");
+#endif
+      return code;
+    } else {
+#if __RUNNING_LOG_ENABLED__
+      Serial.println("x");
+#endif
+      return -code;
+    }
+  }
+  return 0;
 }

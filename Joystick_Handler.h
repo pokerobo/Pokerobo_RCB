@@ -3,6 +3,7 @@
 
 #include "Commons.h"
 #include "Message_Sender.h"
+#include "Program_Manager.h"
 
 #ifndef __JOYSTICK_READ_BUTTONS_DEBUG__
 #define __JOYSTICK_READ_BUTTONS_DEBUG__  0
@@ -98,6 +99,7 @@ class JoystickHandler {
     byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len);
   private:
     uint32_t _count = 0;
+    ProgramManager* _programManager = NULL;
     MessageSender* _messageSenders[MESSAGE_SENDER_MAX] = {};
     uint8_t _messageSendersTotal = 0;
 };

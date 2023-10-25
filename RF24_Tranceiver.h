@@ -20,7 +20,7 @@ class RF24Receiver {
     int check();
     bool add(MessageRenderer* messageRenderer);
   protected:
-    int8_t invoke(MessageRenderer* messageRenderer, uint8_t index, const void* buf, uint8_t len);
+    byte invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message);
   private:
     void* _receiver = NULL;
     MessageRenderer* _messageRenderers[MESSAGE_RENDERERS_LIMIT] = {};
