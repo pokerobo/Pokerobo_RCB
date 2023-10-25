@@ -44,13 +44,33 @@
 #define PIN_JOYSTICK_Y_AXIS   A1
 #endif//PIN_JOYSTICK_Y_AXIS
 
-#define BIT_UP_BUTTON     1 << 0
-#define BIT_RIGHT_BUTTON  1 << 1
-#define BIT_DOWN_BUTTON   1 << 2
-#define BIT_LEFT_BUTTON   1 << 3
-#define BIT_START_BUTTON  1 << 4
-#define BIT_SELECT_BUTTON 1 << 5
-#define BIT_ANALOG_BUTTON 1 << 6
+#ifndef BIT_UP_BUTTON
+#define BIT_UP_BUTTON          0
+#endif//BIT_UP_BUTTON
+
+#ifndef BIT_RIGHT_BUTTON
+#define BIT_RIGHT_BUTTON       1
+#endif//BIT_RIGHT_BUTTON
+
+#ifndef BIT_DOWN_BUTTON
+#define BIT_DOWN_BUTTON        2
+#endif//BIT_DOWN_BUTTON
+
+#ifndef BIT_LEFT_BUTTON
+#define BIT_LEFT_BUTTON        3
+#endif//BIT_LEFT_BUTTON
+
+#ifndef BIT_START_BUTTON
+#define BIT_START_BUTTON       4
+#endif//BIT_START_BUTTON
+
+#ifndef BIT_SELECT_BUTTON
+#define BIT_SELECT_BUTTON      5
+#endif//BIT_SELECT_BUTTON
+
+#ifndef BIT_ANALOG_BUTTON
+#define BIT_ANALOG_BUTTON      6
+#endif//BIT_ANALOG_BUTTON
 
 #define PIN_UP_BUTTON     2 // A
 #define PIN_RIGHT_BUTTON  3 // B
@@ -63,6 +83,10 @@
 #define MESSAGE_SENDER_MAX  7
 
 class JoystickHandler {
+  static int pinOfButtons[];
+#if __STRICT_MODE__
+  static void init();
+#endif
   public:
     JoystickHandler(MessageSender* messageSender=NULL);
     int begin();

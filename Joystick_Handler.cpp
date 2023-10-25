@@ -1,6 +1,6 @@
 #include "Joystick_Handler.h"
 
-int buttons[] = {
+static int JoystickHandler::pinOfButtons[] = {
   PIN_UP_BUTTON,
   PIN_RIGHT_BUTTON,
   PIN_DOWN_BUTTON,
@@ -9,6 +9,18 @@ int buttons[] = {
   PIN_SELECT_BUTTON,
   PIN_ANALOG_BUTTON
 };
+
+#if __STRICT_MODE__
+static void JoystickHandler::init() {
+  pinOfButtons[BIT_UP_BUTTON] = PIN_UP_BUTTON;
+  pinOfButtons[BIT_RIGHT_BUTTON] = PIN_RIGHT_BUTTON;
+  pinOfButtons[BIT_DOWN_BUTTON] = PIN_DOWN_BUTTON;
+  pinOfButtons[BIT_LEFT_BUTTON] = PIN_LEFT_BUTTON;
+  pinOfButtons[BIT_START_BUTTON] = PIN_START_BUTTON;
+  pinOfButtons[BIT_SELECT_BUTTON] = PIN_SELECT_BUTTON;
+  pinOfButtons[BIT_ANALOG_BUTTON] = PIN_ANALOG_BUTTON;
+}
+#endif
 
 JoystickHandler::JoystickHandler(MessageSender* messageSender) {
   add(messageSender);
@@ -33,9 +45,12 @@ bool JoystickHandler::add(MessageSender* messageSender) {
 }
 
 int JoystickHandler::begin() {
+#if __STRICT_MODE__
+  init();
+#endif
   for(int i; i <7 ; i++) {
-    pinMode(buttons[i], INPUT);
-    digitalWrite(buttons[i], HIGH);
+    pinMode(pinOfButtons[i], INPUT);
+    digitalWrite(pinOfButtons[i], HIGH);
   }
 }
 
@@ -113,7 +128,7 @@ uint16_t JoystickHandler::readButtonStates() {
   uint16_t buttonStates = 0;
 
   for (int i = 0; i < 7; i++) {
-    buttonStates |= ((digitalRead(buttons[i]) == LOW) ? 1 : 0) << i;
+    buttonStates |= ((digitalRead(pinOfButtons[i]) == LOW) ? 1 : 0) << i;
   }
 
   return buttonStates;
@@ -125,49 +140,49 @@ uint16_t JoystickHandler::readButtonStates() {
   uint16_t pressed = 0;
 
   if(digitalRead(PIN_UP_BUTTON)==LOW) {
-    pressed |= BIT_UP_BUTTON;
+    pressed |= (1 << BIT_UP_BUTTON);
 #if __RUNNING_LOG_ENABLED__
     Serial.print("UP"), Serial.print(" "), Serial.print("Button Pressed");
 #endif
   }
 
   if(digitalRead(PIN_RIGHT_BUTTON)==LOW) {
-    pressed |= BIT_RIGHT_BUTTON;
+    pressed |= (1 << BIT_RIGHT_BUTTON);
 #if __RUNNING_LOG_ENABLED__
     Serial.print("RIGHT"), Serial.print(" "), Serial.print("Button Pressed");
 #endif
   }
 
   if(digitalRead(PIN_DOWN_BUTTON)==LOW) {
-    pressed |= BIT_DOWN_BUTTON;
+    pressed |= (1 << BIT_DOWN_BUTTON);
 #if __RUNNING_LOG_ENABLED__
     Serial.print("DOWN"), Serial.print(" "), Serial.print("Button Pressed");
 #endif
   }
 
   if(digitalRead(PIN_LEFT_BUTTON)==LOW) {
-    pressed |= BIT_LEFT_BUTTON;
+    pressed |= (1 << BIT_LEFT_BUTTON);
 #if __RUNNING_LOG_ENABLED__
     Serial.print("LEFT"), Serial.print(" "), Serial.print("Button Pressed");
 #endif
   }
 
   if(digitalRead(PIN_START_BUTTON)==LOW) {
-    pressed |= BIT_START_BUTTON;
+    pressed |= (1 << BIT_START_BUTTON);
 #if __RUNNING_LOG_ENABLED__
     Serial.print("START"), Serial.print(" "), Serial.print("Button Pressed");
 #endif
   }
 
   if(digitalRead(PIN_SELECT_BUTTON)==LOW) {
-    pressed |= BIT_SELECT_BUTTON;
+    pressed |= (1 << BIT_SELECT_BUTTON);
 #if __RUNNING_LOG_ENABLED__
     Serial.print("SELECT"), Serial.print(" "), Serial.print("Button Pressed");
 #endif
   }
 
   if(digitalRead(PIN_ANALOG_BUTTON)==LOW) {
-    pressed |= BIT_ANALOG_BUTTON;
+    pressed |= (1 << BIT_ANALOG_BUTTON);
 #if __RUNNING_LOG_ENABLED__
     Serial.print("ANALOG"), Serial.print(" "), Serial.print("Button Pressed");
 #endif
