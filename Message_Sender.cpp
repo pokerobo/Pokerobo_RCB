@@ -1,5 +1,11 @@
 #include "Message_Sender.h"
 
+static const uint8_t JoystickAction::messageSize = 2
+    + sizeof(uint16_t)
+    + sizeof(uint16_t)
+    + sizeof(uint16_t)
+    + sizeof(uint32_t);
+
 JoystickAction::JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t flags) {
   _buttons = buttons;
   _x = x;
@@ -24,11 +30,11 @@ uint32_t JoystickAction::getFlags() {
 }
 
 uint8_t JoystickAction::length() {
-  return 12; // 2 + sizeof(uint16_t) + sizeof(uint16_t) + sizeof(uint16_t) + sizeof(uint32_t)
+  return messageSize;
 }
 
 uint8_t* JoystickAction::serialize(uint8_t* buf, uint8_t len) {
-  if (len < length()) {
+  if (len < messageSize) {
     return NULL;
   }
   return encodeMessage(buf, "JS", _buttons, _x, _y, _flags);

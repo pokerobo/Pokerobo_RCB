@@ -14,27 +14,31 @@
 #endif//__JOYSTICK_FUNDUINO_SHIELD__
 
 #if __JOYSTICK_FUNDUINO_SHIELD__
+#define JOYSTICK_MID_X   333
+#define JOYSTICK_MID_Y   333
 #define JOYSTICK_MAX_X   723
 #define JOYSTICK_MAX_Y   723
 #else
-#define JOYSTICK_MAX_X   950
-#define JOYSTICK_MAX_Y   950
+#define JOYSTICK_MID_X   580
+#define JOYSTICK_MID_Y   590
+#define JOYSTICK_MAX_X   1024
+#define JOYSTICK_MAX_Y   1024
 #endif
 
 #ifndef MIN_BOUND_X
-#define MIN_BOUND_X      512 - 64
+#define MIN_BOUND_X      512 - 160
 #endif//MIN_BOUND_X
 
 #ifndef MAX_BOUND_X
-#define MAX_BOUND_X      512 + 64
+#define MAX_BOUND_X      512 + 160
 #endif//MAX_BOUND_X
 
 #ifndef MIN_BOUND_Y
-#define MIN_BOUND_Y      512 - 64
+#define MIN_BOUND_Y      512 - 160
 #endif//MIN_BOUND_Y
 
 #ifndef MAX_BOUND_Y
-#define MAX_BOUND_Y      512 + 64
+#define MAX_BOUND_Y      512 + 160
 #endif//MAX_BOUND_Y
 
 #ifndef PIN_JOYSTICK_X_AXIS
@@ -96,7 +100,7 @@ class JoystickHandler {
   protected:
     uint16_t readButtonStates();
     bool isChanged(int16_t x, int16_t y, uint32_t buttons);
-    byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len);
+    byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet=NULL);
   private:
     uint32_t _count = 0;
     ProgramManager* _programManager = NULL;

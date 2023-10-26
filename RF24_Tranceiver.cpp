@@ -37,6 +37,16 @@ int RF24Transmitter::begin(void* radio) {
   _tranceiver->stopListening();
 }
 
+bool RF24Transmitter::write(MessagePacket* packet) {
+  if (packet == NULL) {
+    return false;
+  }
+  uint8_t len = packet->length();
+  uint8_t msg[len] = {};
+  packet->serialize(msg, len);
+  return write(msg, len);
+}
+
 bool RF24Transmitter::write(const void* buf, uint8_t len) {
   if (_transmitter == NULL) {
     return false;
@@ -93,7 +103,6 @@ int RF24Receiver::check() {
 
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageRenderersTotal; i++) {
-    Serial.print("Renderer #"), Serial.println(i);
     int8_t status = invoke(_messageRenderers[i], i+1, &message);
     if (status > 0) {
       sumOk += status;
@@ -130,17 +139,16 @@ byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, Joyst
     uint8_t code = 1 << index;
     bool ok = messageRenderer->render(message);
 #if __RUNNING_LOG_ENABLED__
-      Serial.print("#"), Serial.print(message->getFlags()), Serial.print("->"), Serial.print(index), Serial.print(": ");
+    Serial.print("#"), Serial.print(message->getFlags()), Serial.print("->"), Serial.print(index), Serial.print(": ");
+    if (ok) {
+      Serial.println("v");
+    } else {
+      Serial.println("x");
+    }
 #endif
     if (ok) {
-#if __RUNNING_LOG_ENABLED__
-      Serial.println("v");
-#endif
       return code;
     } else {
-#if __RUNNING_LOG_ENABLED__
-      Serial.println("x");
-#endif
       return -code;
     }
   }

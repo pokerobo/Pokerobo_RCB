@@ -12,6 +12,7 @@ class MessagePacket {
 };
 
 class JoystickAction: public MessagePacket {
+  static const uint8_t messageSize;
   public:
     JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t flags);
     uint16_t getButtons();
@@ -30,7 +31,7 @@ class JoystickAction: public MessagePacket {
 class MessageSender {
   public:
     virtual bool write(const void* buf, uint8_t len);
-    // virtual bool write(MessagePacket* message);
+    virtual bool write(MessagePacket* packet);
 };
 
 class MessageRenderer {

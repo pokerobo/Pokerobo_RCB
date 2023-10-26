@@ -1,7 +1,7 @@
 #include "Joystick_Handler.h"
 #include "RF24_Tranceiver.h"
 
-#define __RF24_TRANCEIVER_MODE__    0
+#define __RF24_TRANCEIVER_MODE__    1
 
 RF24Tranceiver tranceiverInstance;
 RF24Tranceiver* tranceiver = &tranceiverInstance;

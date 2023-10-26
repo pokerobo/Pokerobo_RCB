@@ -68,8 +68,17 @@ int JoystickHandler::check() {
     Serial.print("M1"), Serial.print(": "), Serial.println(log);
 #endif
 
-  x = map(x, 0, JOYSTICK_MAX_X, 0, 1024);
-  y = map(y, 0, JOYSTICK_MAX_Y, 0, 1024);
+  if (x < JOYSTICK_MID_X) {
+    x = map(x, 0, JOYSTICK_MID_X, 0, 512);
+  } else {
+    x = map(x, JOYSTICK_MID_X, JOYSTICK_MAX_X, 512, 1024);
+  }
+
+  if (y < JOYSTICK_MID_Y) {
+    y = map(y, 0, JOYSTICK_MID_Y, 0, 512);
+  } else {
+    y = map(y, JOYSTICK_MID_Y, JOYSTICK_MAX_Y, 512, 1024);
+  }
 
 #if __RUNNING_LOG_ENABLED__
     sprintf(log, "%d,%d,%d", pressed, x, y);
@@ -77,11 +86,10 @@ int JoystickHandler::check() {
 #endif
 
   if (isChanged(x, y, pressed)) {
-    uint8_t msg[12] = {};
-    encodeMessage(msg, "JS", pressed, x, y, _count);
+    JoystickAction message(pressed, x, y, _count);
     int8_t countNulls = 0, sumFails = 0, sumOk = 0;
     for(int i=0; i<_messageSendersTotal; i++) {
-      int8_t status = invoke(_messageSenders[i], i+1, msg, sizeof(msg));
+      int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, &message);
       if (status > 0) {
         sumOk += status;
       } else if (status < 0) {
@@ -100,22 +108,29 @@ bool JoystickHandler::isChanged(int16_t x, int16_t y, uint32_t buttons) {
   return !(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || buttons;
 }
 
-byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len) {
+byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet) {
   if (messageSender != NULL) {
     uint8_t code = 1 << index;
-    bool ok = messageSender->write(buf, len);
+
+    bool ok = false;
+    if (packet != NULL) {
+      ok = messageSender->write(packet);
+    } else {
+      ok = messageSender->write(buf, len);
+    }
+
 #if __RUNNING_LOG_ENABLED__
-      Serial.print("#"), Serial.print(_count), Serial.print("->"), Serial.print(index), Serial.print(": ");
-#endif
+    Serial.print("#"), Serial.print(_count), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {
-#if __RUNNING_LOG_ENABLED__
       Serial.println("v");
+    } else {
+      Serial.println("x");
+    }
 #endif
+
+    if (ok) {
       return code;
     } else {
-#if __RUNNING_LOG_ENABLED__
-      Serial.println("x");
-#endif
       return -code;
     }
   }

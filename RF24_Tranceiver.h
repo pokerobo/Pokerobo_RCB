@@ -10,6 +10,7 @@ class RF24Transmitter: public MessageSender {
   public:
     int begin(void* radio);
     bool write(const void* buf, uint8_t len);
+    bool write(MessagePacket* packet);
   private:
     void* _transmitter = NULL;
 };
