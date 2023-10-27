@@ -1,12 +1,14 @@
+#include "Display_Handler.h"
 #include "Joystick_Handler.h"
 #include "RF24_Tranceiver.h"
 
-#define __RF24_TRANCEIVER_MODE__    1
+DisplayHandler displayHandlerInstance;
+DisplayHandler* displayHandler = &displayHandlerInstance;
 
 RF24Tranceiver tranceiverInstance;
 RF24Tranceiver* tranceiver = &tranceiverInstance;
 
-JoystickHandler joystickHandlerInstance(&tranceiverInstance);
+JoystickHandler joystickHandlerInstance(&tranceiverInstance, displayHandler);
 JoystickHandler* joystickHandler = &joystickHandlerInstance;
 
 ConsoleMessageRenderer consoleMessageRenderer;
@@ -14,6 +16,8 @@ ConsoleMessageRenderer consoleMessageRenderer;
 void setup() {
   while (!Serial) delay(100);
   Serial.begin(57600);
+
+  displayHandler->begin();
 
 #if __RF24_TRANCEIVER_MODE__
   tranceiver->begin();

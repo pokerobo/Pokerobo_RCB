@@ -4,6 +4,9 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
+// #define PIN_CE  48
+// #define PIN_CSN 49
+
 #ifndef PIN_CE
 #define PIN_CE  9
 #endif

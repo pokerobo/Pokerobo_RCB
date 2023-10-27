@@ -93,7 +93,7 @@ class JoystickHandler {
   static void init();
 #endif
   public:
-    JoystickHandler(MessageSender* messageSender=NULL);
+    JoystickHandler(MessageSender* messageSender=NULL, MessageRenderer* messageRenderer=NULL);
     int begin();
     int check();
     bool add(MessageSender* messageSender);
@@ -104,6 +104,7 @@ class JoystickHandler {
   private:
     uint32_t _count = 0;
     ProgramManager* _programManager = NULL;
+    MessageRenderer* _messageRenderer = NULL;
     MessageSender* _messageSenders[MESSAGE_SENDER_MAX] = {};
     uint8_t _messageSendersTotal = 0;
 };

@@ -22,7 +22,8 @@ static void JoystickHandler::init() {
 }
 #endif
 
-JoystickHandler::JoystickHandler(MessageSender* messageSender) {
+JoystickHandler::JoystickHandler(MessageSender* messageSender, MessageRenderer* messageRenderer) {
+  _messageRenderer = messageRenderer;
   add(messageSender);
 }
 
@@ -80,13 +81,17 @@ int JoystickHandler::check() {
     y = map(y, JOYSTICK_MID_Y, JOYSTICK_MAX_Y, 512, 1024);
   }
 
+  JoystickAction message(pressed, x, y, _count);
+  if (_messageRenderer != NULL) {
+    _messageRenderer->render(&message);
+  }
+
 #if __RUNNING_LOG_ENABLED__
     sprintf(log, "%d,%d,%d", pressed, x, y);
     Serial.print("M2"), Serial.print(": "), Serial.println(log);
 #endif
 
   if (isChanged(x, y, pressed)) {
-    JoystickAction message(pressed, x, y, _count);
     int8_t countNulls = 0, sumFails = 0, sumOk = 0;
     for(int i=0; i<_messageSendersTotal; i++) {
       int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, &message);
@@ -98,6 +103,7 @@ int JoystickHandler::check() {
         countNulls++;
       }
     }
+
     return 2;
   } else {
     return 1;
