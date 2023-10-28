@@ -2,6 +2,15 @@
 #define __COMMONS_H__
 
 #define __RUNNING_LOG_ENABLED__           1
+
+#define __AVR_NANO__                      1
+#define __AVR_UNO__                       2
+#define __AVR_MEGA_2560__                 3
+
+#ifndef __AVR_MODEL__
+#define __AVR_MODEL__                     __AVR_NANO__
+#endif
+
 #define __JOYSTICK_FUNDUINO_SHIELD__      0
 #define __JOYSTICK_READ_BUTTONS_DEBUG__   0
 
@@ -16,7 +25,7 @@
 #endif
 
 #ifndef __RF24_TRANCEIVER_MODE__
-#define __RF24_TRANCEIVER_MODE__          0
+#define __RF24_TRANCEIVER_MODE__          1
 #endif
 
 #endif

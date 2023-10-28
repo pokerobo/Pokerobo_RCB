@@ -111,7 +111,10 @@ int JoystickHandler::check() {
 }
 
 bool JoystickHandler::isChanged(int16_t x, int16_t y, uint32_t buttons) {
+#if JOYSTICK_CHECKING_CHANGE
   return !(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || buttons;
+#endif
+  return true;
 }
 
 byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet) {

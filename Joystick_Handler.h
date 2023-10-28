@@ -49,6 +49,10 @@
 #define PIN_JOYSTICK_Y_AXIS   A1
 #endif//PIN_JOYSTICK_Y_AXIS
 
+#ifndef JOYSTICK_CHECKING_CHANGE
+#define JOYSTICK_CHECKING_CHANGE 0
+#endif
+
 #ifndef BIT_UP_BUTTON
 #define BIT_UP_BUTTON          0
 #endif//BIT_UP_BUTTON
