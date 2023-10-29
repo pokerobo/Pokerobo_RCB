@@ -100,6 +100,7 @@ class JoystickHandler {
     JoystickHandler(MessageSender* messageSender=NULL, MessageRenderer* messageRenderer=NULL);
     int begin();
     int check();
+    void detect();
     bool add(MessageSender* messageSender);
   protected:
     uint16_t readButtonStates();
@@ -107,6 +108,8 @@ class JoystickHandler {
     byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet=NULL);
   private:
     uint32_t _count = 0;
+    int16_t _middleX = JOYSTICK_MID_X;
+    int16_t _middleY = JOYSTICK_MID_Y;
     ProgramManager* _programManager = NULL;
     MessageRenderer* _messageRenderer = NULL;
     MessageSender* _messageSenders[MESSAGE_SENDER_MAX] = {};

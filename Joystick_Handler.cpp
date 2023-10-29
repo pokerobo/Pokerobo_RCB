@@ -1,5 +1,9 @@
 #include "Joystick_Handler.h"
 
+#ifndef JOYSTICK_DETECTION_TOTAL
+#define JOYSTICK_DETECTION_TOTAL 10
+#endif//JOYSTICK_DETECTION_TOTAL
+
 static int JoystickHandler::pinOfButtons[] = {
   PIN_UP_BUTTON,
   PIN_RIGHT_BUTTON,
@@ -11,7 +15,7 @@ static int JoystickHandler::pinOfButtons[] = {
 };
 
 #if __STRICT_MODE__
-static void JoystickHandler::init() {
+static void JoystickHandler::verify() {
   pinOfButtons[BIT_UP_BUTTON] = PIN_UP_BUTTON;
   pinOfButtons[BIT_RIGHT_BUTTON] = PIN_RIGHT_BUTTON;
   pinOfButtons[BIT_DOWN_BUTTON] = PIN_DOWN_BUTTON;
@@ -25,6 +29,40 @@ static void JoystickHandler::init() {
 JoystickHandler::JoystickHandler(MessageSender* messageSender, MessageRenderer* messageRenderer) {
   _messageRenderer = messageRenderer;
   add(messageSender);
+}
+
+void JoystickHandler::detect() {
+  uint16_t middleX[JOYSTICK_DETECTION_TOTAL] = {};
+  uint16_t middleY[JOYSTICK_DETECTION_TOTAL] = {};
+  uint16_t minX = 1024;
+  uint16_t minY = 1024;
+
+  for(uint8_t i=0; i<JOYSTICK_DETECTION_TOTAL; i++) {
+    delay(50);
+    middleX[i] = analogRead(PIN_JOYSTICK_X_AXIS);
+    middleY[i] = analogRead(PIN_JOYSTICK_Y_AXIS);
+    if (middleX[i] < minX) {
+      minX = middleX[i];
+    }
+    if (middleY[i] < minY) {
+      minY = middleY[i];
+    }
+  }
+
+  uint16_t sumX = 0;
+  uint16_t sumY = 0;
+  for(uint8_t i=0; i<JOYSTICK_DETECTION_TOTAL; i++) {
+    sumX += (middleX[i] - minX);
+    sumY += (middleY[i] - minY);
+  }
+
+  _middleX = minX + (sumX / JOYSTICK_DETECTION_TOTAL);
+  _middleY = minY + (sumY / JOYSTICK_DETECTION_TOTAL);
+
+  #if __RUNNING_LOG_ENABLED__
+    Serial.print("Origin "), Serial.print("X"), Serial.print(": "), Serial.println(_middleX);
+    Serial.print("Origin "), Serial.print("Y"), Serial.print(": "), Serial.println(_middleY);
+  #endif
 }
 
 bool JoystickHandler::add(MessageSender* messageSender) {
@@ -47,16 +85,24 @@ bool JoystickHandler::add(MessageSender* messageSender) {
 
 int JoystickHandler::begin() {
 #if __STRICT_MODE__
-  init();
+  verify();
 #endif
   for(int i; i <7 ; i++) {
     pinMode(pinOfButtons[i], INPUT);
     digitalWrite(pinOfButtons[i], HIGH);
   }
+  detect();
 }
 
 int JoystickHandler::check() {
   _count += 1;
+
+#if __RUNNING_LOG_ENABLED__
+  if (_count < 10) {
+    Serial.print("Middle "), Serial.print("X"), Serial.print(": "), Serial.println(_middleX);
+    Serial.print("Middle "), Serial.print("Y"), Serial.print(": "), Serial.println(_middleY);
+  }
+#endif
 
   uint16_t pressed = readButtonStates();
 
@@ -64,21 +110,21 @@ int JoystickHandler::check() {
   uint16_t y = analogRead(PIN_JOYSTICK_Y_AXIS);
 
 #if __RUNNING_LOG_ENABLED__
-    char log[32] = "";
-    sprintf(log, "%d,%d,%d", pressed, x, y);
-    Serial.print("M1"), Serial.print(": "), Serial.println(log);
+  char log[32] = "";
+  sprintf(log, "%d,%d,%d", pressed, x, y);
+  Serial.print("M1"), Serial.print(": "), Serial.println(log);
 #endif
 
-  if (x < JOYSTICK_MID_X) {
-    x = map(x, 0, JOYSTICK_MID_X, 0, 512);
+  if (x < _middleX) {
+    x = map(x, 0, _middleX, 0, 512);
   } else {
-    x = map(x, JOYSTICK_MID_X, JOYSTICK_MAX_X, 512, 1024);
+    x = map(x, _middleX, JOYSTICK_MAX_X, 512, 1024);
   }
 
-  if (y < JOYSTICK_MID_Y) {
-    y = map(y, 0, JOYSTICK_MID_Y, 0, 512);
+  if (y < _middleY) {
+    y = map(y, 0, _middleY, 0, 512);
   } else {
-    y = map(y, JOYSTICK_MID_Y, JOYSTICK_MAX_Y, 512, 1024);
+    y = map(y, _middleY, JOYSTICK_MAX_Y, 512, 1024);
   }
 
   JoystickAction message(pressed, x, y, _count);

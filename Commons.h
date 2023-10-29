@@ -5,10 +5,10 @@
 
 #define __AVR_NANO__                      1
 #define __AVR_UNO__                       2
-#define __AVR_MEGA_2560__                 3
+#define __AVR_MEGA_2560__                 4
 
 #ifndef __AVR_MODEL__
-#define __AVR_MODEL__                     __AVR_NANO__
+#define __AVR_MODEL__                     __AVR_UNO__
 #endif
 
 #define __JOYSTICK_FUNDUINO_SHIELD__      0
