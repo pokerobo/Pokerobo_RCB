@@ -53,34 +53,6 @@
 #define JOYSTICK_CHECKING_CHANGE 0
 #endif
 
-#ifndef BIT_UP_BUTTON
-#define BIT_UP_BUTTON          0
-#endif//BIT_UP_BUTTON
-
-#ifndef BIT_RIGHT_BUTTON
-#define BIT_RIGHT_BUTTON       1
-#endif//BIT_RIGHT_BUTTON
-
-#ifndef BIT_DOWN_BUTTON
-#define BIT_DOWN_BUTTON        2
-#endif//BIT_DOWN_BUTTON
-
-#ifndef BIT_LEFT_BUTTON
-#define BIT_LEFT_BUTTON        3
-#endif//BIT_LEFT_BUTTON
-
-#ifndef BIT_START_BUTTON
-#define BIT_START_BUTTON       4
-#endif//BIT_START_BUTTON
-
-#ifndef BIT_SELECT_BUTTON
-#define BIT_SELECT_BUTTON      5
-#endif//BIT_SELECT_BUTTON
-
-#ifndef BIT_ANALOG_BUTTON
-#define BIT_ANALOG_BUTTON      6
-#endif//BIT_ANALOG_BUTTON
-
 #define PIN_UP_BUTTON     2 // A
 #define PIN_RIGHT_BUTTON  3 // B
 #define PIN_DOWN_BUTTON   4 // C

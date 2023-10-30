@@ -18,21 +18,30 @@ int DisplayHandler::begin() {
   return 1;
 }
 
-char lines[2][24] = {{}, {}};
-
-int DisplayHandler::check() {
+bool DisplayHandler::print(char lines[][24]) {
   u8g2.firstPage();
   do {
-      u8g2.setCursor(0, 23);
-      u8g2.print(lines[0]);
-      u8g2.setCursor(0, 23 + u8g2.getMaxCharHeight() + 1);
-      u8g2.print(lines[1]);
+    int maxCharHeight = u8g2.getMaxCharHeight();
+    for (uint8_t i=0; i<3; i++) {
+      u8g2.setCursor(0, 23 + maxCharHeight * i);
+      u8g2.print(lines[i]);
+    }
   } while (u8g2.nextPage());
 }
 
 bool DisplayHandler::render(JoystickAction* message) {
+  char lines[3][24] = {{}, {}, {}};
   sprintf(lines[0], "Fix X:% 4d - Y:% 4d", message->getX() - 512, message->getY() - 512);
   sprintf(lines[1], "Raw X:%4d - Y:%4d", message->getOriginX(), message->getOriginY());
-  check();
-  return true;
+
+  uint16_t buttons = message->getButtons();
+  lines[2][0] = (buttons & MASK_UP_BUTTON) ? 'U' : '_';
+  lines[2][1] = (buttons & MASK_RIGHT_BUTTON) ? 'R' : '_';
+  lines[2][2] = (buttons & MASK_DOWN_BUTTON) ? 'D' : '_';
+  lines[2][3] = (buttons & MASK_LEFT_BUTTON) ? 'L' : '_';
+  lines[2][4] = (buttons & MASK_START_BUTTON) ? 'S' : '_';
+  lines[2][5] = (buttons & MASK_SELECT_BUTTON) ? 'O' : '_';
+  lines[2][6] = (buttons & MASK_ANALOG_BUTTON) ? 'A' : '_';
+
+  return print(lines);
 }

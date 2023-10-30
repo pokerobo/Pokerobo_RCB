@@ -8,8 +8,9 @@ class DisplayHandler: public MessageRenderer {
   public:
     DisplayHandler();
     int begin();
-    int check();
     bool render(JoystickAction* message);
+  protected:
+    bool print(char lines[][24]);
 };
 
 #endif

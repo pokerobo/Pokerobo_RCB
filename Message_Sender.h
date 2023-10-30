@@ -3,6 +3,44 @@
 
 #include "Commons.h"
 
+#define TOTAL_OF_BUTTONS       7
+
+#ifndef BIT_UP_BUTTON
+#define BIT_UP_BUTTON          0
+#endif//BIT_UP_BUTTON
+
+#ifndef BIT_RIGHT_BUTTON
+#define BIT_RIGHT_BUTTON       1
+#endif//BIT_RIGHT_BUTTON
+
+#ifndef BIT_DOWN_BUTTON
+#define BIT_DOWN_BUTTON        2
+#endif//BIT_DOWN_BUTTON
+
+#ifndef BIT_LEFT_BUTTON
+#define BIT_LEFT_BUTTON        3
+#endif//BIT_LEFT_BUTTON
+
+#ifndef BIT_START_BUTTON
+#define BIT_START_BUTTON       4
+#endif//BIT_START_BUTTON
+
+#ifndef BIT_SELECT_BUTTON
+#define BIT_SELECT_BUTTON      5
+#endif//BIT_SELECT_BUTTON
+
+#ifndef BIT_ANALOG_BUTTON
+#define BIT_ANALOG_BUTTON      6
+#endif//BIT_ANALOG_BUTTON
+
+#define MASK_UP_BUTTON     1U << BIT_UP_BUTTON
+#define MASK_RIGHT_BUTTON  1U << BIT_RIGHT_BUTTON
+#define MASK_DOWN_BUTTON   1U << BIT_DOWN_BUTTON
+#define MASK_LEFT_BUTTON   1U << BIT_LEFT_BUTTON
+#define MASK_START_BUTTON  1U << BIT_START_BUTTON
+#define MASK_SELECT_BUTTON 1U << BIT_SELECT_BUTTON
+#define MASK_ANALOG_BUTTON 1U << BIT_ANALOG_BUTTON
+
 #define MESSAGE_RENDERERS_LIMIT   7
 
 class MessagePacket {

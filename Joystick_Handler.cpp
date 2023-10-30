@@ -87,7 +87,7 @@ int JoystickHandler::begin() {
 #if __STRICT_MODE__
   verify();
 #endif
-  for(int i; i <7 ; i++) {
+  for(int i; i < TOTAL_OF_BUTTONS; i++) {
     pinMode(pinOfButtons[i], INPUT);
     digitalWrite(pinOfButtons[i], HIGH);
   }
@@ -200,7 +200,7 @@ byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const 
 uint16_t JoystickHandler::readButtonStates() {
   uint16_t buttonStates = 0;
 
-  for (int i = 0; i < 7; i++) {
+  for (int i = 0; i < TOTAL_OF_BUTTONS; i++) {
     buttonStates |= ((digitalRead(pinOfButtons[i]) == LOW) ? 1 : 0) << i;
   }
 
