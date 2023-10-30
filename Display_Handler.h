@@ -9,8 +9,6 @@ class DisplayHandler: public MessageRenderer {
     DisplayHandler();
     int begin();
     bool render(JoystickAction* message);
-  protected:
-    bool print(char lines[][24]);
 };
 
 #endif
