@@ -14,22 +14,25 @@ int DisplayHandler::begin() {
   u8g2.setI2CAddress(0x3F * 2); 
   u8g2.setBusClock(200000);
   u8g2.begin();
-  u8g2.setFont(u8g2_font_t0_13_tf);
+  u8g2.setFont(u8g2_font_t0_12_tf);
   return 1;
 }
 
-char buf[20] = {};
+char lines[2][24] = {{}, {}};
 
 int DisplayHandler::check() {
   u8g2.firstPage();
   do {
       u8g2.setCursor(0, 23);
-      u8g2.print(buf);
+      u8g2.print(lines[0]);
+      u8g2.setCursor(0, 23 + u8g2.getMaxCharHeight() + 1);
+      u8g2.print(lines[1]);
   } while (u8g2.nextPage());
 }
 
 bool DisplayHandler::render(JoystickAction* message) {
-  sprintf(buf, " X:% 4d - Y:% 4d ", message->getX() - 512, message->getY() - 512);
+  sprintf(lines[0], "Fix X:% 4d - Y:% 4d", message->getX() - 512, message->getY() - 512);
+  sprintf(lines[1], "Raw X:%4d - Y:%4d", message->getOriginX(), message->getOriginY());
   check();
   return true;
 }

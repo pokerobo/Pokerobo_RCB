@@ -13,6 +13,11 @@ JoystickAction::JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_
   _flags = flags;
 }
 
+void JoystickAction::setOrigin(uint16_t x, uint16_t y) {
+  _originX = x;
+  _originY = y;
+}
+
 uint16_t JoystickAction::getButtons() {
   return _buttons;
 }
@@ -23,6 +28,14 @@ uint16_t JoystickAction::getX() {
 
 uint16_t JoystickAction::getY() {
   return _y;
+}
+
+uint16_t JoystickAction::getOriginX() {
+  return _originX;
+}
+
+uint16_t JoystickAction::getOriginY() {
+  return _originY;
 }
 
 uint32_t JoystickAction::getFlags() {

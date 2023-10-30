@@ -1,7 +1,7 @@
 #include "Joystick_Handler.h"
 
 #ifndef JOYSTICK_DETECTION_TOTAL
-#define JOYSTICK_DETECTION_TOTAL 10
+#define JOYSTICK_DETECTION_TOTAL  20
 #endif//JOYSTICK_DETECTION_TOTAL
 
 static int JoystickHandler::pinOfButtons[] = {
@@ -115,12 +115,14 @@ int JoystickHandler::check() {
   Serial.print("M1"), Serial.print(": "), Serial.println(log);
 #endif
 
+  uint16_t originX = x;
   if (x < _middleX) {
     x = map(x, 0, _middleX, 0, 512);
   } else {
     x = map(x, _middleX, JOYSTICK_MAX_X, 512, 1024);
   }
 
+  uint16_t originY = y;
   if (y < _middleY) {
     y = map(y, 0, _middleY, 0, 512);
   } else {
@@ -128,6 +130,7 @@ int JoystickHandler::check() {
   }
 
   JoystickAction message(pressed, x, y, _count);
+  message.setOrigin(originX, originY);
   if (_messageRenderer != NULL) {
     _messageRenderer->render(&message);
   }

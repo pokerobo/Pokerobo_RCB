@@ -15,9 +15,12 @@ class JoystickAction: public MessagePacket {
   static const uint8_t messageSize;
   public:
     JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t flags);
+    void setOrigin(uint16_t x, uint16_t y);
     uint16_t getButtons();
     uint16_t getX();
     uint16_t getY();
+    uint16_t getOriginX();
+    uint16_t getOriginY();
     uint32_t getFlags();
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
@@ -25,6 +28,8 @@ class JoystickAction: public MessagePacket {
     uint16_t _buttons;
     uint16_t _x;
     uint16_t _y;
+    uint16_t _originX;
+    uint16_t _originY;
     uint32_t _flags;
 };
 
