@@ -18,6 +18,7 @@ void setup() {
   joystickHandler.begin();
 #else
   tranceiver.begin(RX);
+  tranceiver.add(&displayHandler);
   tranceiver.add(&consoleMessageRenderer);
 #endif
 }

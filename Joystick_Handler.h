@@ -21,8 +21,8 @@
 #else
 #define JOYSTICK_MID_X   580
 #define JOYSTICK_MID_Y   590
-#define JOYSTICK_MAX_X   1024
-#define JOYSTICK_MAX_Y   1024
+#define JOYSTICK_MAX_X   900
+#define JOYSTICK_MAX_Y   900
 #endif
 
 #ifndef MIN_BOUND_X
@@ -82,6 +82,8 @@ class JoystickHandler {
     uint32_t _count = 0;
     int16_t _middleX = JOYSTICK_MID_X;
     int16_t _middleY = JOYSTICK_MID_Y;
+    int16_t _maxX = JOYSTICK_MAX_X;
+    int16_t _maxY = JOYSTICK_MAX_Y;
     ProgramManager* _programManager = NULL;
     MessageRenderer* _messageRenderer = NULL;
     MessageSender* _messageSenders[MESSAGE_SENDER_MAX] = {};

@@ -115,18 +115,25 @@ int JoystickHandler::check() {
   Serial.print("M1"), Serial.print(": "), Serial.println(log);
 #endif
 
+  if (x > _maxX) {
+    _maxX = x;
+  }
+  if (y > _maxY) {
+    _maxY = y;
+  }
+
   uint16_t originX = x;
   if (x < _middleX) {
     x = map(x, 0, _middleX, 0, 512);
   } else {
-    x = map(x, _middleX, JOYSTICK_MAX_X, 512, 1024);
+    x = map(x, _middleX, _maxX, 512, 1024);
   }
 
   uint16_t originY = y;
   if (y < _middleY) {
     y = map(y, 0, _middleY, 0, 512);
   } else {
-    y = map(y, _middleY, JOYSTICK_MAX_Y, 512, 1024);
+    y = map(y, _middleY, _maxY, 512, 1024);
   }
 
   JoystickAction message(pressed, x, y, _count);

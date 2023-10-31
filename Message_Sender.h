@@ -63,12 +63,12 @@ class JoystickAction: public MessagePacket {
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
   private:
-    uint16_t _buttons;
-    uint16_t _x;
-    uint16_t _y;
-    uint16_t _originX;
-    uint16_t _originY;
-    uint32_t _flags;
+    uint16_t _buttons = 0;
+    uint16_t _x = 0;
+    uint16_t _y = 0;
+    uint16_t _originX = 0;
+    uint16_t _originY = 0;
+    uint32_t _flags = 0;
 };
 
 class MessageSender {
