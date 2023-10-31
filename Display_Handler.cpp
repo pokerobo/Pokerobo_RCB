@@ -3,10 +3,11 @@
 #include <U8g2lib.h>
 #include <Wire.h>
 
-#define JOYSTICK_PAD_OX 96
-#define JOYSTICK_PAD_OY 32
-#define JOYSTICK_PAD_OR 30
-#define JOYSTICK_PAD_IR 4
+#define JOYSTICK_INFO_COLUMNS           8 // 7 chars and '\0'
+#define JOYSTICK_PAD_OX                 32
+#define JOYSTICK_PAD_OY                 32
+#define JOYSTICK_PAD_OR                 30
+#define JOYSTICK_PAD_IR                 4
 
 #define JOYSTICK_VISUAL_PAD_CIRCLE      1
 #define JOYSTICK_VISUAL_PAD_SQUARE1     2
@@ -26,13 +27,18 @@ int DisplayHandler::begin() {
   u8g2.setBusClock(200000);
   u8g2.begin();
   u8g2.setFont(u8g2_font_t0_12_tf);
+
+  _maxCharHeight = u8g2.getMaxCharHeight();
+  _maxCharWidth = u8g2.getMaxCharWidth();
+  _virtualPadOx = JOYSTICK_PAD_OX + (JOYSTICK_INFO_COLUMNS - 1) * _maxCharWidth + 3;
+
   return 1;
 }
 
-bool print_(char lines[][8]) {
+bool print_(char lines[][JOYSTICK_INFO_COLUMNS]) {
   int maxCharHeight = u8g2.getMaxCharHeight();
   for (uint8_t i=0; i<5; i++) {
-    u8g2.setCursor(0, maxCharHeight + maxCharHeight * i);
+    u8g2.setCursor(0, maxCharHeight + 3 + maxCharHeight * i);
     u8g2.print(lines[i]);
   }
 }
@@ -77,20 +83,20 @@ bool DisplayHandler::render(JoystickAction* message) {
   int nX = -512 + message->getX();
   int nY = -512 + message->getY();
 
-  char lines[5][8] = {{}, {}, {}, {}, {}};
+  char lines[5][JOYSTICK_INFO_COLUMNS] = {{}, {}, {}, {}, {}};
   sprintf(lines[0], "~X:% 4d", nX);
   sprintf(lines[1], "~Y:% 4d", nY);
   sprintf(lines[3], "oX:%4d", message->getOriginX());
   sprintf(lines[4], "oY:%4d", message->getOriginY());
 
   uint16_t buttons = message->getButtons();
-  lines[2][0] = (buttons & MASK_UP_BUTTON) ? 'U' : '-';
-  lines[2][1] = (buttons & MASK_RIGHT_BUTTON) ? 'R' : '-';
-  lines[2][2] = (buttons & MASK_DOWN_BUTTON) ? 'D' : '-';
-  lines[2][3] = (buttons & MASK_LEFT_BUTTON) ? 'L' : '-';
-  lines[2][4] = (buttons & MASK_START_BUTTON) ? 'S' : '-';
-  lines[2][5] = (buttons & MASK_SELECT_BUTTON) ? 'O' : '-';
-  lines[2][6] = (buttons & MASK_ANALOG_BUTTON) ? 'A' : '-';
+  lines[2][POS_UP_BUTTON] = (buttons & MASK_UP_BUTTON) ? 'U' : '-';
+  lines[2][POS_RIGHT_BUTTON] = (buttons & MASK_RIGHT_BUTTON) ? 'R' : '-';
+  lines[2][POS_DOWN_BUTTON] = (buttons & MASK_DOWN_BUTTON) ? 'D' : '-';
+  lines[2][POS_LEFT_BUTTON] = (buttons & MASK_LEFT_BUTTON) ? 'L' : '-';
+  lines[2][POS_START_BUTTON] = (buttons & MASK_START_BUTTON) ? 'S' : '-';
+  lines[2][POS_SELECT_BUTTON] = (buttons & MASK_SELECT_BUTTON) ? 'O' : '-';
+  lines[2][POS_ANALOG_BUTTON] = (buttons & MASK_ANALOG_BUTTON) ? 'A' : '-';
 
   int rX = map(nX, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
   int rY = map(nY, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
@@ -99,7 +105,7 @@ bool DisplayHandler::render(JoystickAction* message) {
   do {
     print_(lines);
   #if JOYSTICK_VISUAL_PAD_STYLE == JOYSTICK_VISUAL_PAD_SQUARE2
-    drawJoystickSquare2(JOYSTICK_PAD_OX, JOYSTICK_PAD_OY, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
+    drawJoystickSquare2(_virtualPadOx, JOYSTICK_PAD_OY, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
 #endif
   } while (u8g2.nextPage());
 }

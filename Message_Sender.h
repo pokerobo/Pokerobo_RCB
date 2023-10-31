@@ -41,6 +41,14 @@
 #define MASK_SELECT_BUTTON 1U << BIT_SELECT_BUTTON
 #define MASK_ANALOG_BUTTON 1U << BIT_ANALOG_BUTTON
 
+#define POS_UP_BUTTON         2
+#define POS_RIGHT_BUTTON      4
+#define POS_DOWN_BUTTON       3
+#define POS_LEFT_BUTTON       1
+#define POS_START_BUTTON      5
+#define POS_SELECT_BUTTON     6
+#define POS_ANALOG_BUTTON     0
+
 #define MESSAGE_RENDERERS_LIMIT   7
 
 class MessagePacket {

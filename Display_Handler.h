@@ -9,6 +9,10 @@ class DisplayHandler: public MessageRenderer {
     DisplayHandler();
     int begin();
     bool render(JoystickAction* message);
+  private:
+    int _maxCharHeight = 10;
+    int _maxCharWidth = 4;
+    int _virtualPadOx = 64;
 };
 
 #endif
