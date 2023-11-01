@@ -4,6 +4,14 @@
 #define JOYSTICK_DETECTION_TOTAL  20
 #endif//JOYSTICK_DETECTION_TOTAL
 
+#if __JOYSTICK_FUNDUINO_SHIELD__
+#define BUTTON_PRESS_PIN_VALUES   0b0000000
+#else
+#define BUTTON_PRESS_PIN_VALUES   0b0111111
+#endif
+
+#define CLICK_STYLE_BUTTONS       MASK_START_BUTTON | MASK_SELECT_BUTTON | MASK_ANALOG_BUTTON
+
 static int JoystickHandler::pinOfButtons[] = {
   PIN_UP_BUTTON,
   PIN_RIGHT_BUTTON,
@@ -218,14 +226,13 @@ byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const 
   return 0;
 }
 
-uint16_t buttonClicks[3] = {
-  MASK_ANALOG_BUTTON, MASK_START_BUTTON, MASK_SELECT_BUTTON
-};
-
 uint16_t JoystickHandler::checkButtonClickedFlags(uint16_t pressed) {
   uint16_t clicked = pressed;
-  for (byte i=0; i<3; i++) {
-    uint16_t mask = buttonClicks[i];
+  for (int i = 0; i < TOTAL_OF_BUTTONS; i++) {
+    uint16_t mask = 1U << i;
+    if (!(CLICK_STYLE_BUTTONS & mask)) {
+      continue;
+    }
     clicked &= (~mask);
     if (pressed & mask) {
       _clickedMemo |= mask;
@@ -245,7 +252,7 @@ uint16_t JoystickHandler::readButtonStates() {
   uint16_t buttonStates = 0;
 
   for (int i = 0; i < TOTAL_OF_BUTTONS; i++) {
-    buttonStates |= ((digitalRead(pinOfButtons[i]) == LOW) ? 1 : 0) << i;
+    buttonStates |= ((digitalRead(pinOfButtons[i]) == ((BUTTON_PRESS_PIN_VALUES >> i) & 1)) ? 1 : 0) << i;
   }
 
   return buttonStates;
