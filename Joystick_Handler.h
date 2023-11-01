@@ -79,10 +79,12 @@ class JoystickHandler {
     void set(SpeedResolver* speedResolver);
   protected:
     uint16_t readButtonStates();
+    uint16_t checkButtonClickedFlags(uint16_t pressed);
     bool isChanged(int16_t x, int16_t y, uint32_t buttons);
     byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet=NULL);
   private:
     uint32_t _count = 0;
+    uint16_t _clickedMemo;
     int16_t _middleX = JOYSTICK_MID_X;
     int16_t _middleY = JOYSTICK_MID_Y;
     int16_t _maxX = JOYSTICK_MAX_X;

@@ -18,8 +18,16 @@ void JoystickAction::setOrigin(uint16_t x, uint16_t y) {
   _originY = y;
 }
 
+void JoystickAction::setClickedFlags(uint16_t clickedFlags) {
+  _clickedMemo = clickedFlags;
+}
+
 uint16_t JoystickAction::getButtons() {
   return _buttons;
+}
+
+uint16_t JoystickAction::getClickedFlags() {
+  return _clickedMemo;
 }
 
 uint16_t JoystickAction::getX() {

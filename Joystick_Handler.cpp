@@ -146,6 +146,7 @@ int JoystickHandler::check() {
 
   JoystickAction message(pressed, x, y, _count);
   message.setOrigin(originX, originY);
+  message.setClickedFlags(checkButtonClickedFlags(pressed));
 
   SpeedPacket speedPacket;
 
@@ -215,6 +216,27 @@ byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const 
     }
   }
   return 0;
+}
+
+uint16_t buttonClicks[3] = {
+  MASK_ANALOG_BUTTON, MASK_START_BUTTON, MASK_SELECT_BUTTON
+};
+
+uint16_t JoystickHandler::checkButtonClickedFlags(uint16_t pressed) {
+  uint16_t clicked = pressed;
+  for (byte i=0; i<3; i++) {
+    uint16_t mask = buttonClicks[i];
+    clicked &= (~mask);
+    if (pressed & mask) {
+      _clickedMemo |= mask;
+    } else {
+      if (_clickedMemo & mask) {
+        _clickedMemo &= (~mask);
+        clicked |= mask;
+      }
+    }
+  }
+  return clicked;
 }
 
 #if !__JOYSTICK_READ_BUTTONS_DEBUG__

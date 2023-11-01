@@ -62,7 +62,9 @@ class JoystickAction: public MessagePacket {
   public:
     JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t flags);
     void setOrigin(uint16_t x, uint16_t y);
+    void setClickedFlags(uint16_t clickedFlags);
     uint16_t getButtons();
+    uint16_t getClickedFlags();
     uint16_t getX();
     uint16_t getY();
     uint16_t getOriginX();
@@ -72,6 +74,7 @@ class JoystickAction: public MessagePacket {
     uint8_t* serialize(uint8_t* buf, uint8_t len);
   private:
     uint16_t _buttons = 0;
+    uint16_t _clickedMemo = 0;
     uint16_t _x = 0;
     uint16_t _y = 0;
     uint16_t _originX = 0;

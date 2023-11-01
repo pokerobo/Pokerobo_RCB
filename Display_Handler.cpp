@@ -135,6 +135,17 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
   lines[2][POS_SELECT_BUTTON] = (buttons & MASK_SELECT_BUTTON) ? 'O' : '-';
   lines[2][POS_ANALOG_BUTTON] = (buttons & MASK_ANALOG_BUTTON) ? 'A' : '-';
 
+  uint16_t clickedFlags = message->getClickedFlags();
+  if (clickedFlags & MASK_START_BUTTON) {
+    lines[2][POS_START_BUTTON] = 's';
+  }
+  if (clickedFlags & MASK_SELECT_BUTTON) {
+    lines[2][POS_SELECT_BUTTON] = 'o';
+  }
+  if (clickedFlags & MASK_ANALOG_BUTTON) {
+    lines[2][POS_ANALOG_BUTTON] = 'a';
+  }
+
   int rX = map(nX, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
   int rY = map(nY, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
 
