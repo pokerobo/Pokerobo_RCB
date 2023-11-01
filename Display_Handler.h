@@ -9,6 +9,7 @@ class DisplayHandler: public MessageRenderer {
     DisplayHandler();
     int begin();
     bool render(JoystickAction* message);
+    bool render(JoystickAction* message, SpeedPacket* speedPacket);
   private:
     int _maxCharHeight = 10;
     int _maxCharWidth = 4;

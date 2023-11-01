@@ -4,6 +4,7 @@
 #include "Commons.h"
 #include "Message_Sender.h"
 #include "Program_Manager.h"
+#include "Speed_Resolver.h"
 
 #ifndef __JOYSTICK_READ_BUTTONS_DEBUG__
 #define __JOYSTICK_READ_BUTTONS_DEBUG__  0
@@ -74,6 +75,8 @@ class JoystickHandler {
     int check();
     void detect();
     bool add(MessageSender* messageSender);
+    void set(MessageRenderer* messageRenderer);
+    void set(SpeedResolver* speedResolver);
   protected:
     uint16_t readButtonStates();
     bool isChanged(int16_t x, int16_t y, uint32_t buttons);
@@ -88,6 +91,7 @@ class JoystickHandler {
     MessageRenderer* _messageRenderer = NULL;
     MessageSender* _messageSenders[MESSAGE_SENDER_MAX] = {};
     uint8_t _messageSendersTotal = 0;
+    SpeedResolver* _speedResolver = NULL;
 };
 
 #endif//__JOYSTICK_HANDLER_H__

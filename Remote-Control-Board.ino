@@ -6,6 +6,7 @@ DisplayHandler displayHandler;
 RF24Tranceiver tranceiver;
 JoystickHandler joystickHandler(&tranceiver, &displayHandler);
 ConsoleMessageRenderer consoleMessageRenderer;
+SpeedResolver speedResolver;
 
 void setup() {
   while (!Serial) delay(100);
@@ -16,6 +17,7 @@ void setup() {
 #if __RF24_TRANCEIVER_MODE__
   tranceiver.begin();
   joystickHandler.begin();
+  joystickHandler.set(&speedResolver);
 #else
   tranceiver.begin(RX);
   tranceiver.add(&displayHandler);

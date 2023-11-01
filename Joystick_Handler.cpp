@@ -83,6 +83,14 @@ bool JoystickHandler::add(MessageSender* messageSender) {
   return true;
 }
 
+void JoystickHandler::set(MessageRenderer* messageRenderer) {
+  _messageRenderer = messageRenderer;
+}
+
+void JoystickHandler::set(SpeedResolver* speedResolver) {
+  _speedResolver = speedResolver;
+}
+
 int JoystickHandler::begin() {
 #if __STRICT_MODE__
   verify();
@@ -138,8 +146,15 @@ int JoystickHandler::check() {
 
   JoystickAction message(pressed, x, y, _count);
   message.setOrigin(originX, originY);
+
+  SpeedPacket speedPacket;
+
+  if (_speedResolver != NULL) {
+    _speedResolver->resolve(&speedPacket, &message);
+  }
+
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(&message);
+    _messageRenderer->render(&message, &speedPacket);
   }
 
 #if __RUNNING_LOG_ENABLED__

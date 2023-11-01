@@ -53,7 +53,41 @@ uint8_t* JoystickAction::serialize(uint8_t* buf, uint8_t len) {
   return encodeMessage(buf, "JS", _buttons, _x, _y, _flags);
 }
 
+SpeedPacket::SpeedPacket(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
+  _LeftSpeed = leftSpeed;
+  _LeftDirection = leftDirection;
+  _RightSpeed = rightSpeed;
+  _RightDirection = rightDirection;
+}
+
+void SpeedPacket::update(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
+  _LeftSpeed = leftSpeed;
+  _LeftDirection = leftDirection;
+  _RightSpeed = rightSpeed;
+  _RightDirection = rightDirection;
+}
+
+int SpeedPacket::getLeftSpeed() {
+  return _LeftSpeed;
+}
+
+byte SpeedPacket::getLeftDirection() {
+  return _LeftDirection;
+}
+
+int SpeedPacket::getRightSpeed() {
+  return _RightSpeed;
+}
+
+byte SpeedPacket::getRightDirection() {
+  return _RightDirection;
+}
+
 bool ConsoleMessageRenderer::render(JoystickAction* message) {
+  return render(message, NULL);
+}
+
+bool ConsoleMessageRenderer::render(JoystickAction* message, SpeedPacket* speedPacket) {
   Serial.print("#"), Serial.print(message->getFlags()), Serial.print(" - ");
   Serial.print("Buttons"), Serial.print(": "), Serial.print(message->getButtons());
   Serial.print("; "), Serial.print("X"), Serial.print(": "), Serial.print(message->getX());

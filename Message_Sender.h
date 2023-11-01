@@ -79,6 +79,21 @@ class JoystickAction: public MessagePacket {
     uint32_t _flags = 0;
 };
 
+class SpeedPacket {
+  public:
+    SpeedPacket(int leftSpeed=0, byte leftDirection=0, int rightSpeed=0, byte rightDirection=0);
+    void update(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection);
+    int getLeftSpeed();
+    byte getLeftDirection();
+    int getRightSpeed();
+    byte getRightDirection();
+  private:
+    int _LeftSpeed;
+    byte _LeftDirection;
+    int _RightSpeed;
+    byte _RightDirection;
+};
+
 class MessageSender {
   public:
     virtual bool write(const void* buf, uint8_t len);
@@ -88,11 +103,13 @@ class MessageSender {
 class MessageRenderer {
   public:
     virtual bool render(JoystickAction* message);
+    virtual bool render(JoystickAction* message, SpeedPacket* speedPacket);
 };
 
 class ConsoleMessageRenderer: public MessageRenderer {
   public:
     bool render(JoystickAction* message);
+    bool render(JoystickAction* message, SpeedPacket* speedPacket);
 };
 
 uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t flags);
