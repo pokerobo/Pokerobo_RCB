@@ -60,11 +60,11 @@ class MessagePacket {
 class JoystickAction: public MessagePacket {
   static const uint8_t messageSize;
   public:
-    JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t flags);
+    JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
     void setOrigin(uint16_t x, uint16_t y);
-    void setClickedFlags(uint16_t clickedFlags);
-    uint16_t getButtons();
-    uint16_t getClickedFlags();
+    void setClickingFlags(uint16_t clickingFlags);
+    uint16_t getPressingFlags();
+    uint16_t getClickingFlags();
     uint16_t getX();
     uint16_t getY();
     uint16_t getOriginX();
@@ -73,13 +73,13 @@ class JoystickAction: public MessagePacket {
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
   private:
-    uint16_t _buttons = 0;
-    uint16_t _clickedMemo = 0;
+    uint16_t _pressingFlags = 0;
+    uint16_t _clickingTrack = 0;
     uint16_t _x = 0;
     uint16_t _y = 0;
     uint16_t _originX = 0;
     uint16_t _originY = 0;
-    uint32_t _flags = 0;
+    uint32_t _extras = 0;
 };
 
 class SpeedPacket {
@@ -115,8 +115,8 @@ class ConsoleMessageRenderer: public MessageRenderer {
     bool render(JoystickAction* message, SpeedPacket* speedPacket);
 };
 
-uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t flags);
+uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t extras);
 
-bool decodeMessage(uint8_t* buf, char* cmd, uint16_t* pressed, uint16_t* x, uint16_t* y, uint32_t* flags);
+bool decodeMessage(uint8_t* buf, char* cmd, uint16_t* pressed, uint16_t* x, uint16_t* y, uint32_t* extras);
 
 #endif

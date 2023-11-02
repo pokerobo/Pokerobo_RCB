@@ -126,7 +126,7 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
   sprintf(lines[3], "oX:%4d", message->getOriginX());
   sprintf(lines[4], "oY:%4d", message->getOriginY());
 
-  uint16_t buttons = message->getButtons();
+  uint16_t buttons = message->getPressingFlags();
   lines[2][POS_UP_BUTTON] = (buttons & MASK_UP_BUTTON) ? 'U' : '-';
   lines[2][POS_RIGHT_BUTTON] = (buttons & MASK_RIGHT_BUTTON) ? 'R' : '-';
   lines[2][POS_DOWN_BUTTON] = (buttons & MASK_DOWN_BUTTON) ? 'D' : '-';
@@ -135,14 +135,14 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
   lines[2][POS_SELECT_BUTTON] = (buttons & MASK_SELECT_BUTTON) ? 'O' : '-';
   lines[2][POS_ANALOG_BUTTON] = (buttons & MASK_ANALOG_BUTTON) ? 'A' : '-';
 
-  uint16_t clickedFlags = message->getClickedFlags();
-  if (clickedFlags & MASK_START_BUTTON) {
+  uint16_t clickingFlags = message->getClickingFlags();
+  if (clickingFlags & MASK_START_BUTTON) {
     lines[2][POS_START_BUTTON] = 's';
   }
-  if (clickedFlags & MASK_SELECT_BUTTON) {
+  if (clickingFlags & MASK_SELECT_BUTTON) {
     lines[2][POS_SELECT_BUTTON] = 'o';
   }
-  if (clickedFlags & MASK_ANALOG_BUTTON) {
+  if (clickingFlags & MASK_ANALOG_BUTTON) {
     lines[2][POS_ANALOG_BUTTON] = 'a';
   }
 

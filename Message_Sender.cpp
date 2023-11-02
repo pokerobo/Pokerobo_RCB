@@ -6,11 +6,11 @@ static const uint8_t JoystickAction::messageSize = 2
     + sizeof(uint16_t)
     + sizeof(uint32_t);
 
-JoystickAction::JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t flags) {
-  _buttons = buttons;
+JoystickAction::JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras) {
+  _pressingFlags = buttons;
   _x = x;
   _y = y;
-  _flags = flags;
+  _extras = extras;
 }
 
 void JoystickAction::setOrigin(uint16_t x, uint16_t y) {
@@ -18,16 +18,16 @@ void JoystickAction::setOrigin(uint16_t x, uint16_t y) {
   _originY = y;
 }
 
-void JoystickAction::setClickedFlags(uint16_t clickedFlags) {
-  _clickedMemo = clickedFlags;
+void JoystickAction::setClickingFlags(uint16_t clickingFlags) {
+  _clickingTrack = clickingFlags;
 }
 
-uint16_t JoystickAction::getButtons() {
-  return _buttons;
+uint16_t JoystickAction::getPressingFlags() {
+  return _pressingFlags;
 }
 
-uint16_t JoystickAction::getClickedFlags() {
-  return _clickedMemo;
+uint16_t JoystickAction::getClickingFlags() {
+  return _clickingTrack;
 }
 
 uint16_t JoystickAction::getX() {
@@ -47,7 +47,7 @@ uint16_t JoystickAction::getOriginY() {
 }
 
 uint32_t JoystickAction::getFlags() {
-  return _flags;
+  return _extras;
 }
 
 uint8_t JoystickAction::length() {
@@ -58,7 +58,7 @@ uint8_t* JoystickAction::serialize(uint8_t* buf, uint8_t len) {
   if (len < messageSize) {
     return NULL;
   }
-  return encodeMessage(buf, "JS", _buttons, _x, _y, _flags);
+  return encodeMessage(buf, "JS", _pressingFlags, _x, _y, _extras);
 }
 
 SpeedPacket::SpeedPacket(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
@@ -97,7 +97,7 @@ bool ConsoleMessageRenderer::render(JoystickAction* message) {
 
 bool ConsoleMessageRenderer::render(JoystickAction* message, SpeedPacket* speedPacket) {
   Serial.print("#"), Serial.print(message->getFlags()), Serial.print(" - ");
-  Serial.print("Buttons"), Serial.print(": "), Serial.print(message->getButtons());
+  Serial.print("Buttons"), Serial.print(": "), Serial.print(message->getPressingFlags());
   Serial.print("; "), Serial.print("X"), Serial.print(": "), Serial.print(message->getX());
   Serial.print("; "), Serial.print("Y"), Serial.print(": "), Serial.print(message->getY());
   Serial.println();
@@ -118,13 +118,13 @@ uint8_t* encodeInteger(uint8_t* store, uint32_t value) {
   return store;
 }
 
-uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t flags) {
+uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t extras) {
   buf[0] = cmd[0];
   buf[1] = cmd[1];
   encodeInteger(&buf[2], pressed);
   encodeInteger(&buf[4], x);
   encodeInteger(&buf[6], y);
-  encodeInteger(&buf[8], flags);
+  encodeInteger(&buf[8], extras);
   return buf;
 }
 
@@ -142,12 +142,12 @@ uint32_t decodeInteger(uint8_t* arr, int length) {
   return 0;
 }
 
-bool decodeMessage(uint8_t* msg, char* cmd, uint16_t* buttons, uint16_t* x, uint16_t* y, uint32_t* flags) {
+bool decodeMessage(uint8_t* msg, char* cmd, uint16_t* buttons, uint16_t* x, uint16_t* y, uint32_t* extras) {
   if (msg[0] == cmd[0] && msg[1] == cmd[1]) {
     *buttons = decodeInteger(&msg[2], 2);
     *x = decodeInteger(&msg[4], 2);
     *y = decodeInteger(&msg[6], 2);
-    *flags = decodeInteger(&msg[8], 4);
+    *extras = decodeInteger(&msg[8], 4);
     return true;
   }
   return false;
