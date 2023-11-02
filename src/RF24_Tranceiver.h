@@ -4,12 +4,14 @@
 #include "Commons.h"
 #include "Message_Sender.h"
 
+#define RF24_DEFAULT_ADDRESS 0x123456789ABCDEF0LL
+
 typedef enum { TX = 0, RX } tranceiver_t;
 typedef enum { ACK_OK = 0, ACK_FAILED, MESSAGE_NULL, TRANSMITTER_NULL } rf24_tx_status_t;
 
 class RF24Transmitter: public MessageSender {
   public:
-    int begin(void* radio);
+    int begin(void* radio, uint64_t address);
     bool write(const void* buf, uint8_t len);
     bool write(MessagePacket* packet);
     rf24_tx_status_t getStatus();
@@ -20,7 +22,7 @@ class RF24Transmitter: public MessageSender {
 
 class RF24Receiver {
   public:
-    int begin(void* radio);
+    int begin(void* radio, uint64_t address);
     int check();
     bool add(MessageRenderer* messageRenderer);
   protected:
@@ -33,7 +35,7 @@ class RF24Receiver {
 
 class RF24Tranceiver: public RF24Transmitter, public RF24Receiver {
   public:
-    int begin(tranceiver_t mode=TX);
+    int begin(tranceiver_t mode=TX, uint64_t address=RF24_DEFAULT_ADDRESS);
 };
 
 #endif

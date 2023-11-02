@@ -22,21 +22,19 @@
 #define PIN_CSN 10
 #endif
 
-const uint64_t address = 0xE8E8F0F0E1LL;
-
 RF24 radio(PIN_CE, PIN_CSN);
 
-int RF24Tranceiver::begin(tranceiver_t mode) {
+int RF24Tranceiver::begin(tranceiver_t mode, uint64_t address) {
   if (mode == TX) {
-    return RF24Transmitter::begin(&radio);
+    return RF24Transmitter::begin(&radio, address);
   }
   if (mode == RX) {
-    return RF24Receiver::begin(&radio);
+    return RF24Receiver::begin(&radio, address);
   }
   return -1;
 }
 
-int RF24Transmitter::begin(void* radio) {
+int RF24Transmitter::begin(void* radio, uint64_t address) {
   if (radio == NULL) {
     return -1;
   }
@@ -73,7 +71,7 @@ rf24_tx_status_t RF24Transmitter::getStatus() {
   return _status;
 }
 
-int RF24Receiver::begin(void* radio) {
+int RF24Receiver::begin(void* radio, uint64_t address) {
   if (radio == NULL) {
     return -1;
   }

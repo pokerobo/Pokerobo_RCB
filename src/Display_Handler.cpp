@@ -19,7 +19,7 @@
 #define SPEED_METER_OY                  32
 #define SPEED_METER_MAX_HEIGHT          30
 
-#define idleButtonIcon(mask) ((JOYSTICK_DISABLED_BUTTONS & mask) ? '-' : 'X')
+#define idleButtonIcon(buttons, mask, icon) ((JOYSTICK_DISABLED_BUTTONS & mask) ? '-' : (buttons & mask) ? '*' : icon)
 
 U8G2_ST7567_ENH_DG128064I_1_HW_I2C u8g2(U8G2_R2, SCL, SDA, U8X8_PIN_NONE); 
 
@@ -129,23 +129,23 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
   sprintf(lines[4], "oY:%4d", message->getOriginY());
 
   uint16_t buttons = message->getPressingFlags();
-  lines[2][POS_UP_BUTTON] = (buttons & MASK_UP_BUTTON) ? 'U' : idleButtonIcon(MASK_UP_BUTTON);
-  lines[2][POS_RIGHT_BUTTON] = (buttons & MASK_RIGHT_BUTTON) ? 'R' : idleButtonIcon(MASK_RIGHT_BUTTON);
-  lines[2][POS_DOWN_BUTTON] = (buttons & MASK_DOWN_BUTTON) ? 'D' : idleButtonIcon(MASK_DOWN_BUTTON);
-  lines[2][POS_LEFT_BUTTON] = (buttons & MASK_LEFT_BUTTON) ? 'L' : idleButtonIcon(MASK_LEFT_BUTTON);
-  lines[2][POS_START_BUTTON] = (buttons & MASK_START_BUTTON) ? 'S' : idleButtonIcon(MASK_START_BUTTON);
-  lines[2][POS_SELECT_BUTTON] = (buttons & MASK_SELECT_BUTTON) ? 'O' : idleButtonIcon(MASK_SELECT_BUTTON);
-  lines[2][POS_ANALOG_BUTTON] = (buttons & MASK_ANALOG_BUTTON) ? 'A' : idleButtonIcon(MASK_ANALOG_BUTTON);
+  lines[2][POS_UP_BUTTON] = idleButtonIcon(buttons, MASK_UP_BUTTON, 'U');
+  lines[2][POS_RIGHT_BUTTON] = idleButtonIcon(buttons, MASK_RIGHT_BUTTON, 'R');
+  lines[2][POS_DOWN_BUTTON] = idleButtonIcon(buttons, MASK_DOWN_BUTTON, 'D');
+  lines[2][POS_LEFT_BUTTON] = idleButtonIcon(buttons, MASK_LEFT_BUTTON, 'L');
+  lines[2][POS_START_BUTTON] = idleButtonIcon(buttons, MASK_START_BUTTON, 'S');
+  lines[2][POS_SELECT_BUTTON] = idleButtonIcon(buttons, MASK_SELECT_BUTTON, 'O');
+  lines[2][POS_ANALOG_BUTTON] = idleButtonIcon(buttons, MASK_ANALOG_BUTTON, 'A');
 
   uint16_t clickingFlags = message->getClickingFlags();
   if (clickingFlags & MASK_START_BUTTON) {
-    lines[2][POS_START_BUTTON] = 's';
+    lines[2][POS_START_BUTTON] = '+';
   }
   if (clickingFlags & MASK_SELECT_BUTTON) {
-    lines[2][POS_SELECT_BUTTON] = 'o';
+    lines[2][POS_SELECT_BUTTON] = '+';
   }
   if (clickingFlags & MASK_ANALOG_BUTTON) {
-    lines[2][POS_ANALOG_BUTTON] = 'a';
+    lines[2][POS_ANALOG_BUTTON] = '+';
   }
 
   int rX = map(nX, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);

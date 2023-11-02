@@ -7,6 +7,8 @@
 #define __RF24_TRANCEIVER_MODE__          __RF24_TRANCEIVER_MODE_TX__
 #endif
 
+const uint64_t address = 0x18580901LL;
+
 DisplayHandler displayHandler;
 RF24Tranceiver tranceiver;
 JoystickHandler joystickHandler(&tranceiver, &displayHandler);
@@ -20,11 +22,11 @@ void setup() {
   displayHandler.begin();
 
 #if __RF24_TRANCEIVER_MODE__ == __RF24_TRANCEIVER_MODE_TX__
-  tranceiver.begin();
+  tranceiver.begin(TX, address);
   joystickHandler.begin();
   joystickHandler.set(&speedResolver);
 #else
-  tranceiver.begin(RX);
+  tranceiver.begin(RX, address);
   tranceiver.add(&displayHandler);
   tranceiver.add(&consoleMessageRenderer);
 #endif
