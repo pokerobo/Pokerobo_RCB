@@ -15,16 +15,6 @@
 #endif//__JOYSTICK_FUNDUINO_SHIELD__
 
 #if __JOYSTICK_FUNDUINO_SHIELD__
-#ifndef JOYSTICK_DISABLED_BUTTONS
-#define JOYSTICK_DISABLED_BUTTONS 0b0000000
-#endif//JOYSTICK_DISABLED_BUTTONS
-#else//__JOYSTICK_FUNDUINO_SHIELD__
-#ifndef JOYSTICK_DISABLED_BUTTONS
-#define JOYSTICK_DISABLED_BUTTONS 0b0111111
-#endif//JOYSTICK_DISABLED_BUTTONS
-#endif//__JOYSTICK_FUNDUINO_SHIELD__
-
-#if __JOYSTICK_FUNDUINO_SHIELD__
 #define JOYSTICK_MID_X   333
 #define JOYSTICK_MID_Y   333
 #define JOYSTICK_MAX_X   723
@@ -94,7 +84,7 @@ class JoystickHandler {
     byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet=NULL);
   private:
     uint32_t _count = 0;
-    uint16_t _clickingTrack;
+    uint16_t _clickingTrail;
     int16_t _middleX = JOYSTICK_MID_X;
     int16_t _middleY = JOYSTICK_MID_Y;
     int16_t _maxX = JOYSTICK_MAX_X;

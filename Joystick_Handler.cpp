@@ -171,23 +171,23 @@ int JoystickHandler::check() {
     Serial.print("M2"), Serial.print(": "), Serial.println(log);
 #endif
 
-  if (isChanged(x, y, pressed)) {
-    int8_t countNulls = 0, sumFails = 0, sumOk = 0;
-    for(int i=0; i<_messageSendersTotal; i++) {
-      int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, &message);
-      if (status > 0) {
-        sumOk += status;
-      } else if (status < 0) {
-        sumFails += status;
-      } else {
-        countNulls++;
-      }
-    }
-
-    return 2;
-  } else {
+  if (!isChanged(x, y, pressed)) {
     return 1;
   }
+
+  int8_t countNulls = 0, sumFails = 0, sumOk = 0;
+  for(int i=0; i<_messageSendersTotal; i++) {
+    int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, &message);
+    if (status > 0) {
+      sumOk += status;
+    } else if (status < 0) {
+      sumFails += status;
+    } else {
+      countNulls++;
+    }
+  }
+
+  return 2;
 }
 
 bool JoystickHandler::isChanged(int16_t x, int16_t y, uint32_t buttons) {
@@ -235,10 +235,10 @@ uint16_t JoystickHandler::checkButtonClickingFlags(uint16_t pressed) {
     }
     clicked &= (~mask);
     if (pressed & mask) {
-      _clickingTrack |= mask;
+      _clickingTrail |= mask;
     } else {
-      if (_clickingTrack & mask) {
-        _clickingTrack &= (~mask);
+      if (_clickingTrail & mask) {
+        _clickingTrail &= (~mask);
         clicked |= mask;
       }
     }

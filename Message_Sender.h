@@ -49,6 +49,21 @@
 #define POS_SELECT_BUTTON     6
 #define POS_ANALOG_BUTTON     0
 
+#if __JOYSTICK_FUNDUINO_SHIELD__
+#ifndef JOYSTICK_DISABLED_BUTTONS
+#define JOYSTICK_DISABLED_BUTTONS 0b0000000
+#endif//JOYSTICK_DISABLED_BUTTONS
+#else//__JOYSTICK_FUNDUINO_SHIELD__
+#ifndef JOYSTICK_DISABLED_BUTTONS
+#define JOYSTICK_DISABLED_BUTTONS MASK_UP_BUTTON | \
+                                  MASK_RIGHT_BUTTON | \
+                                  MASK_DOWN_BUTTON | \
+                                  MASK_LEFT_BUTTON | \
+                                  MASK_START_BUTTON | \
+                                  MASK_SELECT_BUTTON
+#endif//JOYSTICK_DISABLED_BUTTONS
+#endif//__JOYSTICK_FUNDUINO_SHIELD__
+
 #define MESSAGE_RENDERERS_LIMIT   7
 
 class MessagePacket {
@@ -69,12 +84,12 @@ class JoystickAction: public MessagePacket {
     uint16_t getY();
     uint16_t getOriginX();
     uint16_t getOriginY();
-    uint32_t getFlags();
+    uint32_t getExtras();
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
   private:
     uint16_t _pressingFlags = 0;
-    uint16_t _clickingTrack = 0;
+    uint16_t _clickingTrail = 0;
     uint16_t _x = 0;
     uint16_t _y = 0;
     uint16_t _originX = 0;

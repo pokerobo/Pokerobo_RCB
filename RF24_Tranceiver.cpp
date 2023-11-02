@@ -49,6 +49,7 @@ int RF24Transmitter::begin(void* radio) {
 
 bool RF24Transmitter::write(MessagePacket* packet) {
   if (packet == NULL) {
+    _status = MESSAGE_NULL;
     return false;
   }
   uint8_t len = packet->length();
@@ -59,10 +60,17 @@ bool RF24Transmitter::write(MessagePacket* packet) {
 
 bool RF24Transmitter::write(const void* buf, uint8_t len) {
   if (_transmitter == NULL) {
+    _status = TRANSMITTER_NULL;
     return false;
   }
   RF24* _tranceiver = (RF24*)_transmitter;
-  return _tranceiver->write(buf, len);
+  bool result = _tranceiver->write(buf, len);
+  _status = result ? ACK_OK : ACK_FAILED;
+  return result;
+}
+
+rf24_tx_status_t RF24Transmitter::getStatus() {
+  return _status;
 }
 
 int RF24Receiver::begin(void* radio) {
@@ -149,7 +157,7 @@ byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, Joyst
     uint8_t code = 1 << index;
     bool ok = messageRenderer->render(message);
 #if __RUNNING_LOG_ENABLED__
-    Serial.print("#"), Serial.print(message->getFlags()), Serial.print("->"), Serial.print(index), Serial.print(": ");
+    Serial.print("#"), Serial.print(message->getExtras()), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {
       Serial.println("v");
     } else {

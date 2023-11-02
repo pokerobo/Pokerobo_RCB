@@ -19,7 +19,7 @@ void JoystickAction::setOrigin(uint16_t x, uint16_t y) {
 }
 
 void JoystickAction::setClickingFlags(uint16_t clickingFlags) {
-  _clickingTrack = clickingFlags;
+  _clickingTrail = clickingFlags;
 }
 
 uint16_t JoystickAction::getPressingFlags() {
@@ -27,7 +27,7 @@ uint16_t JoystickAction::getPressingFlags() {
 }
 
 uint16_t JoystickAction::getClickingFlags() {
-  return _clickingTrack;
+  return _clickingTrail;
 }
 
 uint16_t JoystickAction::getX() {
@@ -46,7 +46,7 @@ uint16_t JoystickAction::getOriginY() {
   return _originY;
 }
 
-uint32_t JoystickAction::getFlags() {
+uint32_t JoystickAction::getExtras() {
   return _extras;
 }
 
@@ -96,8 +96,11 @@ bool ConsoleMessageRenderer::render(JoystickAction* message) {
 }
 
 bool ConsoleMessageRenderer::render(JoystickAction* message, SpeedPacket* speedPacket) {
-  Serial.print("#"), Serial.print(message->getFlags()), Serial.print(" - ");
-  Serial.print("Buttons"), Serial.print(": "), Serial.print(message->getPressingFlags());
+  Serial.print("#"), Serial.print(message->getExtras()), Serial.print(" - ");
+  Serial.print("Pressing"), Serial.print("Flags"), Serial.print(": "),
+      Serial.print(message->getPressingFlags());
+  Serial.print("Clicking"), Serial.print("Flags"), Serial.print(": "),
+      Serial.print(message->getClickingFlags());
   Serial.print("; "), Serial.print("X"), Serial.print(": "), Serial.print(message->getX());
   Serial.print("; "), Serial.print("Y"), Serial.print(": "), Serial.print(message->getY());
   Serial.println();

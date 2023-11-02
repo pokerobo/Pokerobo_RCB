@@ -5,14 +5,17 @@
 #include "Message_Sender.h"
 
 typedef enum { TX = 0, RX } tranceiver_t;
+typedef enum { ACK_OK = 0, ACK_FAILED, MESSAGE_NULL, TRANSMITTER_NULL } rf24_tx_status_t;
 
 class RF24Transmitter: public MessageSender {
   public:
     int begin(void* radio);
     bool write(const void* buf, uint8_t len);
     bool write(MessagePacket* packet);
+    rf24_tx_status_t getStatus();
   private:
     void* _transmitter = NULL;
+    rf24_tx_status_t _status;
 };
 
 class RF24Receiver {
