@@ -1,7 +1,7 @@
 #ifndef __COMMONS_H__
 #define __COMMONS_H__
 
-#define __RUNNING_LOG_ENABLED__           0
+#include <Arduino.h>
 
 #define __AVR_NANO__                      1
 #define __AVR_UNO__                       2
@@ -21,21 +21,12 @@
                                   MASK_START_BUTTON | \
                                   MASK_SELECT_BUTTON
 
-#include <Arduino.h>
-
 #ifndef __RUNNING_LOG_ENABLED__
-#define __RUNNING_LOG_ENABLED__           1
+#define __RUNNING_LOG_ENABLED__           0
 #endif
 
 #ifndef __STRICT_MODE__
 #define __STRICT_MODE__                   0
-#endif
-
-#define __RF24_TRANCEIVER_MODE_TX__       1
-#define __RF24_TRANCEIVER_MODE_RX__       2
-
-#ifndef __RF24_TRANCEIVER_MODE__
-#define __RF24_TRANCEIVER_MODE__          __RF24_TRANCEIVER_MODE_TX__
 #endif
 
 #endif
