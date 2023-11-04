@@ -74,13 +74,14 @@ class JoystickHandler {
     int begin();
     int check();
     void detect();
+    JoystickAction input();
     bool add(MessageSender* messageSender);
     void set(MessageRenderer* messageRenderer);
     void set(SpeedResolver* speedResolver);
   protected:
     uint16_t readButtonStates();
     uint16_t checkButtonClickingFlags(uint16_t pressed);
-    bool isChanged(int16_t x, int16_t y, uint32_t buttons);
+    bool isChanged(JoystickAction* msg);
     byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet=NULL);
   private:
     uint32_t _count = 0;

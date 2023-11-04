@@ -120,6 +120,38 @@ int JoystickHandler::check() {
   }
 #endif
 
+  JoystickAction message = input();
+
+  SpeedPacket speedPacket;
+
+  if (_speedResolver != NULL) {
+    _speedResolver->resolve(&speedPacket, &message);
+  }
+
+  if (_messageRenderer != NULL) {
+    _messageRenderer->render(&message, &speedPacket);
+  }
+
+  if (!isChanged(&message)) {
+    return 1;
+  }
+
+  int8_t countNulls = 0, sumFails = 0, sumOk = 0;
+  for(int i=0; i<_messageSendersTotal; i++) {
+    int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, &message);
+    if (status > 0) {
+      sumOk += status;
+    } else if (status < 0) {
+      sumFails += status;
+    } else {
+      countNulls++;
+    }
+  }
+
+  return 2;
+}
+
+JoystickAction JoystickHandler::input() {
   uint16_t pressed = readButtonStates();
 
   uint16_t x = analogRead(PIN_JOYSTICK_X_AXIS);
@@ -152,46 +184,23 @@ int JoystickHandler::check() {
     y = map(y, _middleY, _maxY, 512, 1024);
   }
 
-  JoystickAction message(pressed, x, y, _count);
-  message.setOrigin(originX, originY);
-  message.setClickingFlags(checkButtonClickingFlags(pressed));
-
-  SpeedPacket speedPacket;
-
-  if (_speedResolver != NULL) {
-    _speedResolver->resolve(&speedPacket, &message);
-  }
-
-  if (_messageRenderer != NULL) {
-    _messageRenderer->render(&message, &speedPacket);
-  }
-
 #if __RUNNING_LOG_ENABLED__
     sprintf(log, "%d,%d,%d", pressed, x, y);
     Serial.print("M2"), Serial.print(": "), Serial.println(log);
 #endif
 
-  if (!isChanged(x, y, pressed)) {
-    return 1;
-  }
+  JoystickAction message(pressed, x, y, _count);
+  message.setOrigin(originX, originY);
+  message.setClickingFlags(checkButtonClickingFlags(pressed));
 
-  int8_t countNulls = 0, sumFails = 0, sumOk = 0;
-  for(int i=0; i<_messageSendersTotal; i++) {
-    int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, &message);
-    if (status > 0) {
-      sumOk += status;
-    } else if (status < 0) {
-      sumFails += status;
-    } else {
-      countNulls++;
-    }
-  }
-
-  return 2;
+  return message;
 }
 
-bool JoystickHandler::isChanged(int16_t x, int16_t y, uint32_t buttons) {
+bool JoystickHandler::isChanged(JoystickAction* msg) {
 #if JOYSTICK_CHECKING_CHANGE
+  int16_t x = msg->getX();
+  int16_t y = msg->getY();
+  uint32_t buttons = msg->getPressingFlags();
   return !(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || buttons;
 #endif
   return true;
