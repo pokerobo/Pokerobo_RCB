@@ -48,8 +48,7 @@ int DisplayHandler::begin() {
   return 1;
 }
 
-bool print_(char lines[][JOYSTICK_INFO_COLUMNS]) {
-  int maxCharHeight = u8g2.getMaxCharHeight();
+bool print_(char lines[][JOYSTICK_INFO_COLUMNS], int maxCharHeight) {
   for (uint8_t i=0; i<5; i++) {
     u8g2.setCursor(0, maxCharHeight + 3 + maxCharHeight * i);
     u8g2.print(lines[i]);
@@ -101,14 +100,16 @@ void drawSpeedPacket(SpeedPacket* speedPacket) {
   int rw = map(speedPacket->getRightSpeed(), 0, 256, 0, SPEED_METER_MAX_HEIGHT);
   uint8_t rd = speedPacket->getRightDirection();
 
+  u8g2.drawHLine(mX - 2 - 7, mY, (7 + 2)*2);
+
   if (ld == 1) {
-    u8g2.drawBox(mX - 1 - 7, mY -1 - lw, 7, lw);
+    u8g2.drawBox(mX - 1 - 7, mY - lw, 7, lw);
   } else if (ld == 2) {
     u8g2.drawBox(mX - 1 - 7, mY + 1, 7, lw);
   }
 
   if (rd == 1) {
-    u8g2.drawBox(mX + 1, mY -1 - rw, 7, rw);
+    u8g2.drawBox(mX + 1, mY - rw, 7, rw);
   } else if (rd == 2) {
     u8g2.drawBox(mX + 1, mY + 1, 7, rw);
   }
@@ -153,7 +154,7 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
 
   u8g2.firstPage();
   do {
-    print_(lines);
+    print_(lines, _maxCharHeight);
 #if JOYSTICK_VISUAL_PAD_STYLE == JOYSTICK_VISUAL_PAD_SQUARE2
     drawJoystickSquare2(_virtualPadOx, JOYSTICK_PAD_OY, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
 #endif
