@@ -34,6 +34,15 @@ int RF24Tranceiver::begin(tranceiver_t mode, uint64_t address) {
   return -1;
 }
 
+void RF24Tranceiver::reset(tranceiver_t mode) {
+  if (mode == TX) {
+    return RF24Transmitter::reset();
+  }
+  if (mode == RX) {
+    return RF24Receiver::reset();
+  }
+}
+
 int RF24Transmitter::begin(void* radio, uint64_t address) {
   if (radio == NULL) {
     return -1;
@@ -43,6 +52,13 @@ int RF24Transmitter::begin(void* radio, uint64_t address) {
   _tranceiver->begin();
   _tranceiver->openWritingPipe(address);
   _tranceiver->stopListening();
+}
+
+void RF24Transmitter::reset() {
+  RF24* _tranceiver = (RF24*)_transmitter;
+  _tranceiver->powerDown();
+  delay(100);
+  _tranceiver->powerUp();
 }
 
 bool RF24Transmitter::write(MessagePacket* packet) {
@@ -80,6 +96,13 @@ int RF24Receiver::begin(void* radio, uint64_t address) {
   _tranceiver->begin();
   _tranceiver->openReadingPipe(0, address);
   _tranceiver->startListening();
+}
+
+void RF24Receiver::reset() {
+  RF24* _tranceiver = (RF24*)_receiver;
+  _tranceiver->powerDown();
+  delay(100);
+  _tranceiver->powerUp();
 }
 
 int RF24Receiver::check() {

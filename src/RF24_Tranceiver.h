@@ -11,10 +11,11 @@ typedef enum { ACK_OK = 0, ACK_FAILED, MESSAGE_NULL, TRANSMITTER_NULL } rf24_tx_
 
 class RF24Transmitter: public MessageSender {
   public:
-    int begin(void* radio, uint64_t address);
+    int begin(void* radio, uint64_t address=RF24_DEFAULT_ADDRESS);
     bool write(const void* buf, uint8_t len);
     bool write(MessagePacket* packet);
     rf24_tx_status_t getStatus();
+    void reset();
   private:
     void* _transmitter = NULL;
     rf24_tx_status_t _status;
@@ -22,9 +23,10 @@ class RF24Transmitter: public MessageSender {
 
 class RF24Receiver {
   public:
-    int begin(void* radio, uint64_t address);
+    int begin(void* radio, uint64_t address=RF24_DEFAULT_ADDRESS);
     int check();
     bool add(MessageRenderer* messageRenderer);
+    void reset();
   protected:
     byte invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message);
   private:
@@ -36,6 +38,7 @@ class RF24Receiver {
 class RF24Tranceiver: public RF24Transmitter, public RF24Receiver {
   public:
     int begin(tranceiver_t mode=TX, uint64_t address=RF24_DEFAULT_ADDRESS);
+    void reset(tranceiver_t mode=TX);
 };
 
 #endif
