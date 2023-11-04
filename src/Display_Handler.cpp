@@ -48,9 +48,9 @@ int DisplayHandler::begin() {
   return 1;
 }
 
-bool print_(char lines[][JOYSTICK_INFO_COLUMNS], int maxCharHeight);
-void drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
-void drawSpeedPacket(SpeedPacket* speedPacket);
+bool renderCoordinates_(char lines[][JOYSTICK_INFO_COLUMNS], int maxCharHeight);
+void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
+void renderSpeedWeight_(SpeedPacket* speedPacket);
 
 bool DisplayHandler::render(JoystickAction* message) {
   return render(message, NULL);
@@ -91,17 +91,15 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
 
   u8g2.firstPage();
   do {
-    print_(lines, _maxCharHeight);
-#if JOYSTICK_VISUAL_PAD_STYLE == JOYSTICK_VISUAL_PAD_SQUARE2
-    drawJoystickSquare2(_virtualPadOx, JOYSTICK_PAD_OY, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
-#endif
+    renderCoordinates_(lines, _maxCharHeight);
+    renderJoystickPad_(_virtualPadOx, JOYSTICK_PAD_OY, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
     if (speedPacket != NULL) {
-      drawSpeedPacket(speedPacket);
+      renderSpeedWeight_(speedPacket);
     }
   } while (u8g2.nextPage());
 }
 
-bool print_(char lines[][JOYSTICK_INFO_COLUMNS], int maxCharHeight) {
+bool renderCoordinates_(char lines[][JOYSTICK_INFO_COLUMNS], int maxCharHeight) {
   for (uint8_t i=0; i<5; i++) {
     u8g2.setCursor(0, maxCharHeight + 3 + maxCharHeight * i);
     u8g2.print(lines[i]);
@@ -144,7 +142,17 @@ void drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, i
   u8g2.drawFrame(Ox + x - 1, Oy + (-y) - 1, 3, 3);
 }
 
-void drawSpeedPacket(SpeedPacket* speedPacket) {
+void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y) {
+#if JOYSTICK_VISUAL_PAD_STYLE == JOYSTICK_VISUAL_PAD_CIRCLE
+  return drawJoystickCircle(Ox, Oy, r, ir, x, y);
+#endif
+#if JOYSTICK_VISUAL_PAD_STYLE == JOYSTICK_VISUAL_PAD_SQUARE1
+  return drawJoystickSquare1(Ox, Oy, r, ir, x, y);
+#endif
+  return drawJoystickSquare2(Ox, Oy, r, ir, x, y);
+}
+
+void renderSpeedWeight_(SpeedPacket* speedPacket) {
   int mX = SPEED_METER_OX;
   int mY = SPEED_METER_OY;
 

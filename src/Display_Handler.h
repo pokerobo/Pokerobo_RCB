@@ -11,9 +11,9 @@ class DisplayHandler: public MessageRenderer {
     bool render(JoystickAction* message);
     bool render(JoystickAction* message, SpeedPacket* speedPacket);
   private:
-    int _maxCharHeight = 10;
-    int _maxCharWidth = 4;
-    int _virtualPadOx = 64;
+    uint8_t _maxCharHeight = 10;
+    uint8_t _maxCharWidth = 4;
+    uint8_t _virtualPadOx = 64;
 };
 
 #endif
