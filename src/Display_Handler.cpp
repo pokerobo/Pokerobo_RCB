@@ -48,6 +48,59 @@ int DisplayHandler::begin() {
   return 1;
 }
 
+bool print_(char lines[][JOYSTICK_INFO_COLUMNS], int maxCharHeight);
+void drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
+void drawSpeedPacket(SpeedPacket* speedPacket);
+
+bool DisplayHandler::render(JoystickAction* message) {
+  return render(message, NULL);
+}
+
+bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
+  int nX = -512 + message->getX();
+  int nY = -512 + message->getY();
+
+  char lines[5][JOYSTICK_INFO_COLUMNS] = {{}, {}, {}, {}, {}};
+  sprintf(lines[0], "~X:% 4d", nX);
+  sprintf(lines[1], "~Y:% 4d", nY);
+  sprintf(lines[3], "oX:%4d", message->getOriginX());
+  sprintf(lines[4], "oY:%4d", message->getOriginY());
+
+  uint16_t buttons = message->getPressingFlags();
+  lines[2][POS_UP_BUTTON] = idleButtonIcon(buttons, MASK_UP_BUTTON, 'U');
+  lines[2][POS_RIGHT_BUTTON] = idleButtonIcon(buttons, MASK_RIGHT_BUTTON, 'R');
+  lines[2][POS_DOWN_BUTTON] = idleButtonIcon(buttons, MASK_DOWN_BUTTON, 'D');
+  lines[2][POS_LEFT_BUTTON] = idleButtonIcon(buttons, MASK_LEFT_BUTTON, 'L');
+  lines[2][POS_START_BUTTON] = idleButtonIcon(buttons, MASK_START_BUTTON, 'S');
+  lines[2][POS_SELECT_BUTTON] = idleButtonIcon(buttons, MASK_SELECT_BUTTON, 'O');
+  lines[2][POS_ANALOG_BUTTON] = idleButtonIcon(buttons, MASK_ANALOG_BUTTON, 'A');
+
+  uint16_t clickingFlags = message->getClickingFlags();
+  if (clickingFlags & MASK_START_BUTTON) {
+    lines[2][POS_START_BUTTON] = '+';
+  }
+  if (clickingFlags & MASK_SELECT_BUTTON) {
+    lines[2][POS_SELECT_BUTTON] = '+';
+  }
+  if (clickingFlags & MASK_ANALOG_BUTTON) {
+    lines[2][POS_ANALOG_BUTTON] = '+';
+  }
+
+  int rX = map(nX, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
+  int rY = map(nY, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
+
+  u8g2.firstPage();
+  do {
+    print_(lines, _maxCharHeight);
+#if JOYSTICK_VISUAL_PAD_STYLE == JOYSTICK_VISUAL_PAD_SQUARE2
+    drawJoystickSquare2(_virtualPadOx, JOYSTICK_PAD_OY, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
+#endif
+    if (speedPacket != NULL) {
+      drawSpeedPacket(speedPacket);
+    }
+  } while (u8g2.nextPage());
+}
+
 bool print_(char lines[][JOYSTICK_INFO_COLUMNS], int maxCharHeight) {
   for (uint8_t i=0; i<5; i++) {
     u8g2.setCursor(0, maxCharHeight + 3 + maxCharHeight * i);
@@ -113,53 +166,4 @@ void drawSpeedPacket(SpeedPacket* speedPacket) {
   } else if (rd == 2) {
     u8g2.drawBox(mX + 1, mY + 1, 7, rw);
   }
-}
-
-bool DisplayHandler::render(JoystickAction* message) {
-  return render(message, NULL);
-}
-
-bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
-  int nX = -512 + message->getX();
-  int nY = -512 + message->getY();
-
-  char lines[5][JOYSTICK_INFO_COLUMNS] = {{}, {}, {}, {}, {}};
-  sprintf(lines[0], "~X:% 4d", nX);
-  sprintf(lines[1], "~Y:% 4d", nY);
-  sprintf(lines[3], "oX:%4d", message->getOriginX());
-  sprintf(lines[4], "oY:%4d", message->getOriginY());
-
-  uint16_t buttons = message->getPressingFlags();
-  lines[2][POS_UP_BUTTON] = idleButtonIcon(buttons, MASK_UP_BUTTON, 'U');
-  lines[2][POS_RIGHT_BUTTON] = idleButtonIcon(buttons, MASK_RIGHT_BUTTON, 'R');
-  lines[2][POS_DOWN_BUTTON] = idleButtonIcon(buttons, MASK_DOWN_BUTTON, 'D');
-  lines[2][POS_LEFT_BUTTON] = idleButtonIcon(buttons, MASK_LEFT_BUTTON, 'L');
-  lines[2][POS_START_BUTTON] = idleButtonIcon(buttons, MASK_START_BUTTON, 'S');
-  lines[2][POS_SELECT_BUTTON] = idleButtonIcon(buttons, MASK_SELECT_BUTTON, 'O');
-  lines[2][POS_ANALOG_BUTTON] = idleButtonIcon(buttons, MASK_ANALOG_BUTTON, 'A');
-
-  uint16_t clickingFlags = message->getClickingFlags();
-  if (clickingFlags & MASK_START_BUTTON) {
-    lines[2][POS_START_BUTTON] = '+';
-  }
-  if (clickingFlags & MASK_SELECT_BUTTON) {
-    lines[2][POS_SELECT_BUTTON] = '+';
-  }
-  if (clickingFlags & MASK_ANALOG_BUTTON) {
-    lines[2][POS_ANALOG_BUTTON] = '+';
-  }
-
-  int rX = map(nX, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
-  int rY = map(nY, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
-
-  u8g2.firstPage();
-  do {
-    print_(lines, _maxCharHeight);
-#if JOYSTICK_VISUAL_PAD_STYLE == JOYSTICK_VISUAL_PAD_SQUARE2
-    drawJoystickSquare2(_virtualPadOx, JOYSTICK_PAD_OY, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
-#endif
-    if (speedPacket != NULL) {
-      drawSpeedPacket(speedPacket);
-    }
-  } while (u8g2.nextPage());
 }
