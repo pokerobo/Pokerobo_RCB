@@ -139,6 +139,7 @@ int RF24Receiver::check() {
   }
 
   JoystickAction message(buttons, jX, jY, count);
+  message.setSource(RX_MSG);
 
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageRenderersTotal; i++) {

@@ -195,6 +195,7 @@ JoystickAction JoystickHandler::input() {
 #endif
 
   JoystickAction message(pressed, x, y, _count);
+  message.setSource(TX_MSG);
   message.setOrigin(originX, originY);
   message.setClickingFlags(checkButtonClickingFlags(pressed));
 

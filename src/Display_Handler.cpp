@@ -3,6 +3,13 @@
 #include <U8g2lib.h>
 #include <Wire.h>
 
+#define COORD_LINE_TITLE                0
+#define COORD_LINE_X                    1
+#define COORD_LINE_Y                    2
+#define COORD_LINE_CLICKING_FLAGS       3
+#define COORD_LINE_RAW_X                4
+#define COORD_LINE_RAW_Y                5
+
 #define JOYSTICK_INFO_COLUMNS           8 // 7 chars and '\0'
 #define JOYSTICK_PAD_OX                 32
 #define JOYSTICK_PAD_OY                 32
@@ -68,29 +75,40 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
     { 'P', 'L', 'A', 'Y', 'E', 'R', '>', '\0' },
     {}, {}, {}, {}, {}
   };
-  sprintf(lines[1], "~X:% 4d", nX);
-  sprintf(lines[2], "~Y:% 4d", nY);
-  sprintf(lines[4], "oX:%4d", message->getOriginX());
-  sprintf(lines[5], "oY:%4d", message->getOriginY());
+
+  if (message->getSource() == RX_MSG) {
+    lines[COORD_LINE_TITLE][0] = '>';
+    lines[COORD_LINE_TITLE][1] = 'T';
+    lines[COORD_LINE_TITLE][2] = 'E';
+    lines[COORD_LINE_TITLE][3] = 'S';
+    lines[COORD_LINE_TITLE][4] = 'T';
+    lines[COORD_LINE_TITLE][5] = 'E';
+    lines[COORD_LINE_TITLE][6] = 'R';
+  }
+
+  sprintf(lines[COORD_LINE_X], "~X:% 4d", nX);
+  sprintf(lines[COORD_LINE_Y], "~Y:% 4d", nY);
+  sprintf(lines[COORD_LINE_RAW_X], "oX:%4d", message->getOriginX());
+  sprintf(lines[COORD_LINE_RAW_Y], "oY:%4d", message->getOriginY());
 
   uint16_t buttons = message->getPressingFlags();
-  lines[3][POS_UP_BUTTON] = idleButtonIcon(buttons, MASK_UP_BUTTON, 'U');
-  lines[3][POS_RIGHT_BUTTON] = idleButtonIcon(buttons, MASK_RIGHT_BUTTON, 'R');
-  lines[3][POS_DOWN_BUTTON] = idleButtonIcon(buttons, MASK_DOWN_BUTTON, 'D');
-  lines[3][POS_LEFT_BUTTON] = idleButtonIcon(buttons, MASK_LEFT_BUTTON, 'L');
-  lines[3][POS_START_BUTTON] = idleButtonIcon(buttons, MASK_START_BUTTON, 'S');
-  lines[3][POS_SELECT_BUTTON] = idleButtonIcon(buttons, MASK_SELECT_BUTTON, 'O');
-  lines[3][POS_ANALOG_BUTTON] = idleButtonIcon(buttons, MASK_ANALOG_BUTTON, 'A');
+  lines[COORD_LINE_CLICKING_FLAGS][POS_UP_BUTTON] = idleButtonIcon(buttons, MASK_UP_BUTTON, 'U');
+  lines[COORD_LINE_CLICKING_FLAGS][POS_RIGHT_BUTTON] = idleButtonIcon(buttons, MASK_RIGHT_BUTTON, 'R');
+  lines[COORD_LINE_CLICKING_FLAGS][POS_DOWN_BUTTON] = idleButtonIcon(buttons, MASK_DOWN_BUTTON, 'D');
+  lines[COORD_LINE_CLICKING_FLAGS][POS_LEFT_BUTTON] = idleButtonIcon(buttons, MASK_LEFT_BUTTON, 'L');
+  lines[COORD_LINE_CLICKING_FLAGS][POS_START_BUTTON] = idleButtonIcon(buttons, MASK_START_BUTTON, 'S');
+  lines[COORD_LINE_CLICKING_FLAGS][POS_SELECT_BUTTON] = idleButtonIcon(buttons, MASK_SELECT_BUTTON, 'O');
+  lines[COORD_LINE_CLICKING_FLAGS][POS_ANALOG_BUTTON] = idleButtonIcon(buttons, MASK_ANALOG_BUTTON, 'A');
 
   uint16_t clickingFlags = message->getClickingFlags();
   if (clickingFlags & MASK_START_BUTTON) {
-    lines[2][POS_START_BUTTON] = '+';
+    lines[COORD_LINE_CLICKING_FLAGS][POS_START_BUTTON] = '+';
   }
   if (clickingFlags & MASK_SELECT_BUTTON) {
-    lines[2][POS_SELECT_BUTTON] = '+';
+    lines[COORD_LINE_CLICKING_FLAGS][POS_SELECT_BUTTON] = '+';
   }
   if (clickingFlags & MASK_ANALOG_BUTTON) {
-    lines[2][POS_ANALOG_BUTTON] = '+';
+    lines[COORD_LINE_CLICKING_FLAGS][POS_ANALOG_BUTTON] = '+';
   }
 
   int rX = map(nX, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
