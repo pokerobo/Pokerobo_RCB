@@ -48,6 +48,10 @@ int DisplayHandler::begin() {
   return 1;
 }
 
+void DisplayHandler::clear() {
+  u8g2.clear();
+}
+
 bool renderCoordinates_(char lines[][JOYSTICK_INFO_COLUMNS], int maxCharHeight);
 void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
 void renderSpeedWeight_(SpeedPacket* speedPacket);
