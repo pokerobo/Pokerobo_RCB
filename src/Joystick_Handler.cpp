@@ -132,9 +132,11 @@ int JoystickHandler::check() {
     _messageRenderer->render(&message, &speedPacket);
   }
 
+#if JOYSTICK_CHECKING_CHANGE
   if (!isChanged(&message)) {
     return 1;
   }
+#endif
 
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageSendersTotal; i++) {
@@ -196,15 +198,14 @@ JoystickAction JoystickHandler::input() {
   return message;
 }
 
-bool JoystickHandler::isChanged(JoystickAction* msg) {
 #if JOYSTICK_CHECKING_CHANGE
+bool JoystickHandler::isChanged(JoystickAction* msg) {
   int16_t x = msg->getX();
   int16_t y = msg->getY();
   uint32_t buttons = msg->getPressingFlags();
   return !(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || buttons;
-#endif
-  return true;
 }
+#endif
 
 byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet) {
   if (messageSender != NULL) {

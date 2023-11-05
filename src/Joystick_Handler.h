@@ -81,7 +81,9 @@ class JoystickHandler {
   protected:
     uint16_t readButtonStates();
     uint16_t checkButtonClickingFlags(uint16_t pressed);
+#if JOYSTICK_CHECKING_CHANGE
     bool isChanged(JoystickAction* msg);
+#endif
     byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet=NULL);
   private:
     uint32_t _count = 0;
