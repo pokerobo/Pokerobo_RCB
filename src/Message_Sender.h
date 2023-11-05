@@ -66,6 +66,8 @@
 
 #define MESSAGE_RENDERERS_LIMIT   7
 
+typedef enum { TX_MSG = 0, RX_MSG } message_source_t;
+
 class MessagePacket {
   public:
     virtual uint8_t length();
@@ -78,6 +80,8 @@ class JoystickAction: public MessagePacket {
     JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
     void setOrigin(uint16_t x, uint16_t y);
     void setClickingFlags(uint16_t clickingFlags);
+    void setSource(message_source_t source);
+    message_source_t getSource();
     uint16_t getPressingFlags();
     uint16_t getClickingFlags();
     uint16_t getX();
@@ -95,6 +99,7 @@ class JoystickAction: public MessagePacket {
     uint16_t _originX = 0;
     uint16_t _originY = 0;
     uint32_t _extras = 0;
+    message_source_t _source = TX_MSG;
 };
 
 class SpeedPacket {
@@ -120,12 +125,14 @@ class MessageSender {
 
 class MessageRenderer {
   public:
+    virtual void clear();
     virtual bool render(JoystickAction* message);
     virtual bool render(JoystickAction* message, SpeedPacket* speedPacket);
 };
 
 class ConsoleMessageRenderer: public MessageRenderer {
   public:
+    void clear();
     bool render(JoystickAction* message);
     bool render(JoystickAction* message, SpeedPacket* speedPacket);
 };

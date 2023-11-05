@@ -22,6 +22,14 @@ void JoystickAction::setClickingFlags(uint16_t clickingFlags) {
   _clickingTrail = clickingFlags;
 }
 
+void JoystickAction::setSource(message_source_t source) {
+  _source = source;
+}
+
+message_source_t JoystickAction::getSource() {
+  return _source;
+}
+
 uint16_t JoystickAction::getPressingFlags() {
   return _pressingFlags;
 }
@@ -90,6 +98,8 @@ int SpeedPacket::getRightSpeed() {
 byte SpeedPacket::getRightDirection() {
   return _RightDirection;
 }
+
+void ConsoleMessageRenderer::clear() {}
 
 bool ConsoleMessageRenderer::render(JoystickAction* message) {
   return render(message, NULL);
