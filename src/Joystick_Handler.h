@@ -72,7 +72,7 @@ class JoystickHandler {
   public:
     JoystickHandler(MessageSender* messageSender=NULL, MessageRenderer* messageRenderer=NULL);
     int begin();
-    int check();
+    int check(JoystickAction* action=NULL);
     void detect();
     JoystickAction input();
     bool add(MessageSender* messageSender);
@@ -92,7 +92,6 @@ class JoystickHandler {
     int16_t _middleY = JOYSTICK_MID_Y;
     int16_t _maxX = JOYSTICK_MAX_X;
     int16_t _maxY = JOYSTICK_MAX_Y;
-    ProgramManager* _programManager = NULL;
     MessageRenderer* _messageRenderer = NULL;
     MessageSender* _messageSenders[MESSAGE_SENDER_MAX] = {};
     uint8_t _messageSendersTotal = 0;

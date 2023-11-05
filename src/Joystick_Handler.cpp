@@ -110,7 +110,7 @@ int JoystickHandler::begin() {
   detect();
 }
 
-int JoystickHandler::check() {
+int JoystickHandler::check(JoystickAction* action) {
   _count += 1;
 
 #if __RUNNING_LOG_ENABLED__
@@ -120,27 +120,30 @@ int JoystickHandler::check() {
   }
 #endif
 
-  JoystickAction message = input();
+  if (action == NULL) {
+    JoystickAction message = input();
+    action = &message;
+  }
 
   SpeedPacket speedPacket;
 
   if (_speedResolver != NULL) {
-    _speedResolver->resolve(&speedPacket, &message);
+    _speedResolver->resolve(&speedPacket, action);
   }
 
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(&message, &speedPacket);
+    _messageRenderer->render(action, &speedPacket);
   }
 
 #if JOYSTICK_CHECKING_CHANGE
-  if (!isChanged(&message)) {
+  if (!isChanged(action)) {
     return 1;
   }
 #endif
 
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageSendersTotal; i++) {
-    int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, &message);
+    int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, action);
     if (status > 0) {
       sumOk += status;
     } else if (status < 0) {
