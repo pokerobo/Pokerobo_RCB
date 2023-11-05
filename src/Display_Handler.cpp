@@ -32,7 +32,7 @@ int DisplayHandler::begin() {
   u8g2.setI2CAddress(0x3F * 2); 
   u8g2.setBusClock(200000);
   u8g2.begin();
-  u8g2.setFont(u8g2_font_t0_12_tf);
+  u8g2.setFont(u8g2_font_5x8_tf);
 
   _maxCharHeight = u8g2.getMaxCharHeight();
   _maxCharWidth = u8g2.getMaxCharWidth();
@@ -64,20 +64,23 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
   int nX = -512 + message->getX();
   int nY = -512 + message->getY();
 
-  char lines[5][JOYSTICK_INFO_COLUMNS] = {{}, {}, {}, {}, {}};
-  sprintf(lines[0], "~X:% 4d", nX);
-  sprintf(lines[1], "~Y:% 4d", nY);
-  sprintf(lines[3], "oX:%4d", message->getOriginX());
-  sprintf(lines[4], "oY:%4d", message->getOriginY());
+  char lines[6][JOYSTICK_INFO_COLUMNS] = {
+    { 'P', 'L', 'A', 'Y', 'E', 'R', '>', '\0' },
+    {}, {}, {}, {}, {}
+  };
+  sprintf(lines[1], "~X:% 4d", nX);
+  sprintf(lines[2], "~Y:% 4d", nY);
+  sprintf(lines[4], "oX:%4d", message->getOriginX());
+  sprintf(lines[5], "oY:%4d", message->getOriginY());
 
   uint16_t buttons = message->getPressingFlags();
-  lines[2][POS_UP_BUTTON] = idleButtonIcon(buttons, MASK_UP_BUTTON, 'U');
-  lines[2][POS_RIGHT_BUTTON] = idleButtonIcon(buttons, MASK_RIGHT_BUTTON, 'R');
-  lines[2][POS_DOWN_BUTTON] = idleButtonIcon(buttons, MASK_DOWN_BUTTON, 'D');
-  lines[2][POS_LEFT_BUTTON] = idleButtonIcon(buttons, MASK_LEFT_BUTTON, 'L');
-  lines[2][POS_START_BUTTON] = idleButtonIcon(buttons, MASK_START_BUTTON, 'S');
-  lines[2][POS_SELECT_BUTTON] = idleButtonIcon(buttons, MASK_SELECT_BUTTON, 'O');
-  lines[2][POS_ANALOG_BUTTON] = idleButtonIcon(buttons, MASK_ANALOG_BUTTON, 'A');
+  lines[3][POS_UP_BUTTON] = idleButtonIcon(buttons, MASK_UP_BUTTON, 'U');
+  lines[3][POS_RIGHT_BUTTON] = idleButtonIcon(buttons, MASK_RIGHT_BUTTON, 'R');
+  lines[3][POS_DOWN_BUTTON] = idleButtonIcon(buttons, MASK_DOWN_BUTTON, 'D');
+  lines[3][POS_LEFT_BUTTON] = idleButtonIcon(buttons, MASK_LEFT_BUTTON, 'L');
+  lines[3][POS_START_BUTTON] = idleButtonIcon(buttons, MASK_START_BUTTON, 'S');
+  lines[3][POS_SELECT_BUTTON] = idleButtonIcon(buttons, MASK_SELECT_BUTTON, 'O');
+  lines[3][POS_ANALOG_BUTTON] = idleButtonIcon(buttons, MASK_ANALOG_BUTTON, 'A');
 
   uint16_t clickingFlags = message->getClickingFlags();
   if (clickingFlags & MASK_START_BUTTON) {
@@ -104,7 +107,9 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
 }
 
 bool renderCoordinates_(char lines[][JOYSTICK_INFO_COLUMNS], int maxCharHeight) {
-  for (uint8_t i=0; i<5; i++) {
+  u8g2.setCursor(0, maxCharHeight);
+  u8g2.print(lines[0]);
+  for (uint8_t i=1; i<6; i++) {
     u8g2.setCursor(0, maxCharHeight + 3 + maxCharHeight * i);
     u8g2.print(lines[i]);
   }
