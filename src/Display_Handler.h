@@ -9,6 +9,7 @@ class DisplayHandler: public MessageRenderer {
     DisplayHandler();
     int begin();
     void clear();
+    void splash(char* title);
     bool render(JoystickAction* message);
     bool render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter=NULL);
   private:

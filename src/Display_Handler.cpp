@@ -59,6 +59,13 @@ void DisplayHandler::clear() {
   u8g2.clear();
 }
 
+void DisplayHandler::splash(char* title) {
+  u8g2.firstPage();
+  do {
+    u8g2.drawStr(0, 32 + _maxCharHeight / 2, title);
+  } while (u8g2.nextPage());
+}
+
 bool renderCoordinates_(char lines[][JOYSTICK_INFO_COLUMNS], int maxCharHeight);
 void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
 void renderSpeedWeight_(SpeedPacket* speedPacket);
@@ -165,8 +172,8 @@ void drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, i
   u8g2.drawLine(Ox - r - 2, Oy - ir, Ox + r + 1, Oy - ir);
   u8g2.drawLine(Ox - r - 2, Oy + ir, Ox + r + 1, Oy + ir);
 
-  u8g2.drawLine(Ox - ir, Oy - r - 2, Ox - ir, Oy + r + 2);
-  u8g2.drawLine(Ox + ir, Oy - r - 2, Ox + ir, Oy + r + 2);
+  u8g2.drawLine(Ox - ir - 1, Oy - r - 2, Ox - ir - 1, Oy + r + 2);
+  u8g2.drawLine(Ox + ir - 1, Oy - r - 2, Ox + ir - 1, Oy + r + 2);
 
   u8g2.drawFrame(Ox + x - 1, Oy + (-y) - 1, 3, 3);
 }

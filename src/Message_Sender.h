@@ -131,6 +131,7 @@ class MessageSender {
 class MessageRenderer {
   public:
     virtual void clear();
+    virtual void splash(char* title);
     virtual bool render(JoystickAction* message);
     virtual bool render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter=NULL);
 };
@@ -138,6 +139,7 @@ class MessageRenderer {
 class ConsoleMessageRenderer: public MessageRenderer {
   public:
     void clear();
+    void splash(char* title);
     bool render(JoystickAction* message);
     bool render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter=NULL);
 };

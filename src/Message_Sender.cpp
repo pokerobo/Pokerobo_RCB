@@ -101,6 +101,8 @@ byte SpeedPacket::getRightDirection() {
 
 void ConsoleMessageRenderer::clear() {}
 
+void ConsoleMessageRenderer::splash(char* title) {}
+
 bool ConsoleMessageRenderer::render(JoystickAction* message) {
   return render(message, NULL);
 }

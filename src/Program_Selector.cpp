@@ -20,6 +20,9 @@ int ProgramSelector::check() {
         }
         if (_mode == PROGRAM_MODE_TEST_STATION) {
           _rf24Tranceiver->begin(RX);
+          if (_messageRenderer != NULL) {
+            _messageRenderer->splash("Waiting for message...");
+          }
           _currentState = PROGRAM_NRF24_TEST_RECEIVER;
         }
         break;
