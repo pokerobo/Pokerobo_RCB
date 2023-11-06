@@ -35,12 +35,8 @@ static void JoystickHandler::verify() {
 #endif
 
 JoystickHandler::JoystickHandler(MessageSender* messageSender, MessageRenderer* messageRenderer) {
-  _messageRenderer = messageRenderer;
-#if MULTIPLE_SENDERS_SUPPORTED
-  add(messageSender);
-#else
   set(messageSender);
-#endif
+  set(messageRenderer);
 }
 
 void JoystickHandler::detect() {
@@ -77,6 +73,10 @@ void JoystickHandler::detect() {
   #endif
 }
 
+void JoystickHandler::set(MessageSender* messageSender) {
+  _messageSender = messageSender;
+}
+
 #if MULTIPLE_SENDERS_SUPPORTED
 bool JoystickHandler::add(MessageSender* messageSender) {
   if (messageSender == NULL) {
@@ -94,10 +94,6 @@ bool JoystickHandler::add(MessageSender* messageSender) {
 #endif
   _messageSenders[_messageSendersTotal++] = messageSender;
   return true;
-}
-#else //MULTIPLE_SENDERS_SUPPORTED
-void JoystickHandler::set(MessageSender* messageSender) {
-  _messageSender = messageSender;
 }
 #endif//MULTIPLE_SENDERS_SUPPORTED
 
@@ -151,6 +147,10 @@ int JoystickHandler::check(JoystickAction* action) {
   }
 #endif
 
+  if (_messageSender != NULL) {
+    bool ok = _messageSender->write(action);
+  }
+
 #if MULTIPLE_SENDERS_SUPPORTED
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageSendersTotal; i++) {
@@ -162,10 +162,6 @@ int JoystickHandler::check(JoystickAction* action) {
     } else {
       countNulls++;
     }
-  }
-#else
-  if (_messageSender != NULL) {
-    bool ok = _messageSender->write(action);
   }
 #endif
 

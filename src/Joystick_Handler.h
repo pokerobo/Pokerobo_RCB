@@ -63,7 +63,7 @@
 #define PIN_ANALOG_BUTTON 8 // JOYSTICK
 
 #define MESSAGE_SENDER_MAX  7
-#define MULTIPLE_SENDERS_SUPPORTED false
+#define MULTIPLE_SENDERS_SUPPORTED true
 
 class JoystickHandler {
   static int pinOfButtons[];
@@ -78,9 +78,8 @@ class JoystickHandler {
     JoystickAction input();
 #if MULTIPLE_SENDERS_SUPPORTED
     bool add(MessageSender* messageSender);
-#else
-    void set(MessageSender* messageSender);
 #endif
+    void set(MessageSender* messageSender);
     void set(MessageRenderer* messageRenderer);
     void set(SpeedResolver* speedResolver);
   protected:
@@ -89,7 +88,9 @@ class JoystickHandler {
 #if JOYSTICK_CHECKING_CHANGE
     bool isChanged(JoystickAction* msg);
 #endif
+#if MULTIPLE_SENDERS_SUPPORTED
     byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet=NULL);
+#endif
   private:
     uint32_t _count = 0;
     uint16_t _clickingTrail;
@@ -101,9 +102,8 @@ class JoystickHandler {
 #if MULTIPLE_SENDERS_SUPPORTED
     MessageSender* _messageSenders[MESSAGE_SENDER_MAX] = {};
     uint8_t _messageSendersTotal = 0;
-#else
-    MessageSender* _messageSender = NULL;
 #endif
+    MessageSender* _messageSender = NULL;
     SpeedResolver* _speedResolver = NULL;
 };
 
