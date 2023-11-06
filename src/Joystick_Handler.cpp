@@ -117,15 +117,6 @@ int JoystickHandler::begin() {
 }
 
 int JoystickHandler::check(JoystickAction* action) {
-  _count += 1;
-
-#if __RUNNING_LOG_ENABLED__
-  if (_count < 10) {
-    Serial.print("Middle "), Serial.print("X"), Serial.print(": "), Serial.println(_middleX);
-    Serial.print("Middle "), Serial.print("Y"), Serial.print(": "), Serial.println(_middleY);
-  }
-#endif
-
   if (action == NULL) {
     JoystickAction message = input();
     action = &message;
@@ -169,6 +160,15 @@ int JoystickHandler::check(JoystickAction* action) {
 }
 
 JoystickAction JoystickHandler::input() {
+  _count += 1;
+
+#if __RUNNING_LOG_ENABLED__
+  if (_count < 10) {
+    Serial.print("Middle "), Serial.print("X"), Serial.print(": "), Serial.println(_middleX);
+    Serial.print("Middle "), Serial.print("Y"), Serial.print(": "), Serial.println(_middleY);
+  }
+#endif
+
   uint16_t pressed = readButtonStates();
 
   uint16_t x = analogRead(PIN_JOYSTICK_X_AXIS);

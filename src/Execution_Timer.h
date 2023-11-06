@@ -1,9 +1,9 @@
-#ifndef __PROGRAM_MANAGER_H__
-#define __PROGRAM_MANAGER_H__
+#ifndef __EXECUTION_TIMER_H__
+#define __EXECUTION_TIMER_H__
 
 #include "Commons.h"
 
-class ProgramManager {
+class ExecutionTimer {
   public:
     void start();
     uint32_t finish();

@@ -63,7 +63,7 @@
 #define PIN_ANALOG_BUTTON 8 // JOYSTICK
 
 #define MESSAGE_SENDER_MAX  7
-#define MULTIPLE_SENDERS_SUPPORTED true
+#define MULTIPLE_SENDERS_SUPPORTED false
 
 class JoystickHandler {
   static int pinOfButtons[];
