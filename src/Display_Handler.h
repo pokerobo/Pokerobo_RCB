@@ -10,7 +10,7 @@ class DisplayHandler: public MessageRenderer {
     int begin();
     void clear();
     bool render(JoystickAction* message);
-    bool render(JoystickAction* message, SpeedPacket* speedPacket);
+    bool render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter=NULL);
   private:
     uint8_t _maxCharHeight = 10;
     uint8_t _maxCharWidth = 4;

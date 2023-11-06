@@ -62,12 +62,13 @@ void DisplayHandler::clear() {
 bool renderCoordinates_(char lines[][JOYSTICK_INFO_COLUMNS], int maxCharHeight);
 void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
 void renderSpeedWeight_(SpeedPacket* speedPacket);
+void renderTransmissionCounter_(TransmissionCounter* counter, uint8_t _maxCharHeight, uint8_t _maxCharWidth);
 
 bool DisplayHandler::render(JoystickAction* message) {
   return render(message, NULL);
 }
 
-bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
+bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter) {
   int nX = -512 + message->getX();
   int nY = -512 + message->getY();
 
@@ -121,6 +122,7 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket) {
     if (speedPacket != NULL) {
       renderSpeedWeight_(speedPacket);
     }
+    renderTransmissionCounter_(counter, _maxCharHeight, _maxCharWidth);
   } while (u8g2.nextPage());
 }
 
@@ -160,8 +162,8 @@ void drawJoystickSquare1(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, i
 void drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y) {
   u8g2.drawFrame(Ox - r, Oy - r, 2*r, 2*r);
 
-  u8g2.drawLine(Ox - r - 2, Oy - ir, Ox + r + 2, Oy - ir);
-  u8g2.drawLine(Ox - r - 2, Oy + ir, Ox + r + 2, Oy + ir);
+  u8g2.drawLine(Ox - r - 2, Oy - ir, Ox + r + 1, Oy - ir);
+  u8g2.drawLine(Ox - r - 2, Oy + ir, Ox + r + 1, Oy + ir);
 
   u8g2.drawLine(Ox - ir, Oy - r - 2, Ox - ir, Oy + r + 2);
   u8g2.drawLine(Ox + ir, Oy - r - 2, Ox + ir, Oy + r + 2);
@@ -201,4 +203,15 @@ void renderSpeedWeight_(SpeedPacket* speedPacket) {
   } else if (rd == 2) {
     u8g2.drawBox(mX + 1, mY + 1, 7, rw);
   }
+}
+
+void renderTransmissionCounter_(TransmissionCounter* counter, uint8_t _maxCharHeight, uint8_t _maxCharWidth) {
+  if (counter == NULL) return;
+  char line[8] = {};
+
+  u8g2.drawHLine(0, 3 + 2 + _maxCharHeight * 6, (JOYSTICK_INFO_COLUMNS - 1) * _maxCharWidth);
+
+  sprintf(line, "% 7ld", counter->packetLossTotal);
+  u8g2.setCursor(0, 3 + 2 + 1 + _maxCharHeight * 7);
+  u8g2.print(line);
 }

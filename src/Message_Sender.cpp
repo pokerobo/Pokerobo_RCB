@@ -105,7 +105,7 @@ bool ConsoleMessageRenderer::render(JoystickAction* message) {
   return render(message, NULL);
 }
 
-bool ConsoleMessageRenderer::render(JoystickAction* message, SpeedPacket* speedPacket) {
+bool ConsoleMessageRenderer::render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter) {
   Serial.print("#"), Serial.print(message->getExtras()), Serial.print(" - ");
   Serial.print("Pressing"), Serial.print("Flags"), Serial.print(": "),
       Serial.print(message->getPressingFlags());

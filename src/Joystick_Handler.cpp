@@ -116,7 +116,12 @@ int JoystickHandler::begin() {
   detect();
 }
 
+void _adjustCounter(TransmissionCounter *counter);
+
 int JoystickHandler::check(JoystickAction* action) {
+    _counter.sendingTotal += 1;
+    _counter.packetLossTotal += 1;
+
   if (action == NULL) {
     JoystickAction message = input();
     action = &message;
@@ -128,10 +133,6 @@ int JoystickHandler::check(JoystickAction* action) {
     _speedResolver->resolve(&speedPacket, action);
   }
 
-  if (_messageRenderer != NULL) {
-    _messageRenderer->render(action, &speedPacket);
-  }
-
 #if JOYSTICK_CHECKING_CHANGE
   if (!isChanged(action)) {
     return 1;
@@ -140,6 +141,9 @@ int JoystickHandler::check(JoystickAction* action) {
 
   if (_messageSender != NULL) {
     bool ok = _messageSender->write(action);
+    if (ok) {
+      _counter.packetLossTotal -= 1;
+    }
   }
 
 #if MULTIPLE_SENDERS_SUPPORTED
@@ -156,14 +160,25 @@ int JoystickHandler::check(JoystickAction* action) {
   }
 #endif
 
+  if (_messageRenderer != NULL) {
+    _messageRenderer->render(action, &speedPacket, &_counter);
+  }
+
+  _adjustCounter(&_counter);
+
   return 2;
 }
 
-JoystickAction JoystickHandler::input() {
-  _count += 1;
+void _adjustCounter(TransmissionCounter *counter) {
+  if (counter->sendingTotal >= 999999) {
+    counter->sendingTotal = 0;
+    counter->packetLossTotal = 0;
+  }
+}
 
+JoystickAction JoystickHandler::input() {
 #if __RUNNING_LOG_ENABLED__
-  if (_count < 10) {
+  if (_counter.sendingTotal < 10) {
     Serial.print("Middle "), Serial.print("X"), Serial.print(": "), Serial.println(_middleX);
     Serial.print("Middle "), Serial.print("Y"), Serial.print(": "), Serial.println(_middleY);
   }
@@ -206,7 +221,7 @@ JoystickAction JoystickHandler::input() {
     Serial.print("M2"), Serial.print(": "), Serial.println(log);
 #endif
 
-  JoystickAction message(pressed, x, y, _count);
+  JoystickAction message(pressed, x, y, _counter.sendingTotal);
   message.setSource(TX_MSG);
   message.setOrigin(originX, originY);
   message.setClickingFlags(checkButtonClickingFlags(pressed));
@@ -236,7 +251,7 @@ byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const 
     }
 
 #if __RUNNING_LOG_ENABLED__
-    Serial.print("#"), Serial.print(_count), Serial.print("->"), Serial.print(index), Serial.print(": ");
+    Serial.print("#"), Serial.print(_counter.sendingTotal), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {
       Serial.println("v");
     } else {

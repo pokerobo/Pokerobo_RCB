@@ -68,6 +68,11 @@
 
 typedef enum { TX_MSG = 0, RX_MSG } message_source_t;
 
+typedef struct _TransmissionCounter {
+  uint32_t sendingTotal = 0;
+  uint32_t packetLossTotal = 0;
+} TransmissionCounter;
+
 class MessagePacket {
   public:
     virtual uint8_t length();
@@ -127,14 +132,14 @@ class MessageRenderer {
   public:
     virtual void clear();
     virtual bool render(JoystickAction* message);
-    virtual bool render(JoystickAction* message, SpeedPacket* speedPacket);
+    virtual bool render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter=NULL);
 };
 
 class ConsoleMessageRenderer: public MessageRenderer {
   public:
     void clear();
     bool render(JoystickAction* message);
-    bool render(JoystickAction* message, SpeedPacket* speedPacket);
+    bool render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter=NULL);
 };
 
 uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t extras);

@@ -3,7 +3,6 @@
 
 #include "Commons.h"
 #include "Message_Sender.h"
-#include "Program_Manager.h"
 #include "Speed_Resolver.h"
 
 #ifndef __JOYSTICK_READ_BUTTONS_DEBUG__
@@ -92,7 +91,7 @@ class JoystickHandler {
     byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet=NULL);
 #endif
   private:
-    uint32_t _count = 0;
+    TransmissionCounter _counter;
     uint16_t _clickingTrail;
     int16_t _middleX = JOYSTICK_MID_X;
     int16_t _middleY = JOYSTICK_MID_Y;
