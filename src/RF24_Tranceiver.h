@@ -3,6 +3,7 @@
 
 #include "Commons.h"
 #include "Message_Sender.h"
+#include "Speed_Resolver.h"
 
 #define RF24_DEFAULT_ADDRESS 0x123456789ABCDEF0LL
 
@@ -32,6 +33,7 @@ class RF24Receiver {
 #if MULTIPLE_RENDERERS_SUPPORTED
     bool add(MessageRenderer* messageRenderer);
 #endif
+    void set(SpeedResolver* speedResolver);
     void reset();
   protected:
 #if MULTIPLE_RENDERERS_SUPPORTED
@@ -44,6 +46,7 @@ class RF24Receiver {
     MessageRenderer* _messageRenderers[MESSAGE_RENDERERS_LIMIT] = {};
     uint8_t _messageRenderersTotal = 0;
 #endif
+    SpeedResolver* _speedResolver = NULL;
 };
 
 class RF24Tranceiver: public RF24Transmitter, public RF24Receiver {

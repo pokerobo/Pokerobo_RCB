@@ -141,8 +141,13 @@ int RF24Receiver::check() {
   JoystickAction message(buttons, jX, jY, count);
   message.setSource(RX_MSG);
 
+  SpeedPacket speedPacket;
+  if (_speedResolver != NULL) {
+    _speedResolver->resolve(&speedPacket, &message);
+  }
+
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(&message);
+    _messageRenderer->render(&message, &speedPacket);
   }
 
 #if MULTIPLE_RENDERERS_SUPPORTED
@@ -185,6 +190,10 @@ bool RF24Receiver::add(MessageRenderer* messageRenderer) {
   return true;
 }
 #endif
+
+void RF24Receiver::set(SpeedResolver* speedResolver) {
+  _speedResolver = speedResolver;
+}
 
 #if MULTIPLE_RENDERERS_SUPPORTED
 byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message) {
