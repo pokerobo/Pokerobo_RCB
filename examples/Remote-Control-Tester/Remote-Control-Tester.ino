@@ -25,7 +25,7 @@ void setup() {
   programSelector.set(&joystickHandler);
   programSelector.set(&tranceiver, address);
   programSelector.set(&displayHandler);
-  programSelector.begin(PROGRAM_MODE_TEST_STATION);
+  programSelector.begin(PROGRAM_MODE_TESTER);
 }
 
 void loop() {

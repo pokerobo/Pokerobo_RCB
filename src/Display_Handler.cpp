@@ -60,6 +60,7 @@ void DisplayHandler::clear() {
 }
 
 void DisplayHandler::splash(char* title) {
+  if (title == NULL) return;
   u8g2.firstPage();
   do {
     u8g2.drawStr(0, 32 + _maxCharHeight / 2, title);
@@ -73,10 +74,12 @@ void renderSpeedWeight_(uint8_t lx, uint8_t ty, SpeedPacket* speedPacket);
 void renderTransmissionCounter_(uint8_t lx, uint8_t ty, TransmissionCounter* counter, uint8_t _maxCharHeight, uint8_t _maxCharWidth);
 
 bool DisplayHandler::render(JoystickAction* message) {
-  return render(message, NULL);
+  return render(message, NULL, NULL);
 }
 
 bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter) {
+  if (message == NULL) return;
+
   int nX = -512 + message->getX();
   int nY = -512 + message->getY();
 
@@ -145,6 +148,7 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, T
 }
 
 void renderTitle_(uint8_t lx, uint8_t ty, char* title) {
+  if (title == NULL) return;
   u8g2.setFontDirection(3);
   u8g2.drawStr(lx, ty, title);
   u8g2.setFontDirection(0);

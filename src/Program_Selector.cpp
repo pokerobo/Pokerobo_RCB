@@ -11,6 +11,7 @@ int ProgramSelector::check() {
     case PROGRAM_NRF24_TEST_TRANSMITTER:
       delay(50);
       break;
+    case PROGRAM_NRF24_REAL_RECEIVER:
     case PROGRAM_NRF24_TEST_RECEIVER:
       delay(10);
       break;
@@ -29,11 +30,11 @@ int ProgramSelector::move_() {
     switch(_currentState) {
       case PROGRAM_NRF24_REAL_TRANSMITTER:
         _rf24Tranceiver->reset(TX);
-        if (_mode == PROGRAM_MODE_REAL_STATION) {
+        if (_mode == PROGRAM_MODE_PLAYER) {
           _rf24Tranceiver->begin(TX);
           _currentState = PROGRAM_NRF24_TEST_TRANSMITTER;
         }
-        if (_mode == PROGRAM_MODE_TEST_STATION) {
+        if (_mode == PROGRAM_MODE_TESTER) {
           _rf24Tranceiver->begin(RX);
           if (_messageRenderer != NULL) {
             _messageRenderer->splash("Waiting for message...");
@@ -57,6 +58,7 @@ int ProgramSelector::move_() {
       case PROGRAM_NRF24_REAL_TRANSMITTER:
       case PROGRAM_NRF24_TEST_TRANSMITTER:
         return _joystickHandler->check(&message);
+      case PROGRAM_NRF24_REAL_RECEIVER:
       case PROGRAM_NRF24_TEST_RECEIVER:
         return _rf24Tranceiver->check();
     }
