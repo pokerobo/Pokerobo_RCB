@@ -141,6 +141,11 @@ int RF24Receiver::check() {
   JoystickAction message(buttons, jX, jY, count);
   message.setSource(RX_MSG);
 
+  if (_messageRenderer != NULL) {
+    _messageRenderer->render(&message);
+  }
+
+#if MULTIPLE_RENDERERS_SUPPORTED
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageRenderersTotal; i++) {
     int8_t status = invoke(_messageRenderers[i], i+1, &message);
@@ -152,10 +157,16 @@ int RF24Receiver::check() {
       countNulls++;
     }
   }
+#endif
 
   return 0;
 }
 
+void RF24Receiver::set(MessageRenderer* messageRenderer) {
+  _messageRenderer = messageRenderer;
+}
+
+#if MULTIPLE_RENDERERS_SUPPORTED
 bool RF24Receiver::add(MessageRenderer* messageRenderer) {
   if (messageRenderer == NULL) {
     return false;
@@ -173,7 +184,9 @@ bool RF24Receiver::add(MessageRenderer* messageRenderer) {
   _messageRenderers[_messageRenderersTotal++] = messageRenderer;
   return true;
 }
+#endif
 
+#if MULTIPLE_RENDERERS_SUPPORTED
 byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message) {
   if (messageRenderer != NULL) {
     uint8_t code = 1 << index;
@@ -194,3 +207,4 @@ byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, Joyst
   }
   return 0;
 }
+#endif

@@ -64,8 +64,6 @@
 #endif//JOYSTICK_DISABLED_BUTTONS
 #endif//__JOYSTICK_FUNDUINO_SHIELD__
 
-#define MESSAGE_RENDERERS_LIMIT   7
-
 typedef enum { TX_MSG = 0, RX_MSG } message_source_t;
 
 typedef struct _TransmissionCounter {
