@@ -135,11 +135,13 @@ bool RF24Receiver::available() {
     bool connected = _tranceiver->isChipConnected();
     if (connected) {
       if (_messageRenderer != NULL) {
-        _messageRenderer->splash("Waiting for message...");
+        char info[14] = { 'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0' };
+        _messageRenderer->splash(info);
       }
     } else {
       if (_messageRenderer != NULL) {
-        _messageRenderer->splash("nRF24L01 is not connected");
+        char info[14] = { 'C', 'o', 'n', 'n', 'e', 'c', 't', 'i', 'n', 'g', '.', '.', '.', '\0' };
+        _messageRenderer->splash(info);
       }
     }
   }
@@ -168,9 +170,9 @@ int RF24Receiver::check() {
   bool ok = decodeMessage(msg, "JS", &buttons, &jX, &jY, &count);
 
 #if __RUNNING_LOG_ENABLED__
-  char log[32] = "";
+  char log[32] = { 0 };
   sprintf(log, "%d,%d,%d,%d", buttons, jX, jY, count);
-  Serial.print("decode"), Serial.print("("), Serial.print(log), Serial.print(")"),
+  Serial.print("decode"), Serial.print('('), Serial.print(log), Serial.print(')'),
       Serial.print(" -> "), Serial.print(ok);
   Serial.println();
 #endif

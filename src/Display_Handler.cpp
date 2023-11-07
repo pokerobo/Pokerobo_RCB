@@ -31,9 +31,6 @@
 
 U8G2_ST7567_ENH_DG128064I_1_HW_I2C u8g2(U8G2_R2, SCL, SDA, U8X8_PIN_NONE); 
 
-DisplayHandler::DisplayHandler() {
-}
-
 int DisplayHandler::begin() {
   Wire.begin();
   Wire.setWireTimeout(3000, true);
@@ -73,10 +70,6 @@ bool renderCoordinates_(uint8_t lx, uint8_t ty, char lines[][JOYSTICK_INFO_COLUM
 void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
 void renderSpeedWeight_(uint8_t lx, uint8_t ty, SpeedPacket* speedPacket);
 void renderTransmissionCounter_(uint8_t lx, uint8_t ty, TransmissionCounter* counter, uint8_t _maxCharHeight, uint8_t _maxCharWidth);
-
-bool DisplayHandler::render(JoystickAction* message) {
-  return render(message, NULL, NULL);
-}
 
 bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter) {
   if (message == NULL) return;
@@ -242,12 +235,13 @@ void renderTransmissionCounter_(uint8_t lx, uint8_t ty, TransmissionCounter* cou
   u8g2.drawHLine(lx, ty, (JOYSTICK_INFO_COLUMNS - 1) * _maxCharWidth);
 
   char line[8] = {};
+  char format[6] = { '%', ' ', '7', 'l', 'd', '\0' };
 
-  sprintf(line, "% 7ld", counter->sendingTotal);
+  sprintf(line, format, counter->sendingTotal);
   u8g2.setCursor(lx, ty + 1 + _maxCharHeight);
   u8g2.print(line);
 
-  sprintf(line, "% 7ld", counter->packetLossTotal);
+  sprintf(line, format, counter->packetLossTotal);
   u8g2.setCursor(lx, ty + 1 + _maxCharHeight * 2);
   u8g2.print(line);
 }

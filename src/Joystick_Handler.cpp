@@ -68,8 +68,8 @@ void JoystickHandler::detect() {
   _middleY = minY + (sumY / JOYSTICK_DETECTION_TOTAL);
 
   #if __RUNNING_LOG_ENABLED__
-    Serial.print("Origin "), Serial.print("X"), Serial.print(": "), Serial.println(_middleX);
-    Serial.print("Origin "), Serial.print("Y"), Serial.print(": "), Serial.println(_middleY);
+    Serial.print("Origin "), Serial.print('X'), Serial.print(": "), Serial.println(_middleX);
+    Serial.print("Origin "), Serial.print('Y'), Serial.print(": "), Serial.println(_middleY);
   #endif
 }
 
@@ -187,8 +187,8 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
 
 #if __RUNNING_LOG_ENABLED__
   if (_counter.sendingTotal < 10) {
-    Serial.print("Middle "), Serial.print("X"), Serial.print(": "), Serial.println(_middleX);
-    Serial.print("Middle "), Serial.print("Y"), Serial.print(": "), Serial.println(_middleY);
+    Serial.print("Middle "), Serial.print('X'), Serial.print(": "), Serial.println(_middleX);
+    Serial.print("Middle "), Serial.print('Y'), Serial.print(": "), Serial.println(_middleY);
   }
 #endif
 
