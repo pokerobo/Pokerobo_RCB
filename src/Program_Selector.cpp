@@ -24,9 +24,6 @@ int ProgramSelector::move_() {
   _joystickHandler->input(&message);
   uint16_t clickingFlags = message.getClickingFlags();
   if (clickingFlags & MASK_SELECT_BUTTON) {
-    if (_messageRenderer != NULL) {
-      _messageRenderer->clear();
-    }
     switch(_currentState) {
       case PROGRAM_NRF24_REAL_TRANSMITTER:
         _rf24Tranceiver->reset(TX);
@@ -36,9 +33,6 @@ int ProgramSelector::move_() {
         }
         if (_mode == PROGRAM_MODE_TESTER) {
           _rf24Tranceiver->begin(RX);
-          if (_messageRenderer != NULL) {
-            _messageRenderer->splash("Waiting for message...");
-          }
           _currentState = PROGRAM_NRF24_TEST_RECEIVER;
         }
         break;

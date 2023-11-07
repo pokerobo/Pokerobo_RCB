@@ -36,8 +36,10 @@ class RF24Receiver {
     void set(SpeedResolver* speedResolver);
     void reset();
   protected:
+    bool available();
 #if MULTIPLE_RENDERERS_SUPPORTED
-    byte invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message);
+    byte invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message,
+        SpeedPacket* speedPacket, TransmissionCounter* counter);
 #endif
   private:
     void* _receiver = NULL;

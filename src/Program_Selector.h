@@ -5,6 +5,7 @@
 #include "Joystick_Handler.h"
 #include "RF24_Tranceiver.h"
 
+#define PROGRAM_MODE_CLIENT                 2
 #define PROGRAM_MODE_PLAYER                 5
 #define PROGRAM_MODE_TESTER                 9
 

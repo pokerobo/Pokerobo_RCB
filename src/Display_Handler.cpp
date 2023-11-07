@@ -40,6 +40,7 @@ int DisplayHandler::begin() {
   u8g2.setI2CAddress(0x3F * 2); 
   u8g2.setBusClock(200000);
   u8g2.begin();
+
   u8g2.setFont(u8g2_font_5x8_tf);
 
   _maxCharHeight = u8g2.getMaxCharHeight();

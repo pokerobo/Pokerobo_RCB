@@ -107,6 +107,44 @@ void RF24Receiver::reset() {
   // reset the _counter
   _counter.sendingTotal = 0;
   _counter.packetLossTotal = 0;
+  // clear the _messageRenderer
+  if (_messageRenderer != NULL) {
+    _messageRenderer->clear();
+  }
+#if MULTIPLE_RENDERERS_SUPPORTED
+  for(int i=0; i<_messageRenderersTotal; i++) {
+    MessageRenderer* messageRenderer = _messageRenderers[i];
+    if (messageRenderer != NULL) {
+      messageRenderer->clear();
+    }
+  }
+#endif
+}
+
+bool RF24Receiver::available() {
+  RF24* _tranceiver = (RF24*)_receiver;
+
+  // resets the IRQ pin to HIGH
+  bool tx_ds, tx_df, rx_dr;
+  _tranceiver->whatHappened(tx_ds, tx_df, rx_dr);
+
+  // returned data should now be reliable
+  bool status = _tranceiver->available();
+
+  if (!status) {
+    bool connected = _tranceiver->isChipConnected();
+    if (connected) {
+      if (_messageRenderer != NULL) {
+        _messageRenderer->splash("Waiting for message...");
+      }
+    } else {
+      if (_messageRenderer != NULL) {
+        _messageRenderer->splash("nRF24L01 is not connected");
+      }
+    }
+  }
+
+  return status;
 }
 
 int RF24Receiver::check() {
@@ -116,11 +154,7 @@ int RF24Receiver::check() {
 
   RF24* _tranceiver = (RF24*)_receiver;
 
-  // resets the IRQ pin to HIGH
-  bool tx_ds, tx_df, rx_dr;
-  _tranceiver->whatHappened(tx_ds, tx_df, rx_dr);
-  // returned data should now be reliable
-  if (!_tranceiver->available()) {
+  if (!available()) {
     return 0;
   }
 
@@ -173,7 +207,7 @@ int RF24Receiver::check() {
 #if MULTIPLE_RENDERERS_SUPPORTED
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageRenderersTotal; i++) {
-    int8_t status = invoke(_messageRenderers[i], i+1, &message);
+    int8_t status = invoke(_messageRenderers[i], i+1, &message, &speedPacket, &_counter);
     if (status > 0) {
       sumOk += status;
     } else if (status < 0) {
@@ -216,10 +250,11 @@ void RF24Receiver::set(SpeedResolver* speedResolver) {
 }
 
 #if MULTIPLE_RENDERERS_SUPPORTED
-byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message) {
+byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message,
+      SpeedPacket* speedPacket, TransmissionCounter* counter) {
   if (messageRenderer != NULL) {
     uint8_t code = 1 << index;
-    bool ok = messageRenderer->render(message);
+    bool ok = messageRenderer->render(message, speedPacket, counter);
 #if __RUNNING_LOG_ENABLED__
     Serial.print("#"), Serial.print(message->getExtras()), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {
