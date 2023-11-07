@@ -5,6 +5,20 @@ int ProgramSelector::begin(uint8_t mode) {
 }
 
 int ProgramSelector::check() {
+  int result = move_();
+  switch(_currentState) {
+    case PROGRAM_NRF24_REAL_TRANSMITTER:
+    case PROGRAM_NRF24_TEST_TRANSMITTER:
+      delay(50);
+      break;
+    case PROGRAM_NRF24_TEST_RECEIVER:
+      delay(10);
+      break;
+  }
+  return result;
+}
+
+int ProgramSelector::move_() {
   JoystickAction message = _joystickHandler->input();
   uint16_t clickingFlags = message.getClickingFlags();
   if (clickingFlags & MASK_SELECT_BUTTON) {

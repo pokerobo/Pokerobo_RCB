@@ -26,6 +26,7 @@ class ProgramSelector {
     RF24Tranceiver* _rf24Tranceiver = NULL;
     uint64_t _rf24Address = RF24_DEFAULT_ADDRESS;
     uint8_t _currentState = PROGRAM_NRF24_REAL_TRANSMITTER;
+    int move_();
 };
 
 #endif
