@@ -111,6 +111,7 @@ bool ConsoleMessageRenderer::render(JoystickAction* message, SpeedPacket* speedP
   Serial.print('#'), Serial.print(message->getExtras()), Serial.print(" - ");
   Serial.print("Pressing"), Serial.print("Flags"), Serial.print(": "),
       Serial.print(message->getPressingFlags());
+  Serial.print("; ");
   Serial.print("Clicking"), Serial.print("Flags"), Serial.print(": "),
       Serial.print(message->getClickingFlags());
   Serial.print("; "), Serial.print('X'), Serial.print(": "), Serial.print(message->getX());

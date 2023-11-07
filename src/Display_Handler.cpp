@@ -102,13 +102,15 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, T
 
   char lines[COORD_LINES_TOTAL][JOYSTICK_INFO_COLUMNS] = { {}, {}, {}, {}, {} };
 
-  char format[8] = { '~', 'X', ':', '%', ' ', '4', 'd', '\0' };
-  sprintf(lines[COORD_LINE_X], format, nX);
-  format[1] = 'Y';
-  sprintf(lines[COORD_LINE_Y], format, nY);
+  char fmt1[8] = { '~', 'X', ':', '%', ' ', '4', 'd', '\0' };
+  sprintf(lines[COORD_LINE_X], fmt1, nX);
+  fmt1[1] = 'Y';
+  sprintf(lines[COORD_LINE_Y], fmt1, nY);
 
-  sprintf(lines[COORD_LINE_RAW_X], "oX:%4d", message->getOriginX());
-  sprintf(lines[COORD_LINE_RAW_Y], "oY:%4d", message->getOriginY());
+  char fmt2[7] = { 'o', 'X', ':', '%', '4', 'd', '\0' };
+  sprintf(lines[COORD_LINE_RAW_X], fmt2, message->getOriginX());
+  fmt2[1] = 'Y';
+  sprintf(lines[COORD_LINE_RAW_Y], fmt2, message->getOriginY());
 
   uint16_t buttons = message->getPressingFlags();
   lines[COORD_LINE_FLAGS][POS_UP_BUTTON] = idleButtonIcon(buttonOffs, buttons, MASK_UP_BUTTON, 'U');

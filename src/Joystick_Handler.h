@@ -67,7 +67,7 @@
 class JoystickHandler {
   static int pinOfButtons[];
 #if __STRICT_MODE__
-  static void init();
+  static void verify();
 #endif
   public:
     JoystickHandler(MessageSender* messageSender=NULL, MessageRenderer* messageRenderer=NULL);
