@@ -8,7 +8,7 @@
 #define RF24_DEFAULT_ADDRESS 0x123456789ABCDEF0LL
 
 #define MESSAGE_RENDERERS_LIMIT   7
-#define MULTIPLE_RENDERERS_SUPPORTED true
+#define MULTIPLE_RENDERERS_SUPPORTED false
 
 typedef enum { TX = 0, RX } tranceiver_t;
 typedef enum { ACK_OK = 0, ACK_FAILED, MESSAGE_NULL, TRANSMITTER_NULL } rf24_tx_status_t;
@@ -41,6 +41,7 @@ class RF24Receiver {
 #endif
   private:
     void* _receiver = NULL;
+    TransmissionCounter _counter;
     MessageRenderer* _messageRenderer = NULL;
 #if MULTIPLE_RENDERERS_SUPPORTED
     MessageRenderer* _messageRenderers[MESSAGE_RENDERERS_LIMIT] = {};

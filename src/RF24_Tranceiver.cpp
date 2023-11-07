@@ -99,10 +99,14 @@ int RF24Receiver::begin(void* radio, uint64_t address) {
 }
 
 void RF24Receiver::reset() {
+  // reset the _receiver
   RF24* _tranceiver = (RF24*)_receiver;
   _tranceiver->powerDown();
   delay(100);
   _tranceiver->powerUp();
+  // reset the _counter
+  _counter.sendingTotal = 0;
+  _counter.packetLossTotal = 0;
 }
 
 int RF24Receiver::check() {
@@ -146,8 +150,21 @@ int RF24Receiver::check() {
     _speedResolver->resolve(&speedPacket, &message);
   }
 
+  if (_counter.sendingTotal == 0) {
+    _counter.sendingTotal = count;
+    _counter.packetLossTotal = 0;
+  } else {
+    if (count < _counter.sendingTotal + 1) {
+      _counter.packetLossTotal = 0;
+    } else if (count == _counter.sendingTotal + 1) {
+    } else if (count > _counter.sendingTotal + 1) {
+      _counter.packetLossTotal += count - _counter.sendingTotal - 1;
+    }
+    _counter.sendingTotal = count;
+  }
+
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(&message, &speedPacket);
+    _messageRenderer->render(&message, &speedPacket, &_counter);
   }
 
 #if MULTIPLE_RENDERERS_SUPPORTED
