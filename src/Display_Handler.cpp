@@ -6,7 +6,7 @@
 #define COORD_LINES_TOTAL               5
 #define COORD_LINE_X                    0
 #define COORD_LINE_Y                    1
-#define COORD_LINE_CLICKING_FLAGS       2
+#define COORD_LINE_FLAGS                2
 #define COORD_LINE_RAW_X                3
 #define COORD_LINE_RAW_Y                4
 
@@ -105,37 +105,37 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, T
   sprintf(lines[COORD_LINE_RAW_Y], "oY:%4d", message->getOriginY());
 
   uint16_t buttons = message->getPressingFlags();
-  lines[COORD_LINE_CLICKING_FLAGS][POS_UP_BUTTON] = idleButtonIcon(buttons, MASK_UP_BUTTON, 'U');
-  lines[COORD_LINE_CLICKING_FLAGS][POS_RIGHT_BUTTON] = idleButtonIcon(buttons, MASK_RIGHT_BUTTON, 'R');
-  lines[COORD_LINE_CLICKING_FLAGS][POS_DOWN_BUTTON] = idleButtonIcon(buttons, MASK_DOWN_BUTTON, 'D');
-  lines[COORD_LINE_CLICKING_FLAGS][POS_LEFT_BUTTON] = idleButtonIcon(buttons, MASK_LEFT_BUTTON, 'L');
-  lines[COORD_LINE_CLICKING_FLAGS][POS_START_BUTTON] = idleButtonIcon(buttons, MASK_START_BUTTON, 'S');
-  lines[COORD_LINE_CLICKING_FLAGS][POS_SELECT_BUTTON] = idleButtonIcon(buttons, MASK_SELECT_BUTTON, 'O');
-  lines[COORD_LINE_CLICKING_FLAGS][POS_ANALOG_BUTTON] = idleButtonIcon(buttons, MASK_ANALOG_BUTTON, 'A');
+  lines[COORD_LINE_FLAGS][POS_UP_BUTTON] = idleButtonIcon(buttons, MASK_UP_BUTTON, 'U');
+  lines[COORD_LINE_FLAGS][POS_RIGHT_BUTTON] = idleButtonIcon(buttons, MASK_RIGHT_BUTTON, 'R');
+  lines[COORD_LINE_FLAGS][POS_DOWN_BUTTON] = idleButtonIcon(buttons, MASK_DOWN_BUTTON, 'D');
+  lines[COORD_LINE_FLAGS][POS_LEFT_BUTTON] = idleButtonIcon(buttons, MASK_LEFT_BUTTON, 'L');
+  lines[COORD_LINE_FLAGS][POS_START_BUTTON] = idleButtonIcon(buttons, MASK_START_BUTTON, 'S');
+  lines[COORD_LINE_FLAGS][POS_SELECT_BUTTON] = idleButtonIcon(buttons, MASK_SELECT_BUTTON, 'O');
+  lines[COORD_LINE_FLAGS][POS_ANALOG_BUTTON] = idleButtonIcon(buttons, MASK_ANALOG_BUTTON, 'A');
 
   uint16_t clickingFlags = message->getClickingFlags();
   if (clickingFlags & MASK_START_BUTTON) {
-    lines[COORD_LINE_CLICKING_FLAGS][POS_START_BUTTON] = '+';
+    lines[COORD_LINE_FLAGS][POS_START_BUTTON] = '+';
   }
   if (clickingFlags & MASK_SELECT_BUTTON) {
-    lines[COORD_LINE_CLICKING_FLAGS][POS_SELECT_BUTTON] = '+';
+    lines[COORD_LINE_FLAGS][POS_SELECT_BUTTON] = '+';
   }
   if (clickingFlags & MASK_ANALOG_BUTTON) {
-    lines[COORD_LINE_CLICKING_FLAGS][POS_ANALOG_BUTTON] = '+';
+    lines[COORD_LINE_FLAGS][POS_ANALOG_BUTTON] = '+';
   }
 
   int rX = map(nX, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
   int rY = map(nY, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
 
   uint8_t _statsLx = _maxCharHeight + 1;
-  uint8_t _virtualPadOx = _statsLx + (JOYSTICK_INFO_COLUMNS - 1) * _maxCharWidth + 1;
-  uint8_t _speedMeterLx = _virtualPadOx + 64;
+  uint8_t _virtualPadLx = _statsLx + (JOYSTICK_INFO_COLUMNS - 1) * _maxCharWidth + 1;
+  uint8_t _speedMeterLx = _virtualPadLx + 64;
   uint8_t _counterTy = JOYSTICK_PAD_PADDING_TOP + _maxCharHeight * COORD_LINES_TOTAL + 2;
 
   u8g2.firstPage();
   do {
     renderCoordinates_(_statsLx, 0, lines, _maxCharHeight);
-    renderJoystickPad_(_virtualPadOx, 0, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
+    renderJoystickPad_(_virtualPadLx, 0, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
     renderSpeedWeight_(_speedMeterLx, 0, speedPacket);
     renderTransmissionCounter_(_statsLx, _counterTy, counter, _maxCharHeight, _maxCharWidth);
     renderTitle_(_maxCharHeight - 2, 62, title);
