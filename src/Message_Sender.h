@@ -80,7 +80,8 @@ class MessagePacket {
 class JoystickAction: public MessagePacket {
   static const uint8_t messageSize;
   public:
-    JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
+    JoystickAction(uint16_t buttons=0, uint16_t x=0, uint16_t y=0, uint32_t extras=0);
+    void init(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
     void setOrigin(uint16_t x, uint16_t y);
     void setClickingFlags(uint16_t clickingFlags);
     void setSource(message_source_t source);

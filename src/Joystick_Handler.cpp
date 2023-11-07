@@ -170,13 +170,21 @@ int JoystickHandler::check(JoystickAction* action) {
 }
 
 void _adjustCounter(TransmissionCounter *counter) {
-  if (counter->sendingTotal >= 999999) {
+  if (counter->sendingTotal >= 999999UL) {
     counter->sendingTotal = 0;
     counter->packetLossTotal = 0;
   }
 }
 
 JoystickAction JoystickHandler::input() {
+  JoystickAction message;
+  input(&message);
+  return message;
+}
+
+JoystickAction* JoystickHandler::input(JoystickAction* action) {
+  if (action == NULL) return action;
+
 #if __RUNNING_LOG_ENABLED__
   if (_counter.sendingTotal < 10) {
     Serial.print("Middle "), Serial.print("X"), Serial.print(": "), Serial.println(_middleX);
@@ -191,7 +199,7 @@ JoystickAction JoystickHandler::input() {
 
 #if __RUNNING_LOG_ENABLED__
   char log[32] = "";
-  sprintf(log, "%d,%d,%d", pressed, x, y);
+  sprintf(log, "%d,%d,%d,%d", pressed, x, y, _counter.sendingTotal);
   Serial.print("M1"), Serial.print(": "), Serial.println(log);
 #endif
 
@@ -217,16 +225,16 @@ JoystickAction JoystickHandler::input() {
   }
 
 #if __RUNNING_LOG_ENABLED__
-    sprintf(log, "%d,%d,%d", pressed, x, y);
+    sprintf(log, "%d,%d,%d,%d", pressed, x, y, _counter.sendingTotal);
     Serial.print("M2"), Serial.print(": "), Serial.println(log);
 #endif
 
-  JoystickAction message(pressed, x, y, _counter.sendingTotal);
-  message.setSource(TX_MSG);
-  message.setOrigin(originX, originY);
-  message.setClickingFlags(checkButtonClickingFlags(pressed));
+  action->init(pressed, x, y, _counter.sendingTotal);
+  action->setSource(TX_MSG);
+  action->setOrigin(originX, originY);
+  action->setClickingFlags(checkButtonClickingFlags(pressed));
 
-  return message;
+  return action;
 }
 
 #if JOYSTICK_CHECKING_CHANGE

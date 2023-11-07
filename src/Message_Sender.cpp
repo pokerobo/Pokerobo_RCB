@@ -13,6 +13,13 @@ JoystickAction::JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_
   _extras = extras;
 }
 
+void JoystickAction::init(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras) {
+  _pressingFlags = buttons;
+  _x = x;
+  _y = y;
+  _extras = extras;
+}
+
 void JoystickAction::setOrigin(uint16_t x, uint16_t y) {
   _originX = x;
   _originY = y;
@@ -70,10 +77,7 @@ uint8_t* JoystickAction::serialize(uint8_t* buf, uint8_t len) {
 }
 
 SpeedPacket::SpeedPacket(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
-  _LeftSpeed = leftSpeed;
-  _LeftDirection = leftDirection;
-  _RightSpeed = rightSpeed;
-  _RightDirection = rightDirection;
+  update(leftSpeed, leftDirection, rightSpeed, rightDirection);
 }
 
 void SpeedPacket::update(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
@@ -128,8 +132,8 @@ uint8_t* encodeInteger(uint8_t* store, uint16_t value) {
 uint8_t* encodeInteger(uint8_t* store, uint32_t value) {
   store[0] = value & 0xff;
   store[1] = (value >> 8) & 0xff;
-  store[1] = (value >> 16) & 0xff;
-  store[1] = (value >> 24) & 0xff;
+  store[2] = (value >> 16) & 0xff;
+  store[3] = (value >> 24) & 0xff;
   return store;
 }
 

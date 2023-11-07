@@ -19,7 +19,8 @@ int ProgramSelector::check() {
 }
 
 int ProgramSelector::move_() {
-  JoystickAction message = _joystickHandler->input();
+  JoystickAction message;
+  _joystickHandler->input(&message);
   uint16_t clickingFlags = message.getClickingFlags();
   if (clickingFlags & MASK_SELECT_BUTTON) {
     if (_messageRenderer != NULL) {

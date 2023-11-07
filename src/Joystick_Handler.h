@@ -75,6 +75,7 @@ class JoystickHandler {
     int check(JoystickAction* action=NULL);
     void detect();
     JoystickAction input();
+    JoystickAction* input(JoystickAction* packet);
 #if MULTIPLE_SENDERS_SUPPORTED
     bool add(MessageSender* messageSender);
 #endif

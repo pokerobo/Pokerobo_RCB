@@ -134,7 +134,10 @@ int RF24Receiver::check() {
   bool ok = decodeMessage(msg, "JS", &buttons, &jX, &jY, &count);
 
 #if __RUNNING_LOG_ENABLED__
-  Serial.print("decodeMessage -> "), Serial.print(ok);
+  char log[32] = "";
+  sprintf(log, "%d,%d,%d,%d", buttons, jX, jY, count);
+  Serial.print("decode"), Serial.print("("), Serial.print(log), Serial.print(")"),
+      Serial.print(" -> "), Serial.print(ok);
   Serial.println();
 #endif
 
