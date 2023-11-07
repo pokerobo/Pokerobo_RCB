@@ -3,6 +3,10 @@
 #include <U8g2lib.h>
 #include <Wire.h>
 
+#ifndef __DEBUG_LOG_DISPLAY_HANDLER__
+#define __DEBUG_LOG_DISPLAY_HANDLER__ __RUNNING_LOG_ENABLED__
+#endif//__DEBUG_LOG_DISPLAY_HANDLER__
+
 #define COORD_LINES_TOTAL               5
 #define COORD_LINE_X                    0
 #define COORD_LINE_Y                    1
@@ -43,7 +47,7 @@ int DisplayHandler::begin() {
   _maxCharHeight = u8g2.getMaxCharHeight();
   _maxCharWidth = u8g2.getMaxCharWidth();
 
-#if __RUNNING_LOG_ENABLED__
+#if __DEBUG_LOG_DISPLAY_HANDLER__
   // maxCharHeight: 8
   Serial.print("max"), Serial.print("Char"), Serial.print("Height"), Serial.print(": "), Serial.println(_maxCharHeight);
   // maxCharWidth: 5
@@ -98,8 +102,11 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, T
 
   char lines[COORD_LINES_TOTAL][JOYSTICK_INFO_COLUMNS] = { {}, {}, {}, {}, {} };
 
-  sprintf(lines[COORD_LINE_X], "~X:% 4d", nX);
-  sprintf(lines[COORD_LINE_Y], "~Y:% 4d", nY);
+  char format[8] = { '~', 'X', ':', '%', ' ', '4', 'd', '\0' };
+  sprintf(lines[COORD_LINE_X], format, nX);
+  format[1] = 'Y';
+  sprintf(lines[COORD_LINE_Y], format, nY);
+
   sprintf(lines[COORD_LINE_RAW_X], "oX:%4d", message->getOriginX());
   sprintf(lines[COORD_LINE_RAW_Y], "oY:%4d", message->getOriginY());
 

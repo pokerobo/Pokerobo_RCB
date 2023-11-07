@@ -4,6 +4,10 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
+#ifndef __DEBUG_LOG_RF24_TRANCEIVER__
+#define __DEBUG_LOG_RF24_TRANCEIVER__ __RUNNING_LOG_ENABLED__
+#endif//__DEBUG_LOG_RF24_TRANCEIVER__
+
 #if __AVR_MODEL__ == __VAR_MEGA_2560__
 #ifndef PIN_CE
 #define PIN_CE  48
@@ -169,7 +173,7 @@ int RF24Receiver::check() {
 
   bool ok = decodeMessage(msg, "JS", &buttons, &jX, &jY, &count);
 
-#if __RUNNING_LOG_ENABLED__
+#if __DEBUG_LOG_RF24_TRANCEIVER__
   char log[32] = { 0 };
   sprintf(log, "%d,%d,%d,%d", buttons, jX, jY, count);
   Serial.print("decode"), Serial.print('('), Serial.print(log), Serial.print(')'),
@@ -257,8 +261,8 @@ byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, Joyst
   if (messageRenderer != NULL) {
     uint8_t code = 1 << index;
     bool ok = messageRenderer->render(message, speedPacket, counter);
-#if __RUNNING_LOG_ENABLED__
-    Serial.print("#"), Serial.print(message->getExtras()), Serial.print("->"), Serial.print(index), Serial.print(": ");
+#if __DEBUG_LOG_RF24_TRANCEIVER__
+    Serial.print('#'), Serial.print(message->getExtras()), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {
       Serial.println("v");
     } else {

@@ -27,6 +27,10 @@
 #define __RUNNING_LOG_ENABLED__           1
 #endif
 
+#undef __DEBUG_LOG_DISPLAY_HANDLER__      0
+#undef __DEBUG_LOG_JOYSTICK_HANDLER__     0
+#undef __DEBUG_LOG_RF24_TRANCEIVER__      0
+
 #ifndef __STRICT_MODE__
 #define __STRICT_MODE__                   0
 #endif
