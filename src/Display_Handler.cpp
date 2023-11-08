@@ -61,11 +61,21 @@ void DisplayHandler::clear() {
   u8g2.clear();
 }
 
-void DisplayHandler::splash(char* title) {
+void DisplayHandler::splash(char* title, byte align) {
   if (title == NULL) return;
+
+  uint8_t left = 0;
+  uint8_t len = strlen(title);
+  uint8_t pixel = len * _maxCharWidth;
+  if (pixel < 128) {
+    if (align == 0) {
+      left = (128 - pixel) / 2;
+    }
+  }
+
   u8g2.firstPage();
   do {
-    u8g2.drawStr(0, 32 + _maxCharHeight / 2, title);
+    u8g2.drawStr(left, 32 + _maxCharHeight / 2, title);
   } while (u8g2.nextPage());
 }
 
@@ -164,8 +174,7 @@ void renderTitle_(uint8_t lx, uint8_t ty, char* title) {
 
 void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, char lines[][JOYSTICK_INFO_COLUMNS]) {
   for (uint8_t i=0; i<COORD_LINES_TOTAL; i++) {
-    u8g2.setCursor(lx, ty + _maxCharHeight + JOYSTICK_PAD_PADDING_TOP + _maxCharHeight * i);
-    u8g2.print(lines[i]);
+    u8g2.drawStr(lx, ty + _maxCharHeight + JOYSTICK_PAD_PADDING_TOP + _maxCharHeight * i, lines[i]);
   }
 }
 
@@ -256,10 +265,8 @@ void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, 
   char format[6] = { '%', ' ', '7', 'l', 'd', '\0' };
 
   sprintf(line, format, counter->sendingTotal);
-  u8g2.setCursor(lx, ty + 1 + _maxCharHeight);
-  u8g2.print(line);
+  u8g2.drawStr(lx, ty + 1 + _maxCharHeight, line);
 
   sprintf(line, format, counter->packetLossTotal);
-  u8g2.setCursor(lx, ty + 1 + _maxCharHeight * 2);
-  u8g2.print(line);
+  u8g2.drawStr(lx, ty + 1 + _maxCharHeight * 2, line);
 }

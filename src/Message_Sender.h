@@ -134,14 +134,14 @@ class MessageSender {
 class MessageRenderer {
   public:
     virtual void clear();
-    virtual void splash(char* title);
+    virtual void splash(char* title, byte align = 0);
     virtual bool render(JoystickAction* message, SpeedPacket* speedPacket=NULL, TransmissionCounter* counter=NULL);
 };
 
 class ConsoleMessageRenderer: public MessageRenderer {
   public:
     void clear();
-    void splash(char* title);
+    void splash(char* title, byte align = 0);
     bool render(JoystickAction* message, SpeedPacket* speedPacket=NULL, TransmissionCounter* counter=NULL);
 };
 

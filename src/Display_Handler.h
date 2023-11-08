@@ -8,7 +8,7 @@ class DisplayHandler: public MessageRenderer {
   public:
     int begin();
     void clear();
-    void splash(char* title);
+    void splash(char* title, byte align = 0);
     bool render(JoystickAction* message, SpeedPacket* speedPacket=NULL, TransmissionCounter* counter=NULL);
   private:
     uint8_t _maxCharHeight = 8;
