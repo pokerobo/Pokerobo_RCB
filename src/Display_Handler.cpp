@@ -69,11 +69,12 @@ void DisplayHandler::splash(char* title) {
   } while (u8g2.nextPage());
 }
 
+void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source);
 void renderTitle_(uint8_t lx, uint8_t ty, char* title);
-bool renderCoordinates_(uint8_t lx, uint8_t ty, char lines[][JOYSTICK_INFO_COLUMNS], uint8_t _maxCharHeight);
+void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, char lines[][JOYSTICK_INFO_COLUMNS]);
 void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
 void renderSpeedWeight_(uint8_t lx, uint8_t ty, SpeedPacket* speedPacket);
-void renderTransmissionCounter_(uint8_t lx, uint8_t ty, TransmissionCounter* counter, uint8_t _maxCharHeight, uint8_t _maxCharWidth);
+void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, TransmissionCounter* counter);
 
 bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter) {
   if (message == NULL) return;
@@ -81,24 +82,9 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, T
   int nX = -512 + message->getX();
   int nY = -512 + message->getY();
 
-  char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
-  uint16_t buttonOffs = JOYSTICK_DISABLED_BUTTONS;
+  message_source_t source = message->getSource();
 
-  if (message->getSource() == RX_MSG) {
-    title[ 0] = '<';
-    title[ 1] = '<';
-    title[ 2] = ' ';
-    title[ 3] = 'T';
-    title[ 4] = 'E';
-    title[ 5] = 'S';
-    title[ 6] = 'T';
-    title[ 7] = 'E';
-    title[ 8] = 'R';
-    title[ 9] = ' ';
-    title[10] = '<';
-    title[11] = '<';
-    buttonOffs = 0;
-  }
+  uint16_t buttonOffs = (source == RX_MSG) ? 0 : JOYSTICK_DISABLED_BUTTONS;
 
   char lines[COORD_LINES_TOTAL][JOYSTICK_INFO_COLUMNS] = { {}, {}, {}, {}, {} };
 
@@ -112,14 +98,14 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, T
   fmt2[1] = 'Y';
   sprintf(lines[COORD_LINE_RAW_Y], fmt2, message->getOriginY());
 
-  uint16_t buttons = message->getPressingFlags();
-  lines[COORD_LINE_FLAGS][POS_UP_BUTTON] = idleButtonIcon(buttonOffs, buttons, MASK_UP_BUTTON, 'U');
-  lines[COORD_LINE_FLAGS][POS_RIGHT_BUTTON] = idleButtonIcon(buttonOffs, buttons, MASK_RIGHT_BUTTON, 'R');
-  lines[COORD_LINE_FLAGS][POS_DOWN_BUTTON] = idleButtonIcon(buttonOffs, buttons, MASK_DOWN_BUTTON, 'D');
-  lines[COORD_LINE_FLAGS][POS_LEFT_BUTTON] = idleButtonIcon(buttonOffs, buttons, MASK_LEFT_BUTTON, 'L');
-  lines[COORD_LINE_FLAGS][POS_START_BUTTON] = idleButtonIcon(buttonOffs, buttons, MASK_START_BUTTON, 'S');
-  lines[COORD_LINE_FLAGS][POS_SELECT_BUTTON] = idleButtonIcon(buttonOffs, buttons, MASK_SELECT_BUTTON, 'O');
-  lines[COORD_LINE_FLAGS][POS_ANALOG_BUTTON] = idleButtonIcon(buttonOffs, buttons, MASK_ANALOG_BUTTON, 'A');
+  uint16_t pressingFlags = message->getPressingFlags();
+  lines[COORD_LINE_FLAGS][POS_UP_BUTTON] = idleButtonIcon(buttonOffs, pressingFlags, MASK_UP_BUTTON, 'U');
+  lines[COORD_LINE_FLAGS][POS_RIGHT_BUTTON] = idleButtonIcon(buttonOffs, pressingFlags, MASK_RIGHT_BUTTON, 'R');
+  lines[COORD_LINE_FLAGS][POS_DOWN_BUTTON] = idleButtonIcon(buttonOffs, pressingFlags, MASK_DOWN_BUTTON, 'D');
+  lines[COORD_LINE_FLAGS][POS_LEFT_BUTTON] = idleButtonIcon(buttonOffs, pressingFlags, MASK_LEFT_BUTTON, 'L');
+  lines[COORD_LINE_FLAGS][POS_START_BUTTON] = idleButtonIcon(buttonOffs, pressingFlags, MASK_START_BUTTON, 'S');
+  lines[COORD_LINE_FLAGS][POS_SELECT_BUTTON] = idleButtonIcon(buttonOffs, pressingFlags, MASK_SELECT_BUTTON, 'O');
+  lines[COORD_LINE_FLAGS][POS_ANALOG_BUTTON] = idleButtonIcon(buttonOffs, pressingFlags, MASK_ANALOG_BUTTON, 'A');
 
   uint16_t clickingFlags = message->getClickingFlags();
   if (clickingFlags & MASK_START_BUTTON) {
@@ -142,12 +128,31 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, T
 
   u8g2.firstPage();
   do {
-    renderCoordinates_(_statsLx, 0, lines, _maxCharHeight);
+    renderCoordinates_(_statsLx, 0, _maxCharHeight, _maxCharWidth, lines);
     renderJoystickPad_(_virtualPadLx, 0, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
     renderSpeedWeight_(_speedMeterLx, 0, speedPacket);
-    renderTransmissionCounter_(_statsLx, _counterTy, counter, _maxCharHeight, _maxCharWidth);
-    renderTitle_(_maxCharHeight - 2, 62, title);
+    renderTransmissionCounter_(_statsLx, _counterTy, _maxCharHeight, _maxCharWidth, counter);
+    renderTitle_(_maxCharHeight - 2, 62, source);
   } while (u8g2.nextPage());
+}
+
+void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source) {
+  char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
+  if (source == RX_MSG) {
+    title[ 0] = '<';
+    title[ 1] = '<';
+    title[ 2] = ' ';
+    title[ 3] = 'T';
+    title[ 4] = 'E';
+    title[ 5] = 'S';
+    title[ 6] = 'T';
+    title[ 7] = 'E';
+    title[ 8] = 'R';
+    title[ 9] = ' ';
+    title[10] = '<';
+    title[11] = '<';
+  }
+  renderTitle_(lx, ty, title);
 }
 
 void renderTitle_(uint8_t lx, uint8_t ty, char* title) {
@@ -157,7 +162,7 @@ void renderTitle_(uint8_t lx, uint8_t ty, char* title) {
   u8g2.setFontDirection(0);
 }
 
-bool renderCoordinates_(uint8_t lx, uint8_t ty, char lines[][JOYSTICK_INFO_COLUMNS], uint8_t _maxCharHeight) {
+void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, char lines[][JOYSTICK_INFO_COLUMNS]) {
   for (uint8_t i=0; i<COORD_LINES_TOTAL; i++) {
     u8g2.setCursor(lx, ty + _maxCharHeight + JOYSTICK_PAD_PADDING_TOP + _maxCharHeight * i);
     u8g2.print(lines[i]);
@@ -238,7 +243,7 @@ void renderSpeedWeight_(uint8_t lx, uint8_t ty, SpeedPacket* speedPacket) {
   }
 }
 
-void renderTransmissionCounter_(uint8_t lx, uint8_t ty, TransmissionCounter* counter, uint8_t _maxCharHeight, uint8_t _maxCharWidth) {
+void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, TransmissionCounter* counter) {
   if (counter == NULL) return;
 
   u8g2.drawHLine(lx, ty, (JOYSTICK_INFO_COLUMNS - 1) * _maxCharWidth);
