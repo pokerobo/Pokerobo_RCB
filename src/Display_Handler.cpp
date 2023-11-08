@@ -65,6 +65,7 @@ void DisplayHandler::splash(char* title, byte align) {
   if (title == NULL) return;
 
   uint8_t left = 0;
+#if !__SPACE_SAVING_MODE__
   uint8_t len = strlen(title);
   uint8_t pixel = len * _maxCharWidth;
   if (pixel < 128) {
@@ -72,6 +73,7 @@ void DisplayHandler::splash(char* title, byte align) {
       left = (128 - pixel) / 2;
     }
   }
+#endif
 
   u8g2.firstPage();
   do {

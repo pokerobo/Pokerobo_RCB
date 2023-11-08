@@ -140,12 +140,26 @@ bool RF24Receiver::available() {
     bool connected = _tranceiver->isChipConnected();
     if (connected) {
       if (_messageRenderer != NULL) {
+#if __SPACE_SAVING_MODE__
+        char info[19] = {
+            ' ', ' ', ' ', ' ', ' ',
+            'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0'
+        };
+#else
         char info[14] = { 'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0' };
+#endif
         _messageRenderer->splash(info);
       }
     } else {
       if (_messageRenderer != NULL) {
+#if __SPACE_SAVING_MODE__
+        char info[19] = {
+            ' ', ' ', ' ', ' ', ' ',
+            'C', 'o', 'n', 'n', 'e', 'c', 't', 'i', 'n', 'g', '.', '.', '.', '\0'
+        };
+#else
         char info[14] = { 'C', 'o', 'n', 'n', 'e', 'c', 't', 'i', 'n', 'g', '.', '.', '.', '\0' };
+#endif
         _messageRenderer->splash(info);
       }
     }

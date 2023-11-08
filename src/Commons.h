@@ -35,4 +35,8 @@
 #define __STRICT_MODE__                   0
 #endif
 
+#ifndef __SPACE_SAVING_MODE__
+#define __SPACE_SAVING_MODE__             1
+#endif
+
 #endif

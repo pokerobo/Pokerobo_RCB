@@ -144,6 +144,21 @@ uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, ui
   return buf;
 }
 
+#if __SPACE_SAVING_MODE__
+uint32_t decodeInteger(uint8_t* arr, int length) {
+  if (length == 2) {
+    uint16_t a1 = arr[1];
+    return (a1 << 8) | arr[0];
+  }
+  if (length == 4) {
+    uint16_t a1 = arr[1];
+    uint32_t a2 = arr[2];
+    uint32_t a3 = arr[3];
+    return (a3 << 24) | (a2 << 16) | (a1 << 8) | arr[0];
+  }
+  return 0;
+}
+#else
 uint32_t decodeInteger(uint8_t* arr, int length) {
   uint32_t a0 = arr[0];
   uint32_t a1 = arr[1];
@@ -157,6 +172,7 @@ uint32_t decodeInteger(uint8_t* arr, int length) {
   }
   return 0;
 }
+#endif
 
 bool decodeMessage(uint8_t* msg, char* cmd, uint16_t* buttons, uint16_t* x, uint16_t* y, uint32_t* extras) {
   if (msg[0] == cmd[0] && msg[1] == cmd[1]) {
