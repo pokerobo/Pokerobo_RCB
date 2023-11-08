@@ -109,7 +109,8 @@ void RF24Receiver::reset() {
   delay(100);
   _tranceiver->powerUp();
   // reset the _counter
-  _counter.sendingTotal = 0;
+  _counter.baselineNumber = 0;
+  _counter.ordinalNumber = 0;
   _counter.packetLossTotal = 0;
   // clear the _messageRenderer
   if (_messageRenderer != NULL) {
@@ -196,18 +197,19 @@ int RF24Receiver::check() {
     _speedResolver->resolve(speedPacket, &message);
   }
 
-  if (_counter.sendingTotal == 0) {
-    _counter.sendingTotal = count;
+  if (_counter.ordinalNumber == 0) {
+    _counter.baselineNumber = count;
     _counter.packetLossTotal = 0;
   } else {
-    if (count < _counter.sendingTotal + 1) {
+    if (count < _counter.ordinalNumber + 1) {
+      _counter.baselineNumber = count;
       _counter.packetLossTotal = 0;
-    } else if (count == _counter.sendingTotal + 1) {
-    } else if (count > _counter.sendingTotal + 1) {
-      _counter.packetLossTotal += count - _counter.sendingTotal - 1;
+    } else if (count == _counter.ordinalNumber + 1) {
+    } else if (count > _counter.ordinalNumber + 1) {
+      _counter.packetLossTotal += count - _counter.ordinalNumber - 1;
     }
-    _counter.sendingTotal = count;
   }
+  _counter.ordinalNumber = count;
 
   if (_messageRenderer != NULL) {
     _messageRenderer->render(&message, speedPacket, &_counter);

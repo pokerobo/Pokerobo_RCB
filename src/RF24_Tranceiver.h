@@ -44,6 +44,7 @@ class RF24Receiver {
   private:
     void* _receiver = NULL;
     TransmissionCounter _counter;
+    uint32_t _baselineNumber = 0;
     MessageRenderer* _messageRenderer = NULL;
 #if MULTIPLE_RENDERERS_SUPPORTED
     MessageRenderer* _messageRenderers[MESSAGE_RENDERERS_LIMIT] = {};

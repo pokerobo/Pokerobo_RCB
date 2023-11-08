@@ -71,7 +71,8 @@
 typedef enum { TX_MSG = 0, RX_MSG } message_source_t;
 
 typedef struct _TransmissionCounter {
-  uint32_t sendingTotal = 0;
+  uint32_t baselineNumber = 0;
+  uint32_t ordinalNumber = 0;
   uint32_t packetLossTotal = 0;
 } TransmissionCounter;
 

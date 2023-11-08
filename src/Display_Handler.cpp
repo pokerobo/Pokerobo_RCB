@@ -264,7 +264,7 @@ void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, 
   char line[8] = {};
   char format[6] = { '%', ' ', '7', 'l', 'd', '\0' };
 
-  sprintf(line, format, counter->sendingTotal);
+  sprintf(line, format, counter->ordinalNumber - counter->baselineNumber);
   u8g2.drawStr(lx, ty + 1 + _maxCharHeight, line);
 
   sprintf(line, format, counter->packetLossTotal);
