@@ -174,7 +174,6 @@ int JoystickHandler::check(JoystickAction* action) {
 
 void _adjustCounter(TransmissionCounter *counter) {
   if (counter->ordinalNumber >= 999999UL) {
-    counter->baselineNumber = 0;
     counter->ordinalNumber = 0;
     counter->packetLossTotal = 0;
   }
