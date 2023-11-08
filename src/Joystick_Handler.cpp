@@ -71,8 +71,8 @@ void JoystickHandler::detect() {
   _middleY = minY + (sumY / JOYSTICK_DETECTION_TOTAL);
 
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
-  Serial.print("Origin "), Serial.print('X'), Serial.print(": "), Serial.println(_middleX);
-  Serial.print("Origin "), Serial.print('Y'), Serial.print(": "), Serial.println(_middleY);
+  Serial.print("Origin"), Serial.print(' '), Serial.print('X'), Serial.print(':'), Serial.print(' '), Serial.println(_middleX);
+  Serial.print("Origin"), Serial.print(' '), Serial.print('Y'), Serial.print(':'), Serial.print(' '), Serial.println(_middleY);
 #endif
 }
 
@@ -190,8 +190,8 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
 
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
   if (_counter.sendingTotal < 10) {
-    Serial.print("Middle "), Serial.print('X'), Serial.print(": "), Serial.println(_middleX);
-    Serial.print("Middle "), Serial.print('Y'), Serial.print(": "), Serial.println(_middleY);
+    Serial.print("Origin"), Serial.print(' '), Serial.print('X'), Serial.print(':'), Serial.print(' '), Serial.println(_middleX);
+    Serial.print("Origin"), Serial.print(' '), Serial.print('Y'), Serial.print(':'), Serial.print(' '), Serial.println(_middleY);
   }
 #endif
 
@@ -202,8 +202,9 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
 
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
   char log[32] = { 0 };
-  sprintf(log, "%d,%d,%d,%d", pressed, x, y, _counter.sendingTotal);
-  Serial.print("M1"), Serial.print(": "), Serial.println(log);
+  char fmt[12] = { '%', 'd', ',', '%', 'd', ',', '%', 'd', ',', '%', 'd', '\0' };
+  sprintf(log, fmt, pressed, x, y, _counter.sendingTotal);
+  Serial.print("M1"), Serial.print(':'), Serial.print(' '), Serial.println(log);
 #endif
 
   if (x > _maxX) {
@@ -228,8 +229,8 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
   }
 
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
-    sprintf(log, "%d,%d,%d,%d", pressed, x, y, _counter.sendingTotal);
-    Serial.print("M2"), Serial.print(": "), Serial.println(log);
+    sprintf(log, fmt, pressed, x, y, _counter.sendingTotal);
+    Serial.print("M2"), Serial.print(':'), Serial.print(' '), Serial.println(log);
 #endif
 
   action->init(pressed, x, y, _counter.sendingTotal);
@@ -264,9 +265,9 @@ byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const 
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
     Serial.print('#'), Serial.print(_counter.sendingTotal), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {
-      Serial.println("v");
+      Serial.println('v');
     } else {
-      Serial.println("x");
+      Serial.println('x');
     }
 #endif
 
@@ -320,49 +321,49 @@ uint16_t JoystickHandler::readButtonStates() {
   if(digitalRead(PIN_UP_BUTTON)==LOW) {
     pressed |= (1 << BIT_UP_BUTTON);
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
-    Serial.print("UP"), Serial.print(" "), Serial.print("Button Pressed");
+    Serial.print("UP"), Serial.print(' '), Serial.print("Button Pressed");
 #endif
   }
 
   if(digitalRead(PIN_RIGHT_BUTTON)==LOW) {
     pressed |= (1 << BIT_RIGHT_BUTTON);
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
-    Serial.print("RIGHT"), Serial.print(" "), Serial.print("Button Pressed");
+    Serial.print("RIGHT"), Serial.print(' '), Serial.print("Button Pressed");
 #endif
   }
 
   if(digitalRead(PIN_DOWN_BUTTON)==LOW) {
     pressed |= (1 << BIT_DOWN_BUTTON);
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
-    Serial.print("DOWN"), Serial.print(" "), Serial.print("Button Pressed");
+    Serial.print("DOWN"), Serial.print(' '), Serial.print("Button Pressed");
 #endif
   }
 
   if(digitalRead(PIN_LEFT_BUTTON)==LOW) {
     pressed |= (1 << BIT_LEFT_BUTTON);
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
-    Serial.print("LEFT"), Serial.print(" "), Serial.print("Button Pressed");
+    Serial.print("LEFT"), Serial.print(' '), Serial.print("Button Pressed");
 #endif
   }
 
   if(digitalRead(PIN_START_BUTTON)==LOW) {
     pressed |= (1 << BIT_START_BUTTON);
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
-    Serial.print("START"), Serial.print(" "), Serial.print("Button Pressed");
+    Serial.print("START"), Serial.print(' '), Serial.print("Button Pressed");
 #endif
   }
 
   if(digitalRead(PIN_SELECT_BUTTON)==LOW) {
     pressed |= (1 << BIT_SELECT_BUTTON);
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
-    Serial.print("SELECT"), Serial.print(" "), Serial.print("Button Pressed");
+    Serial.print("SELECT"), Serial.print(' '), Serial.print("Button Pressed");
 #endif
   }
 
   if(digitalRead(PIN_ANALOG_BUTTON)==LOW) {
     pressed |= (1 << BIT_ANALOG_BUTTON);
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
-    Serial.print("ANALOG"), Serial.print(" "), Serial.print("Button Pressed");
+    Serial.print("ANALOG"), Serial.print(' '), Serial.print("Button Pressed");
 #endif
   }
 

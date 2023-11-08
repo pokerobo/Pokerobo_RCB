@@ -49,9 +49,9 @@ int DisplayHandler::begin() {
 
 #if __DEBUG_LOG_DISPLAY_HANDLER__
   // maxCharHeight: 8
-  Serial.print("max"), Serial.print("Char"), Serial.print("Height"), Serial.print(": "), Serial.println(_maxCharHeight);
+  Serial.print("max"), Serial.print("Char"), Serial.print("Height"), Serial.print(':'), Serial.print(' '), Serial.println(_maxCharHeight);
   // maxCharWidth: 5
-  Serial.print("max"), Serial.print("Char"), Serial.print("Width"), Serial.print(": "), Serial.println(_maxCharWidth);
+  Serial.print("max"), Serial.print("Char"), Serial.print("Width"), Serial.print(':'), Serial.print(' '), Serial.println(_maxCharWidth);
 #endif
 
   return 1;
@@ -206,15 +206,13 @@ void drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, i
 }
 
 void renderJoystickPad_(uint8_t lx, uint8_t ty, uint8_t r, uint8_t ir, int x, int y) {
-  uint8_t Ox = lx + JOYSTICK_PAD_OX;
-  uint8_t Oy = ty + JOYSTICK_PAD_OY;
 #if JOYSTICK_VISUAL_PAD_STYLE == JOYSTICK_VISUAL_PAD_CIRCLE
-  return drawJoystickCircle(Ox, Oy, r, ir, x, y);
+  return drawJoystickCircle(lx + JOYSTICK_PAD_OX, ty + JOYSTICK_PAD_OY, r, ir, x, y);
 #endif
 #if JOYSTICK_VISUAL_PAD_STYLE == JOYSTICK_VISUAL_PAD_SQUARE1
-  return drawJoystickSquare1(Ox, Oy, r, ir, x, y);
+  return drawJoystickSquare1(lx + JOYSTICK_PAD_OX, ty + JOYSTICK_PAD_OY, r, ir, x, y);
 #endif
-  return drawJoystickSquare2(Ox, Oy, r, ir, x, y);
+  return drawJoystickSquare2(lx + JOYSTICK_PAD_OX, ty + JOYSTICK_PAD_OY, r, ir, x, y);
 }
 
 void renderSpeedWeight_(uint8_t lx, uint8_t ty, SpeedPacket* speedPacket) {
@@ -230,16 +228,22 @@ void renderSpeedWeight_(uint8_t lx, uint8_t ty, SpeedPacket* speedPacket) {
 
   u8g2.drawHLine(mX - 2 - 7, mY, (7 + 2)*2);
 
-  if (ld == 1) {
-    u8g2.drawBox(mX - 1 - 7, mY - lw, 7, lw);
-  } else if (ld == 2) {
-    u8g2.drawBox(mX - 1 - 7, mY + 1, 7, lw);
+  switch(ld) {
+    case 1:
+      u8g2.drawBox(mX - 1 - 7, mY - lw, 7, lw);
+      break;
+    case 2:
+      u8g2.drawBox(mX - 1 - 7, mY + 1, 7, lw);
+      break;
   }
 
-  if (rd == 1) {
-    u8g2.drawBox(mX + 1, mY - rw, 7, rw);
-  } else if (rd == 2) {
-    u8g2.drawBox(mX + 1, mY + 1, 7, rw);
+  switch(rd) {
+    case 1:
+      u8g2.drawBox(mX + 1, mY - rw, 7, rw);
+      break;
+    case 2:
+      u8g2.drawBox(mX + 1, mY + 1, 7, rw);
+      break;
   }
 }
 

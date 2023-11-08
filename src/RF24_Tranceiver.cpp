@@ -175,9 +175,10 @@ int RF24Receiver::check() {
 
 #if __DEBUG_LOG_RF24_TRANCEIVER__
   char log[32] = { 0 };
-  sprintf(log, "%d,%d,%d,%d", buttons, jX, jY, count);
+  char fmt[12] = { '%', 'd', ',', '%', 'd', ',', '%', 'd', ',', '%', 'd', '\0' };
+  sprintf(log, fmt, buttons, jX, jY, count);
   Serial.print("decode"), Serial.print('('), Serial.print(log), Serial.print(')'),
-      Serial.print(" -> "), Serial.print(ok);
+      Serial.print(' '), Serial.print('-'), Serial.print('>'), Serial.print(' '), Serial.print(ok);
   Serial.println();
 #endif
 
@@ -266,9 +267,9 @@ byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, Joyst
 #if __DEBUG_LOG_RF24_TRANCEIVER__
     Serial.print('#'), Serial.print(message->getExtras()), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {
-      Serial.println("v");
+      Serial.println('v');
     } else {
-      Serial.println("x");
+      Serial.println('x');
     }
 #endif
     if (ok) {
