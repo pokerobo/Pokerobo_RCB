@@ -73,7 +73,7 @@ uint8_t* JoystickAction::serialize(uint8_t* buf, uint8_t len) {
   if (len < messageSize) {
     return NULL;
   }
-  return encodeMessage(buf, "JS", _pressingFlags, _x, _y, _extras);
+  return encodeMessage(buf, MESSAGE_SIGNATURE, _pressingFlags, _x, _y, _extras);
 }
 
 SpeedPacket::SpeedPacket(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {

@@ -64,6 +64,10 @@
 #endif//JOYSTICK_DISABLED_BUTTONS
 #endif//__JOYSTICK_FUNDUINO_SHIELD__
 
+#ifndef MESSAGE_SIGNATURE
+#define MESSAGE_SIGNATURE         "JS"
+#endif//MESSAGE_SIGNATURE
+
 typedef enum { TX_MSG = 0, RX_MSG } message_source_t;
 
 typedef struct _TransmissionCounter {
@@ -78,8 +82,8 @@ class MessagePacket {
 };
 
 class JoystickAction: public MessagePacket {
-  static const uint8_t messageSize;
   public:
+    static const uint8_t messageSize;
     JoystickAction(uint16_t buttons=0, uint16_t x=0, uint16_t y=0, uint32_t extras=0);
     void init(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
     void setOrigin(uint16_t x, uint16_t y);

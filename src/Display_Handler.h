@@ -11,8 +11,8 @@ class DisplayHandler: public MessageRenderer {
     void splash(char* title);
     bool render(JoystickAction* message, SpeedPacket* speedPacket=NULL, TransmissionCounter* counter=NULL);
   private:
-    uint8_t _maxCharHeight = 10;
-    uint8_t _maxCharWidth = 4;
+    uint8_t _maxCharHeight = 8;
+    uint8_t _maxCharWidth = 5;
 };
 
 #endif

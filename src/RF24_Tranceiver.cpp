@@ -164,14 +164,14 @@ int RF24Receiver::check() {
     return 0;
   }
 
-  uint8_t msg[32] = {0};
+  uint8_t msg[JoystickAction::messageSize] = {0};
   _tranceiver->read(&msg, sizeof(msg));
 
   uint16_t buttons;
   uint16_t jX, jY;
   uint32_t count;
 
-  bool ok = decodeMessage(msg, "JS", &buttons, &jX, &jY, &count);
+  bool ok = decodeMessage(msg, MESSAGE_SIGNATURE, &buttons, &jX, &jY, &count);
 
 #if __DEBUG_LOG_RF24_TRANCEIVER__
   char log[32] = { 0 };
@@ -188,9 +188,11 @@ int RF24Receiver::check() {
   JoystickAction message(buttons, jX, jY, count);
   message.setSource(RX_MSG);
 
-  SpeedPacket speedPacket;
+  SpeedPacket speedPacketInstance;
+  SpeedPacket* speedPacket = NULL;
   if (_speedResolver != NULL) {
-    _speedResolver->resolve(&speedPacket, &message);
+    speedPacket = &speedPacketInstance;
+    _speedResolver->resolve(speedPacket, &message);
   }
 
   if (_counter.sendingTotal == 0) {
@@ -207,13 +209,13 @@ int RF24Receiver::check() {
   }
 
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(&message, &speedPacket, &_counter);
+    _messageRenderer->render(&message, speedPacket, &_counter);
   }
 
 #if MULTIPLE_RENDERERS_SUPPORTED
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageRenderersTotal; i++) {
-    int8_t status = invoke(_messageRenderers[i], i+1, &message, &speedPacket, &_counter);
+    int8_t status = invoke(_messageRenderers[i], i+1, &message, speedPacket, &_counter);
     if (status > 0) {
       sumOk += status;
     } else if (status < 0) {

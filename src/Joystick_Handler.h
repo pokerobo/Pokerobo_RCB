@@ -70,7 +70,6 @@ class JoystickHandler {
   static void verify();
 #endif
   public:
-    JoystickHandler(MessageSender* messageSender=NULL, MessageRenderer* messageRenderer=NULL);
     int begin();
     int check(JoystickAction* action=NULL);
     void detect();

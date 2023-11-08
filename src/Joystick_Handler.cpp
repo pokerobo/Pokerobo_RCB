@@ -8,6 +8,10 @@
 #define JOYSTICK_DETECTION_TOTAL  20
 #endif//JOYSTICK_DETECTION_TOTAL
 
+#ifndef JOYSTICK_DETECTION_DELAY
+#define JOYSTICK_DETECTION_DELAY  50
+#endif//JOYSTICK_DETECTION_DELAY
+
 #if __JOYSTICK_FUNDUINO_SHIELD__
 #define BUTTON_PRESS_PIN_VALUES   0b0000000
 #else
@@ -38,11 +42,6 @@ static void JoystickHandler::verify() {
 }
 #endif
 
-JoystickHandler::JoystickHandler(MessageSender* messageSender, MessageRenderer* messageRenderer) {
-  set(messageSender);
-  set(messageRenderer);
-}
-
 void JoystickHandler::detect() {
   uint16_t middleX[JOYSTICK_DETECTION_TOTAL] = {};
   uint16_t middleY[JOYSTICK_DETECTION_TOTAL] = {};
@@ -50,7 +49,7 @@ void JoystickHandler::detect() {
   uint16_t minY = 1024;
 
   for(uint8_t i=0; i<JOYSTICK_DETECTION_TOTAL; i++) {
-    delay(50);
+    delay(JOYSTICK_DETECTION_DELAY);
     middleX[i] = analogRead(PIN_JOYSTICK_X_AXIS);
     middleY[i] = analogRead(PIN_JOYSTICK_Y_AXIS);
     if (middleX[i] < minX) {
@@ -202,7 +201,7 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
   uint16_t y = analogRead(PIN_JOYSTICK_Y_AXIS);
 
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
-  char log[32] = "";
+  char log[32] = { 0 };
   sprintf(log, "%d,%d,%d,%d", pressed, x, y, _counter.sendingTotal);
   Serial.print("M1"), Serial.print(": "), Serial.println(log);
 #endif

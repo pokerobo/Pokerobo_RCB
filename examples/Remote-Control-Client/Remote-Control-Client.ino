@@ -9,11 +9,11 @@ void setup() {
   Serial.begin(57600);
 
   displayHandler.begin();
-  tranceiver.begin(RX, address);
+
   tranceiver.add(&displayHandler);
+  tranceiver.begin(RX, address);
 }
 
 void loop() {
   tranceiver.check();
-  delay(50);
 }

@@ -4,7 +4,7 @@ const uint64_t address = 0x18580901LL;
 
 DisplayHandler displayHandler;
 RF24Tranceiver tranceiver;
-JoystickHandler joystickHandler(&tranceiver, &displayHandler);
+JoystickHandler joystickHandler;
 ProgramSelector programSelector;
 SpeedResolver speedResolver;
 
@@ -19,6 +19,8 @@ void setup() {
   tranceiver.set(&speedResolver);
   tranceiver.begin(TX, address);
 
+  joystickHandler.set(&tranceiver);
+  joystickHandler.set(&displayHandler);
   joystickHandler.set(&speedResolver);
   joystickHandler.begin();
 
