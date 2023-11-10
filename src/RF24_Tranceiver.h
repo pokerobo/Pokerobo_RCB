@@ -10,7 +10,7 @@
 #define MESSAGE_RENDERERS_LIMIT   7
 #define MULTIPLE_RENDERERS_SUPPORTED false
 
-typedef enum { TX = 0, RX } tranceiver_t;
+typedef enum { RF24_TX = 0, RF24_RX } tranceiver_t;
 typedef enum { ACK_OK = 0, ACK_FAILED, MESSAGE_NULL, TRANSMITTER_NULL } rf24_tx_status_t;
 
 class RF24Transmitter: public MessageSender {
@@ -55,8 +55,8 @@ class RF24Receiver {
 
 class RF24Tranceiver: public RF24Transmitter, public RF24Receiver {
   public:
-    int begin(tranceiver_t mode=TX, uint64_t address=RF24_DEFAULT_ADDRESS);
-    void reset(tranceiver_t mode=TX);
+    int begin(tranceiver_t mode=RF24_TX, uint64_t address=RF24_DEFAULT_ADDRESS);
+    void reset(tranceiver_t mode=RF24_TX);
 };
 
 #endif

@@ -29,20 +29,20 @@
 RF24 radio(PIN_CE, PIN_CSN);
 
 int RF24Tranceiver::begin(tranceiver_t mode, uint64_t address) {
-  if (mode == TX) {
+  if (mode == RF24_TX) {
     return RF24Transmitter::begin(&radio, address);
   }
-  if (mode == RX) {
+  if (mode == RF24_RX) {
     return RF24Receiver::begin(&radio, address);
   }
   return -1;
 }
 
 void RF24Tranceiver::reset(tranceiver_t mode) {
-  if (mode == TX) {
+  if (mode == RF24_TX) {
     return RF24Transmitter::reset();
   }
-  if (mode == RX) {
+  if (mode == RF24_RX) {
     return RF24Receiver::reset();
   }
 }

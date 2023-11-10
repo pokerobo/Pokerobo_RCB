@@ -26,24 +26,24 @@ int ProgramSelector::move_() {
   if (clickingFlags & MASK_SELECT_BUTTON) {
     switch(_currentState) {
       case PROGRAM_NRF24_REAL_TRANSMITTER:
-        _rf24Tranceiver->reset(TX);
+        _rf24Tranceiver->reset(RF24_TX);
         if (_mode == PROGRAM_MODE_PLAYER) {
-          _rf24Tranceiver->begin(TX);
+          _rf24Tranceiver->begin(RF24_TX);
           _currentState = PROGRAM_NRF24_TEST_TRANSMITTER;
         }
         if (_mode == PROGRAM_MODE_TESTER) {
-          _rf24Tranceiver->begin(RX);
+          _rf24Tranceiver->begin(RF24_RX);
           _currentState = PROGRAM_NRF24_TEST_RECEIVER;
         }
         break;
       case PROGRAM_NRF24_TEST_TRANSMITTER:
-        _rf24Tranceiver->reset(TX);
-        _rf24Tranceiver->begin(TX, _rf24Address);
+        _rf24Tranceiver->reset(RF24_TX);
+        _rf24Tranceiver->begin(RF24_TX, _rf24Address);
         _currentState = PROGRAM_NRF24_REAL_TRANSMITTER;
         break;
       case PROGRAM_NRF24_TEST_RECEIVER:
-        _rf24Tranceiver->reset(RX);
-        _rf24Tranceiver->begin(TX, _rf24Address);
+        _rf24Tranceiver->reset(RF24_RX);
+        _rf24Tranceiver->begin(RF24_TX, _rf24Address);
         _currentState = PROGRAM_NRF24_REAL_TRANSMITTER;
         break;
     }
