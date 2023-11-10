@@ -20,7 +20,7 @@
 
 #define CLICK_STYLE_BUTTONS       MASK_START_BUTTON | MASK_SELECT_BUTTON | MASK_ANALOG_BUTTON
 
-static int JoystickHandler::pinOfButtons[] = {
+int JoystickHandler::pinOfButtons[] = {
   PIN_UP_BUTTON,
   PIN_RIGHT_BUTTON,
   PIN_DOWN_BUTTON,
@@ -31,7 +31,7 @@ static int JoystickHandler::pinOfButtons[] = {
 };
 
 #if __STRICT_MODE__
-static void JoystickHandler::verify() {
+void JoystickHandler::verify() {
   pinOfButtons[BIT_UP_BUTTON] = PIN_UP_BUTTON;
   pinOfButtons[BIT_RIGHT_BUTTON] = PIN_RIGHT_BUTTON;
   pinOfButtons[BIT_DOWN_BUTTON] = PIN_DOWN_BUTTON;

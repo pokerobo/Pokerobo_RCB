@@ -14,7 +14,7 @@
 #define PROGRAM_NRF24_TEST_TRANSMITTER      4
 #define PROGRAM_NRF24_TEST_RECEIVER         8
 
-#define PROGRAM_MENU_TOGGLE_BUTTON          MASK_SELECT_BUTTON
+#define PROGRAM_MENU_TOGGLE_BUTTON          MASK_ANALOG_BUTTON
 
 class ProgramSelector {
   public:

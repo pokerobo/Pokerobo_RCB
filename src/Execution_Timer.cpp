@@ -9,5 +9,5 @@ uint32_t ExecutionTimer::finish() {
 }
 
 uint32_t ExecutionTimer::remain(uint32_t stepTime) {
-  return max(stepTime - (_endTime - _beginTime), 0);
+  return int_max(stepTime - (_endTime - _beginTime), 0);
 }

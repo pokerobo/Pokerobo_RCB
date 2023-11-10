@@ -1,6 +1,6 @@
 #include "Message_Sender.h"
 
-static const uint8_t JoystickAction::messageSize = 2
+const uint8_t JoystickAction::messageSize = 2
     + sizeof(uint16_t)
     + sizeof(uint16_t)
     + sizeof(uint16_t)
@@ -114,7 +114,6 @@ void ConsoleMessageRenderer::render(JoystickAction* message, SpeedPacket* speedP
   Serial.print(';'), Serial.print(' '), Serial.print('X'), Serial.print(':'), Serial.print(' '), Serial.print(message->getX());
   Serial.print(';'), Serial.print(' '), Serial.print('Y'), Serial.print(':'), Serial.print(' '), Serial.print(message->getY());
   Serial.println();
-  return true;
 }
 
 uint8_t* encodeInteger(uint8_t* store, uint16_t value) {

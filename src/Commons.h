@@ -39,4 +39,8 @@
 #define __SPACE_SAVING_MODE__             1
 #endif
 
+#define int_abs(x) ((x)>0?(x):-(x))
+#define int_min(a,b) ((a)<(b)?(a):(b))
+#define int_max(a,b) ((a)>(b)?(a):(b))
+
 #endif
