@@ -23,7 +23,7 @@ int ProgramSelector::move_() {
   JoystickAction message;
   _joystickHandler->input(&message);
   uint16_t clickingFlags = message.getClickingFlags();
-  if (clickingFlags & MASK_SELECT_BUTTON) {
+  if (clickingFlags & PROGRAM_MENU_TOGGLE_BUTTON) {
     switch(_currentState) {
       case PROGRAM_NRF24_REAL_TRANSMITTER:
         _rf24Tranceiver->reset(RF24_TX);

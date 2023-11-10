@@ -14,6 +14,8 @@
 #define PROGRAM_NRF24_TEST_TRANSMITTER      4
 #define PROGRAM_NRF24_TEST_RECEIVER         8
 
+#define PROGRAM_MENU_TOGGLE_BUTTON          MASK_SELECT_BUTTON
+
 class ProgramSelector {
   public:
     int begin(uint8_t mode=PROGRAM_MODE_PLAYER);
