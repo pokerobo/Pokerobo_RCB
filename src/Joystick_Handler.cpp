@@ -119,7 +119,7 @@ int JoystickHandler::begin() {
   detect();
 }
 
-void _adjustCounter(TransmissionCounter *counter);
+inline void _adjustCounter(TransmissionCounter *counter);
 
 int JoystickHandler::check(JoystickAction* action) {
     _counter.ordinalNumber += 1;
@@ -185,6 +185,8 @@ JoystickAction JoystickHandler::input() {
   return message;
 }
 
+inline uint16_t adjustAxis(uint16_t z, uint16_t _middleZ, uint16_t _maxZ);
+
 JoystickAction* JoystickHandler::input(JoystickAction* action) {
   if (action == NULL) return action;
 
@@ -214,31 +216,44 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
     _maxY = y;
   }
 
-  uint16_t originX = x;
+  action->setSource(TX_MSG);
+  action->setOrigin(x, y);
+
+#if __SPACE_SAVING_MODE__
   if (x < _middleX) {
     x = map(x, 0, _middleX, 0, 512);
   } else {
     x = map(x, _middleX, _maxX, 512, 1024);
   }
 
-  uint16_t originY = y;
   if (y < _middleY) {
     y = map(y, 0, _middleY, 0, 512);
   } else {
     y = map(y, _middleY, _maxY, 512, 1024);
   }
+#else
+  x = adjustAxis(x, _middleX, _maxX);
+  y = adjustAxis(y, _middleY, _maxY);
+#endif
 
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
     sprintf(log, fmt, pressed, x, y, _counter.ordinalNumber);
     Serial.print("M2"), Serial.print(':'), Serial.print(' '), Serial.println(log);
 #endif
 
-  action->init(pressed, x, y, _counter.ordinalNumber);
-  action->setSource(TX_MSG);
-  action->setOrigin(originX, originY);
+  action->update(pressed, x, y, _counter.ordinalNumber);
   action->setClickingFlags(checkButtonClickingFlags(pressed));
 
   return action;
+}
+
+uint16_t adjustAxis(uint16_t z, uint16_t _middleZ, uint16_t _maxZ) {
+  if (z < _middleZ) {
+    z = map(z, 0, _middleZ, 0, 512);
+  } else {
+    z = map(z, _middleZ, _maxZ, 512, 1024);
+  }
+  return z;
 }
 
 #if JOYSTICK_CHECKING_CHANGE

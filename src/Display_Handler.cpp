@@ -7,6 +7,9 @@
 #define __DEBUG_LOG_DISPLAY_HANDLER__ __RUNNING_LOG_ENABLED__
 #endif//__DEBUG_LOG_DISPLAY_HANDLER__
 
+#define SCREEN_HEIGHT                   64
+#define SCREEN_WIDTH                   128
+
 #define COORD_LINES_TOTAL               5
 #define COORD_LINE_X                    0
 #define COORD_LINE_Y                    1
@@ -27,7 +30,8 @@
 
 #define JOYSTICK_VISUAL_PAD_STYLE   JOYSTICK_VISUAL_PAD_SQUARE2
 
-#define SPEED_METER_OX                  3 + 7
+#define SPEED_METER_WIDTH               7
+#define SPEED_METER_OX                  3 + SPEED_METER_WIDTH
 #define SPEED_METER_OY                  32
 #define SPEED_METER_MAX_HEIGHT          30
 
@@ -68,16 +72,16 @@ void DisplayHandler::splash(char* title, byte align) {
 #if !__SPACE_SAVING_MODE__
   uint8_t len = strlen(title);
   uint8_t pixel = len * _maxCharWidth;
-  if (pixel < 128) {
+  if (pixel < SCREEN_WIDTH) {
     if (align == 0) {
-      left = (128 - pixel) / 2;
+      left = (SCREEN_WIDTH - pixel) / 2;
     }
   }
 #endif
 
   u8g2.firstPage();
   do {
-    u8g2.drawStr(left, 32 + _maxCharHeight / 2, title);
+    u8g2.drawStr(left, SCREEN_HEIGHT / 2 + _maxCharHeight / 2, title);
   } while (u8g2.nextPage());
 }
 
@@ -88,7 +92,7 @@ void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, in
 void renderSpeedWeight_(uint8_t lx, uint8_t ty, SpeedPacket* speedPacket);
 void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, TransmissionCounter* counter);
 
-bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter) {
+void DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter) {
   if (message == NULL) return;
 
   int nX = -512 + message->getX();
@@ -100,12 +104,12 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, T
 
   char lines[COORD_LINES_TOTAL][JOYSTICK_INFO_COLUMNS] = { {}, {}, {}, {}, {} };
 
-  char fmt1[8] = { '~', 'X', ':', '%', ' ', '4', 'd', '\0' };
+  char fmt1[JOYSTICK_INFO_COLUMNS] = { '~', 'X', ':', '%', ' ', '4', 'd', '\0' };
   sprintf(lines[COORD_LINE_X], fmt1, nX);
   fmt1[1] = 'Y';
   sprintf(lines[COORD_LINE_Y], fmt1, nY);
 
-  char fmt2[7] = { 'o', 'X', ':', '%', '4', 'd', '\0' };
+  char fmt2[JOYSTICK_INFO_COLUMNS - 1] = { 'o', 'X', ':', '%', '4', 'd', '\0' };
   sprintf(lines[COORD_LINE_RAW_X], fmt2, message->getOriginX());
   fmt2[1] = 'Y';
   sprintf(lines[COORD_LINE_RAW_Y], fmt2, message->getOriginY());
@@ -144,7 +148,7 @@ bool DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, T
     renderJoystickPad_(_virtualPadLx, 0, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
     renderSpeedWeight_(_speedMeterLx, 0, speedPacket);
     renderTransmissionCounter_(_statsLx, _counterTy, _maxCharHeight, _maxCharWidth, counter);
-    renderTitle_(_maxCharHeight - 2, 62, source);
+    renderTitle_(_maxCharHeight - 2, SCREEN_HEIGHT - 2, source);
   } while (u8g2.nextPage());
 }
 
@@ -237,23 +241,23 @@ void renderSpeedWeight_(uint8_t lx, uint8_t ty, SpeedPacket* speedPacket) {
   int rw = map(speedPacket->getRightSpeed(), 0, 256, 0, SPEED_METER_MAX_HEIGHT);
   uint8_t rd = speedPacket->getRightDirection();
 
-  u8g2.drawHLine(mX - 2 - 7, mY, (7 + 2)*2);
+  u8g2.drawHLine(mX - 2 - SPEED_METER_WIDTH, mY, (SPEED_METER_WIDTH + 2)*2);
 
   switch(ld) {
     case 1:
-      u8g2.drawBox(mX - 1 - 7, mY - lw, 7, lw);
+      u8g2.drawBox(mX - 1 - SPEED_METER_WIDTH, mY - lw, SPEED_METER_WIDTH, lw);
       break;
     case 2:
-      u8g2.drawBox(mX - 1 - 7, mY + 1, 7, lw);
+      u8g2.drawBox(mX - 1 - SPEED_METER_WIDTH, mY + 1, SPEED_METER_WIDTH, lw);
       break;
   }
 
   switch(rd) {
     case 1:
-      u8g2.drawBox(mX + 1, mY - rw, 7, rw);
+      u8g2.drawBox(mX + 1, mY - rw, SPEED_METER_WIDTH, rw);
       break;
     case 2:
-      u8g2.drawBox(mX + 1, mY + 1, 7, rw);
+      u8g2.drawBox(mX + 1, mY + 1, SPEED_METER_WIDTH, rw);
       break;
   }
 }
@@ -263,7 +267,7 @@ void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, 
 
   u8g2.drawHLine(lx, ty, (JOYSTICK_INFO_COLUMNS - 1) * _maxCharWidth);
 
-  char line[8] = {};
+  char line[JOYSTICK_INFO_COLUMNS] = {};
   char format[6] = { '%', ' ', '7', 'l', 'd', '\0' };
 
   sprintf(line, format, counter->ordinalNumber - counter->baselineNumber);

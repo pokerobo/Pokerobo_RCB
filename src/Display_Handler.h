@@ -9,7 +9,7 @@ class DisplayHandler: public MessageRenderer {
     int begin();
     void clear();
     void splash(char* title, byte align = 0);
-    bool render(JoystickAction* message, SpeedPacket* speedPacket=NULL, TransmissionCounter* counter=NULL);
+    void render(JoystickAction* message, SpeedPacket* speedPacket=NULL, TransmissionCounter* counter=NULL);
   private:
     uint8_t _maxCharHeight = 8;
     uint8_t _maxCharWidth = 5;

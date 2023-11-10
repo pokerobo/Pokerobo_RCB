@@ -7,13 +7,10 @@ static const uint8_t JoystickAction::messageSize = 2
     + sizeof(uint32_t);
 
 JoystickAction::JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras) {
-  _pressingFlags = buttons;
-  _x = x;
-  _y = y;
-  _extras = extras;
+  update(buttons, x, y, extras);
 }
 
-void JoystickAction::init(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras) {
+void JoystickAction::update(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras) {
   _pressingFlags = buttons;
   _x = x;
   _y = y;
@@ -107,7 +104,7 @@ void ConsoleMessageRenderer::clear() {}
 
 void ConsoleMessageRenderer::splash(char* title, byte align) {}
 
-bool ConsoleMessageRenderer::render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter) {
+void ConsoleMessageRenderer::render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter) {
   Serial.print('#'), Serial.print(message->getExtras()), Serial.print(' '), Serial.print('-'), Serial.print(' ');
   Serial.print("Pressing"), Serial.print("Flags"), Serial.print(':'), Serial.print(' '),
       Serial.print(message->getPressingFlags());

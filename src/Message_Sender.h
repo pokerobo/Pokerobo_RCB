@@ -86,7 +86,7 @@ class JoystickAction: public MessagePacket {
   public:
     static const uint8_t messageSize;
     JoystickAction(uint16_t buttons=0, uint16_t x=0, uint16_t y=0, uint32_t extras=0);
-    void init(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
+    void update(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
     void setOrigin(uint16_t x, uint16_t y);
     void setClickingFlags(uint16_t clickingFlags);
     void setSource(message_source_t source);
@@ -136,14 +136,14 @@ class MessageRenderer {
   public:
     virtual void clear();
     virtual void splash(char* title, byte align = 0);
-    virtual bool render(JoystickAction* message, SpeedPacket* speedPacket=NULL, TransmissionCounter* counter=NULL);
+    virtual void render(JoystickAction* message, SpeedPacket* speedPacket=NULL, TransmissionCounter* counter=NULL);
 };
 
 class ConsoleMessageRenderer: public MessageRenderer {
   public:
     void clear();
     void splash(char* title, byte align = 0);
-    bool render(JoystickAction* message, SpeedPacket* speedPacket=NULL, TransmissionCounter* counter=NULL);
+    void render(JoystickAction* message, SpeedPacket* speedPacket=NULL, TransmissionCounter* counter=NULL);
 };
 
 uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t extras);
