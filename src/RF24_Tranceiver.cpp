@@ -8,7 +8,7 @@
 #define __DEBUG_LOG_RF24_TRANCEIVER__ __RUNNING_LOG_ENABLED__
 #endif//__DEBUG_LOG_RF24_TRANCEIVER__
 
-#if __AVR_MODEL__ == __VAR_MEGA_2560__
+#if __PLATFORM_TYPE__ == __PLATFORM_MEGA2560__
 #ifndef PIN_CE
 #define PIN_CE  48
 #endif
@@ -16,7 +16,7 @@
 #ifndef PIN_CSN
 #define PIN_CSN 49
 #endif
-#endif//__AVR_MODEL__
+#endif//__PLATFORM_TYPE__
 
 #ifndef PIN_CE
 #define PIN_CE  9

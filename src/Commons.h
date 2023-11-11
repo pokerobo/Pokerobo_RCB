@@ -3,12 +3,17 @@
 
 #include <Arduino.h>
 
-#define __AVR_NANO__                      1
-#define __AVR_UNO__                       2
-#define __AVR_MEGA_2560__                 4
+#define __PLATFORM_NANO__                 1
+#define __PLATFORM_UNO__                  2
+#define __PLATFORM_MEGA2560__             4
+#define __PLATFORM_ESP32__                8
 
-#ifndef __AVR_MODEL__
-#define __AVR_MODEL__                     __AVR_UNO__
+#ifndef __PLATFORM_TYPE__
+#define __PLATFORM_TYPE__                 __PLATFORM_NANO__
+#endif
+
+#if __PLATFORM_TYPE__ != __PLATFORM_ESP32__
+#define WIRE_HAS_TIMEOUT                  1
 #endif
 
 #define __JOYSTICK_FUNDUINO_SHIELD__      0
@@ -21,7 +26,7 @@
                                   MASK_LEFT_BUTTON | \
                                   MASK_START_BUTTON
 */
-#define JOYSTICK_DISABLED_BUTTONS 0b0011111
+#define JOYSTICK_DISABLED_BUTTONS 0b0101111
 
 #ifndef __RUNNING_LOG_ENABLED__
 #define __RUNNING_LOG_ENABLED__           1

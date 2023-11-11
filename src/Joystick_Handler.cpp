@@ -322,6 +322,9 @@ uint16_t JoystickHandler::readButtonStates() {
   uint16_t buttonStates = 0;
 
   for (int i = 0; i < TOTAL_OF_BUTTONS; i++) {
+    if ((JOYSTICK_DISABLED_BUTTONS >> i) & 1) {
+      continue;
+    }
     buttonStates |= ((digitalRead(pinOfButtons[i]) == ((BUTTON_PRESS_PIN_VALUES >> i) & 1)) ? 1 : 0) << i;
   }
 
