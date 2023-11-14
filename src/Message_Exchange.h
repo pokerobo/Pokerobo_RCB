@@ -76,13 +76,13 @@ typedef struct _TransmissionCounter {
   uint32_t packetLossTotal = 0;
 } TransmissionCounter;
 
-class MessagePacket {
+class MessageInterface {
   public:
     virtual uint8_t length();
     virtual uint8_t* serialize(uint8_t* buf, uint8_t len);
 };
 
-class JoystickAction: public MessagePacket {
+class JoystickAction: public MessageInterface {
   public:
     static const uint8_t messageSize;
     JoystickAction(uint16_t buttons=0, uint16_t x=0, uint16_t y=0, uint32_t extras=0);
@@ -129,7 +129,7 @@ class SpeedPacket {
 class MessageSender {
   public:
     virtual bool write(const void* buf, uint8_t len);
-    virtual bool write(MessagePacket* packet);
+    virtual bool write(MessageInterface* packet);
 };
 
 class MessageRenderer {

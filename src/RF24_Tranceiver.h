@@ -17,7 +17,7 @@ class RF24Transmitter: public MessageSender {
   public:
     int begin(void* radio, uint64_t address=RF24_DEFAULT_ADDRESS);
     bool write(const void* buf, uint8_t len);
-    bool write(MessagePacket* packet);
+    bool write(MessageInterface* packet);
     rf24_tx_status_t getStatus();
     void reset();
   private:

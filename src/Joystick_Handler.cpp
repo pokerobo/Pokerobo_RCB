@@ -266,7 +266,7 @@ bool JoystickHandler::isChanged(JoystickAction* msg) {
 #endif
 
 #if MULTIPLE_SENDERS_SUPPORTED
-byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet) {
+byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessageInterface* packet) {
   if (messageSender != NULL) {
     uint8_t code = 1 << index;
 
