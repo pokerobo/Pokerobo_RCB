@@ -2,6 +2,7 @@
 #define __JOYSTICK_HANDLER_H__
 
 #include "Commons.h"
+#include "Joystick_Action.h"
 #include "Message_Exchange.h"
 #include "Message_Renderer.h"
 #include "Moving_Resolver.h"

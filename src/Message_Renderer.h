@@ -1,7 +1,7 @@
 #ifndef __MESSAGE_RENDERER_H__
 #define __MESSAGE_RENDERER_H__
 
-#include "Message_Exchange.h"
+#include "Joystick_Action.h"
 #include "Moving_Command.h"
 
 class MessageRenderer {
