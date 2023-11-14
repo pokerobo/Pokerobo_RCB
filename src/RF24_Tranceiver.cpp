@@ -270,10 +270,6 @@ bool RF24Receiver::add(MessageRenderer* messageRenderer) {
 }
 #endif
 
-void RF24Receiver::set(SpeedResolver* speedResolver) {
-  _speedResolver = speedResolver;
-}
-
 #if MULTIPLE_RENDERERS_SUPPORTED
 byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message,
       SpeedPacket* speedPacket, TransmissionCounter* counter) {
@@ -297,3 +293,7 @@ byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, Joyst
   return 0;
 }
 #endif
+
+void RF24Receiver::set(SpeedResolver* speedResolver) {
+  _speedResolver = speedResolver;
+}
