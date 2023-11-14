@@ -3,7 +3,7 @@
 #define BOUND_X    40
 #define BOUND_Y    40
 
-SpeedPacket* MovingResolver::resolve(SpeedPacket* packet, JoystickAction* action, int coeff, bool rotatable) {
+MovingCommand* MovingResolver::resolve(MovingCommand* packet, JoystickAction* action, int coeff, bool rotatable) {
   if (packet == NULL) {
     return packet;
   }

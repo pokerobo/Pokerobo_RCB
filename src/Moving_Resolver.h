@@ -6,7 +6,7 @@
 
 class MovingResolver {
   public:
-    SpeedPacket* resolve(SpeedPacket* packet, JoystickAction* action, int coeff=1, bool rotatable=false);
+    MovingCommand* resolve(MovingCommand* packet, JoystickAction* action, int coeff=1, bool rotatable=false);
 };
 
 #endif

@@ -1,41 +1,41 @@
 #include "Moving_Command.h"
 
-SpeedPacket::SpeedPacket(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
+MovingCommand::MovingCommand(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
   update(leftSpeed, leftDirection, rightSpeed, rightDirection);
 }
 
-void SpeedPacket::update(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
+void MovingCommand::update(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
   _LeftSpeed = leftSpeed;
   _LeftDirection = leftDirection;
   _RightSpeed = rightSpeed;
   _RightDirection = rightDirection;
 }
 
-int SpeedPacket::getLeftSpeed() {
+int MovingCommand::getLeftSpeed() {
   return _LeftSpeed;
 }
 
-byte SpeedPacket::getLeftDirection() {
+byte MovingCommand::getLeftDirection() {
   return _LeftDirection;
 }
 
-int SpeedPacket::getRightSpeed() {
+int MovingCommand::getRightSpeed() {
   return _RightSpeed;
 }
 
-byte SpeedPacket::getRightDirection() {
+byte MovingCommand::getRightDirection() {
   return _RightDirection;
 }
 
-const uint8_t SpeedPacket::messageSize = sizeof(uint8_t) +
+const uint8_t MovingCommand::messageSize = sizeof(uint8_t) +
     sizeof(uint8_t) +
     sizeof(uint8_t);
 
-uint8_t SpeedPacket::length() {
+uint8_t MovingCommand::length() {
   return messageSize;
 }
 
-uint8_t* SpeedPacket::serialize(uint8_t* buf, uint8_t len) {
+uint8_t* MovingCommand::serialize(uint8_t* buf, uint8_t len) {
   if (len < messageSize) {
     return NULL;
   }

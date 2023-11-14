@@ -3,10 +3,10 @@
 
 #include "Commons.h"
 
-class SpeedPacket {
+class MovingCommand {
   public:
     static const uint8_t messageSize;
-    SpeedPacket(int leftSpeed=0, byte leftDirection=0, int rightSpeed=0, byte rightDirection=0);
+    MovingCommand(int leftSpeed=0, byte leftDirection=0, int rightSpeed=0, byte rightDirection=0);
     void update(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection);
     int getLeftSpeed();
     byte getLeftDirection();

@@ -75,13 +75,13 @@ uint8_t* JoystickAction::serialize(uint8_t* buf, uint8_t len) {
 
 //-------------------------------------------------------------------------------------------------
 
-MessagePacket::MessagePacket(JoystickAction* action, SpeedPacket* command) {
+MessagePacket::MessagePacket(JoystickAction* action, MovingCommand* command) {
   _action = action;
   _command = command;
 }
 
 uint8_t MessagePacket::length() {
-  return (JoystickAction::messageSize + SpeedPacket::messageSize);
+  return (JoystickAction::messageSize + MovingCommand::messageSize);
 }
 
 uint8_t* MessagePacket::serialize(uint8_t* buf, uint8_t len) {
@@ -92,7 +92,7 @@ uint8_t* MessagePacket::serialize(uint8_t* buf, uint8_t len) {
   _action->serialize(buf, JoystickAction::messageSize);
 
   if (_command != NULL) {
-    _command->serialize(&buf[JoystickAction::messageSize], SpeedPacket::messageSize);
+    _command->serialize(&buf[JoystickAction::messageSize], MovingCommand::messageSize);
   }
 
   return buf;
@@ -104,7 +104,7 @@ void ConsoleMessageRenderer::clear() {}
 
 void ConsoleMessageRenderer::splash(char* title, byte align) {}
 
-void ConsoleMessageRenderer::render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter) {
+void ConsoleMessageRenderer::render(JoystickAction* message, MovingCommand* movingCommand, TransmissionCounter* counter) {
   Serial.print('#'), Serial.print(message->getExtras()), Serial.print(' '), Serial.print('-'), Serial.print(' ');
   Serial.print("Pressing"), Serial.print("Flags"), Serial.print(':'), Serial.print(' '),
       Serial.print(message->getPressingFlags());

@@ -92,10 +92,10 @@ void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source);
 void renderTitle_(uint8_t lx, uint8_t ty, char* title);
 void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, char lines[][JOYSTICK_INFO_COLUMNS]);
 void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
-void renderSpeedWeight_(uint8_t lx, uint8_t ty, SpeedPacket* speedPacket);
+void renderSpeedWeight_(uint8_t lx, uint8_t ty, MovingCommand* movingCommand);
 void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, TransmissionCounter* counter);
 
-void DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, TransmissionCounter* counter) {
+void DisplayHandler::render(JoystickAction* message, MovingCommand* movingCommand, TransmissionCounter* counter) {
   if (message == NULL) return;
 
   int nX = -512 + message->getX();
@@ -149,7 +149,7 @@ void DisplayHandler::render(JoystickAction* message, SpeedPacket* speedPacket, T
   do {
     renderCoordinates_(_statsLx, 0, _maxCharHeight, _maxCharWidth, lines);
     renderJoystickPad_(_virtualPadLx, 0, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
-    renderSpeedWeight_(_speedMeterLx, 0, speedPacket);
+    renderSpeedWeight_(_speedMeterLx, 0, movingCommand);
     renderTransmissionCounter_(_statsLx, _counterTy, _maxCharHeight, _maxCharWidth, counter);
     renderTitle_(_maxCharHeight - 2, SCREEN_HEIGHT - 2, source);
   } while (u8g2.nextPage());
@@ -233,16 +233,16 @@ void renderJoystickPad_(uint8_t lx, uint8_t ty, uint8_t r, uint8_t ir, int x, in
   return drawJoystickSquare2(lx + JOYSTICK_PAD_OX, ty + JOYSTICK_PAD_OY, r, ir, x, y);
 }
 
-void renderSpeedWeight_(uint8_t lx, uint8_t ty, SpeedPacket* speedPacket) {
-  if (speedPacket == NULL) return;
+void renderSpeedWeight_(uint8_t lx, uint8_t ty, MovingCommand* movingCommand) {
+  if (movingCommand == NULL) return;
 
   int mX = lx + SPEED_METER_OX;
   int mY = ty + SPEED_METER_OY;
 
-  int lw = map(speedPacket->getLeftSpeed(), 0, 256, 0, SPEED_METER_MAX_HEIGHT);
-  uint8_t ld = speedPacket->getLeftDirection();
-  int rw = map(speedPacket->getRightSpeed(), 0, 256, 0, SPEED_METER_MAX_HEIGHT);
-  uint8_t rd = speedPacket->getRightDirection();
+  int lw = map(movingCommand->getLeftSpeed(), 0, 256, 0, SPEED_METER_MAX_HEIGHT);
+  uint8_t ld = movingCommand->getLeftDirection();
+  int rw = map(movingCommand->getRightSpeed(), 0, 256, 0, SPEED_METER_MAX_HEIGHT);
+  uint8_t rd = movingCommand->getRightDirection();
 
   u8g2.drawHLine(mX - 2 - SPEED_METER_WIDTH, mY, (SPEED_METER_WIDTH + 2)*2);
 

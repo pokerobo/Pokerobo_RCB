@@ -114,12 +114,12 @@ class JoystickAction: public MessageInterface {
 
 class MessagePacket: public MessageInterface {
   public:
-    MessagePacket(JoystickAction* action, SpeedPacket* command=NULL);
+    MessagePacket(JoystickAction* action, MovingCommand* command=NULL);
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
   private:
     JoystickAction* _action = NULL;
-    SpeedPacket* _command = NULL;
+    MovingCommand* _command = NULL;
 };
 
 class MessageSender {
@@ -132,14 +132,14 @@ class MessageRenderer {
   public:
     virtual void clear();
     virtual void splash(char* title, byte align = 0);
-    virtual void render(JoystickAction* message, SpeedPacket* speedPacket=NULL, TransmissionCounter* counter=NULL);
+    virtual void render(JoystickAction* message, MovingCommand* movingCommand=NULL, TransmissionCounter* counter=NULL);
 };
 
 class ConsoleMessageRenderer: public MessageRenderer {
   public:
     void clear();
     void splash(char* title, byte align = 0);
-    void render(JoystickAction* message, SpeedPacket* speedPacket=NULL, TransmissionCounter* counter=NULL);
+    void render(JoystickAction* message, MovingCommand* movingCommand=NULL, TransmissionCounter* counter=NULL);
 };
 
 uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t extras);

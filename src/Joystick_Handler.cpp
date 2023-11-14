@@ -130,10 +130,10 @@ int JoystickHandler::check(JoystickAction* action) {
     action = &message;
   }
 
-  SpeedPacket speedPacket;
+  MovingCommand movingCommand;
 
   if (_movingResolver != NULL) {
-    _movingResolver->resolve(&speedPacket, action);
+    _movingResolver->resolve(&movingCommand, action);
   }
 
 #if JOYSTICK_CHECKING_CHANGE
@@ -165,7 +165,7 @@ int JoystickHandler::check(JoystickAction* action) {
 #endif
 
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(action, &speedPacket, &_counter);
+    _messageRenderer->render(action, &movingCommand, &_counter);
   }
 
   _adjustCounter(&_counter);

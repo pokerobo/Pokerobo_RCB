@@ -39,7 +39,7 @@ class RF24Receiver {
     bool available();
 #if MULTIPLE_RENDERERS_SUPPORTED
     byte invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message,
-        SpeedPacket* speedPacket, TransmissionCounter* counter);
+        MovingCommand* movingCommand, TransmissionCounter* counter);
 #endif
   private:
     void* _receiver = NULL;
