@@ -3,6 +3,7 @@
 
 #include "Commons.h"
 #include "Message_Exchange.h"
+#include "Message_Renderer.h"
 #include "Moving_Resolver.h"
 
 #ifndef __JOYSTICK_READ_BUTTONS_DEBUG__

@@ -3,6 +3,7 @@
 
 #include "Commons.h"
 #include "Message_Exchange.h"
+#include "Message_Renderer.h"
 
 class DisplayHandler: public MessageRenderer {
   public:

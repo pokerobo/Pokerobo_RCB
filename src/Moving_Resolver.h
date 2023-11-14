@@ -2,7 +2,7 @@
 #define __SPEED_RESOLVER_H__
 
 #include "Commons.h"
-#include "Message_Exchange.h"
+#include "Moving_Command.h"
 
 class MovingResolver {
   public:

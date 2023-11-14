@@ -2,8 +2,9 @@
 #define __MOVING_COMMAND_H__
 
 #include "Commons.h"
+#include "Message_Exchange.h"
 
-class MovingCommand {
+class MovingCommand: public MessageInterface {
   public:
     static const uint8_t messageSize;
     MovingCommand(int leftSpeed=0, byte leftDirection=0, int rightSpeed=0, byte rightDirection=0);
