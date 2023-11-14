@@ -56,6 +56,13 @@ uint8_t* encodeInteger(uint8_t* store, uint32_t value) {
 }
 
 uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t extras) {
+  if (cmd == NULL) {
+    encodeInteger(&buf[0], pressed);
+    encodeInteger(&buf[2], x);
+    encodeInteger(&buf[4], y);
+    encodeInteger(&buf[6], extras);
+    return buf;
+  }
   buf[0] = cmd[0];
   buf[1] = cmd[1];
   encodeInteger(&buf[2], pressed);
@@ -96,6 +103,13 @@ uint32_t decodeInteger(uint8_t* arr, int length) {
 #endif
 
 bool decodeMessage(uint8_t* msg, char* cmd, uint16_t* buttons, uint16_t* x, uint16_t* y, uint32_t* extras) {
+  if (cmd == NULL) {
+    *buttons = decodeInteger(&msg[0], 2);
+    *x = decodeInteger(&msg[2], 2);
+    *y = decodeInteger(&msg[4], 2);
+    *extras = decodeInteger(&msg[6], 4);
+    return true;
+  }
   if (msg[0] == cmd[0] && msg[1] == cmd[1]) {
     *buttons = decodeInteger(&msg[2], 2);
     *x = decodeInteger(&msg[4], 2);

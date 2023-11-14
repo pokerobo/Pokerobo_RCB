@@ -66,3 +66,28 @@ uint8_t* MovingCommand::serialize(uint8_t* buf, uint8_t len) {
 
   return buf;
 }
+
+MessageInterface* MovingCommand::deserialize(uint8_t* buf) {
+  if (buf == NULL) {
+    return NULL;
+  }
+
+  uint8_t directionFlags = buf[0];
+  if (directionFlags & 0b0001) {
+    _LeftDirection = 1;
+  }
+  if (directionFlags & 0b0010) {
+    _LeftDirection = 2;
+  }
+  if (directionFlags & 0b0100) {
+    _RightDirection = 1;
+  }
+  if (directionFlags & 0b1000) {
+    _RightDirection = 2;
+  }
+
+  _LeftSpeed = buf[1];
+  _RightSpeed = buf[2];
+
+  return this;
+}

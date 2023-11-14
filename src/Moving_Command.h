@@ -15,6 +15,7 @@ class MovingCommand: public MessageInterface {
     byte getRightDirection();
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
+    MessageInterface* deserialize(uint8_t* buf);
   private:
     int _LeftSpeed;
     byte _LeftDirection;

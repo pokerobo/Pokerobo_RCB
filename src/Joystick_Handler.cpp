@@ -143,7 +143,7 @@ int JoystickHandler::check(JoystickAction* action) {
 #endif
 
   if (_messageSender != NULL) {
-    MessagePacket packet(action);
+    MessagePacket packet(action, &movingCommand);
     bool ok = _messageSender->write(&packet);
     if (ok) {
       _counter.packetLossTotal -= 1;
@@ -151,7 +151,7 @@ int JoystickHandler::check(JoystickAction* action) {
   }
 
 #if MULTIPLE_SENDERS_SUPPORTED
-  MessagePacket packet2(action);
+  MessagePacket packet2(action, &movingCommand);
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageSendersTotal; i++) {
     int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, &packet2);

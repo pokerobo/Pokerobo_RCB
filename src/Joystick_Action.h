@@ -84,6 +84,7 @@ class JoystickAction: public MessageInterface {
     uint32_t getExtras();
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
+    MessageInterface* deserialize(uint8_t* buf);
   private:
     uint16_t _pressingFlags = 0;
     uint16_t _clickingTrail = 0;

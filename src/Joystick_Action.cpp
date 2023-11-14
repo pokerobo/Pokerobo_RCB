@@ -69,9 +69,15 @@ uint8_t* JoystickAction::serialize(uint8_t* buf, uint8_t len) {
   if (len < messageSize) {
     return NULL;
   }
-  encodeInteger(&buf[0], _pressingFlags);
-  encodeInteger(&buf[2], _x);
-  encodeInteger(&buf[4], _y);
-  encodeInteger(&buf[6], _extras);
-  return buf;
+  return encodeMessage(buf, NULL, _pressingFlags, _x, _y, _extras);
+}
+
+MessageInterface* JoystickAction::deserialize(uint8_t* buf) {
+  if (buf == NULL) {
+    return NULL;
+  }
+
+  decodeMessage(buf, NULL, &(_pressingFlags), &(_x), &(_y), &(_extras));
+
+  return this;
 }

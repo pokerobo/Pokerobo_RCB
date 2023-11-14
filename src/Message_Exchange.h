@@ -24,6 +24,7 @@ class MessagePacket: public MessageInterface {
     MessagePacket(MessageInterface* action, MessageInterface* command=NULL);
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
+    MessageInterface* deserialize(uint8_t* buf);
   private:
     uint8_t* _signature = MESSAGE_SIGNATURE;
     MessageInterface* _action = NULL;
@@ -36,9 +37,7 @@ class MessageSender {
     virtual bool write(MessagePacket* packet);
 };
 
-uint8_t* encodeInteger(uint8_t* store, uint16_t value);
-uint8_t* encodeInteger(uint8_t* store, uint32_t value);
-
+uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t extras);
 bool decodeMessage(uint8_t* buf, char* cmd, uint16_t* pressed, uint16_t* x, uint16_t* y, uint32_t* extras);
 
 #endif
