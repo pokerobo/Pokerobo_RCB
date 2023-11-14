@@ -179,7 +179,7 @@ int RF24Receiver::check() {
     return 0;
   }
 
-  uint8_t msg[JoystickAction::messageSize] = {0};
+  uint8_t msg[strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize + MovingCommand::messageSize] = {0};
   _tranceiver->read(&msg, sizeof(msg));
 
   uint16_t buttons;

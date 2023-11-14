@@ -1,7 +1,6 @@
 #include "Message_Exchange.h"
 
-const uint8_t JoystickAction::messageSize = 2
-    + sizeof(uint16_t)
+const uint8_t JoystickAction::messageSize = sizeof(uint16_t)
     + sizeof(uint16_t)
     + sizeof(uint16_t)
     + sizeof(uint32_t);
@@ -70,7 +69,11 @@ uint8_t* JoystickAction::serialize(uint8_t* buf, uint8_t len) {
   if (len < messageSize) {
     return NULL;
   }
-  return encodeMessage(buf, MESSAGE_SIGNATURE, _pressingFlags, _x, _y, _extras);
+  encodeInteger(&buf[0], _pressingFlags);
+  encodeInteger(&buf[2], _x);
+  encodeInteger(&buf[4], _y);
+  encodeInteger(&buf[6], _extras);
+  return buf;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -81,7 +84,7 @@ MessagePacket::MessagePacket(MessageInterface* action, MessageInterface* command
 }
 
 uint8_t MessagePacket::length() {
-  uint8_t len = 0;
+  uint8_t len = 2; // 2 bytes header
   if (_action != NULL) {
     len += _action->length();
   }
@@ -92,11 +95,18 @@ uint8_t MessagePacket::length() {
 }
 
 uint8_t* MessagePacket::serialize(uint8_t* buf, uint8_t len) {
+  if (len < length()) {
+    return NULL;
+  }
+
   if (_action == NULL) {
     return NULL;
   }
 
-  _action->serialize(buf, _action->length());
+  buf[0] = _signature[0];
+  buf[1] = _signature[1];
+
+  _action->serialize(&buf[2], _action->length());
 
   if (_command != NULL) {
     _command->serialize(&buf[_action->length()], _command->length());

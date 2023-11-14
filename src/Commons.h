@@ -16,7 +16,7 @@
 #define WIRE_HAS_TIMEOUT                  1
 #endif
 
-#define __JOYSTICK_FUNDUINO_SHIELD__      0
+#define __JOYSTICK_FUNDUINO_SHIELD__      1
 #define __JOYSTICK_READ_BUTTONS_DEBUG__   0
 
 /* Attention: MASK_XXX_BUTTON(s) have not defined yet
@@ -29,7 +29,7 @@
 #define JOYSTICK_DISABLED_BUTTONS 0b0101111
 
 #ifndef __RUNNING_LOG_ENABLED__
-#define __RUNNING_LOG_ENABLED__           0
+#define __RUNNING_LOG_ENABLED__           1
 #endif
 
 #undef __DEBUG_LOG_DISPLAY_HANDLER__      0
