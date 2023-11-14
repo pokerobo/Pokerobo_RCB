@@ -116,6 +116,8 @@ void ConsoleMessageRenderer::render(JoystickAction* message, MovingCommand* movi
   Serial.println();
 }
 
+//-------------------------------------------------------------------------------------------------
+
 uint8_t* encodeInteger(uint8_t* store, uint16_t value) {
   store[0] = value & 0xff;
   store[1] = (value >> 8) & 0xff;

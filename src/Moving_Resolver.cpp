@@ -3,9 +3,9 @@
 #define BOUND_X    40
 #define BOUND_Y    40
 
-MovingCommand* MovingResolver::resolve(MovingCommand* packet, JoystickAction* action, int coeff, bool rotatable) {
-  if (packet == NULL) {
-    return packet;
+MovingCommand* MovingResolver::resolve(MovingCommand* command, JoystickAction* action, int coeff, bool rotatable) {
+  if (command == NULL) {
+    return command;
   }
 
   int x = -512 + action->getX();
@@ -55,7 +55,7 @@ MovingCommand* MovingResolver::resolve(MovingCommand* packet, JoystickAction* ac
   enaVal = map(enaVal, 0, 512, 0, 256);
   enbVal = map(enbVal, 0, 512, 0, 256);
 
-  packet->update(enaVal, ld, enbVal, rd);
+  command->update(enaVal, ld, enbVal, rd);
 
-  return packet;
+  return command;
 }
