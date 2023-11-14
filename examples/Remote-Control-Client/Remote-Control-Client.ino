@@ -3,17 +3,17 @@
 const uint64_t address = 0x18580901LL;
 
 DisplayHandler displayHandler;
-RF24Tranceiver tranceiver;
+RF24Tranceiver rf24Tranceiver;
 
 void setup() {
   Serial.begin(57600);
 
   displayHandler.begin();
 
-  tranceiver.add(&displayHandler);
-  tranceiver.begin(RF24_RX, address);
+  rf24Tranceiver.add(&displayHandler);
+  rf24Tranceiver.begin(RF24_RX, address);
 }
 
 void loop() {
-  tranceiver.check();
+  rf24Tranceiver.check();
 }

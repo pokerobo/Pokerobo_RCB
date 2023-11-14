@@ -3,7 +3,7 @@
 const uint64_t address = 0x18580901LL;
 
 DisplayHandler displayHandler;
-RF24Tranceiver tranceiver;
+RF24Tranceiver rf24Tranceiver;
 JoystickHandler joystickHandler;
 ProgramSelector programSelector;
 MovingResolver movingResolver;
@@ -15,17 +15,17 @@ void setup() {
 
   displayHandler.begin();
 
-  tranceiver.set(&displayHandler);
-  tranceiver.set(&movingResolver);
-  tranceiver.begin(RF24_TX, address);
+  rf24Tranceiver.set(&displayHandler);
+  rf24Tranceiver.set(&movingResolver);
+  rf24Tranceiver.begin(RF24_TX, address);
 
-  joystickHandler.set(&tranceiver);
+  joystickHandler.set(&rf24Tranceiver);
   joystickHandler.set(&displayHandler);
   joystickHandler.set(&movingResolver);
   joystickHandler.begin();
 
   programSelector.set(&joystickHandler);
-  programSelector.set(&tranceiver, address);
+  programSelector.set(&rf24Tranceiver, address);
   programSelector.set(&displayHandler);
   programSelector.begin(PROGRAM_MODE_TESTER);
 }
