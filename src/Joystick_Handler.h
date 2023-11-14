@@ -80,7 +80,7 @@ class JoystickHandler {
 #endif
     void set(MessageSender* messageSender);
     void set(MessageRenderer* messageRenderer);
-    void set(SpeedResolver* speedResolver);
+    void set(MovingResolver* movingResolver);
   protected:
     uint16_t readButtonStates();
     uint16_t checkButtonClickingFlags(uint16_t pressed);
@@ -103,7 +103,7 @@ class JoystickHandler {
     uint8_t _messageSendersTotal = 0;
 #endif
     MessageSender* _messageSender = NULL;
-    SpeedResolver* _speedResolver = NULL;
+    MovingResolver* _movingResolver = NULL;
 };
 
 #endif//__JOYSTICK_HANDLER_H__

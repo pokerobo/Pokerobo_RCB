@@ -4,7 +4,7 @@
 #include "Commons.h"
 #include "Message_Exchange.h"
 
-class SpeedResolver {
+class MovingResolver {
   public:
     SpeedPacket* resolve(SpeedPacket* packet, JoystickAction* action, int coeff=1, bool rotatable=false);
 };

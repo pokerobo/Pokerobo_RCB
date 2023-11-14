@@ -11,7 +11,7 @@ void setup() {
   displayHandler.begin();
 
   tranceiver.add(&displayHandler);
-  tranceiver.begin(RX, address);
+  tranceiver.begin(RF24_RX, address);
 }
 
 void loop() {

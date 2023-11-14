@@ -206,9 +206,9 @@ int RF24Receiver::check() {
 
   SpeedPacket speedPacketInstance;
   SpeedPacket* speedPacket = NULL;
-  if (_speedResolver != NULL) {
+  if (_movingResolver != NULL) {
     speedPacket = &speedPacketInstance;
-    _speedResolver->resolve(speedPacket, &message);
+    _movingResolver->resolve(speedPacket, &message);
   }
 
   if (_counter.ordinalNumber == 0) {
@@ -294,6 +294,6 @@ byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, Joyst
 }
 #endif
 
-void RF24Receiver::set(SpeedResolver* speedResolver) {
-  _speedResolver = speedResolver;
+void RF24Receiver::set(MovingResolver* movingResolver) {
+  _movingResolver = movingResolver;
 }

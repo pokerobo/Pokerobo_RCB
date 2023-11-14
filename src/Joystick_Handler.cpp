@@ -104,8 +104,8 @@ void JoystickHandler::set(MessageRenderer* messageRenderer) {
   _messageRenderer = messageRenderer;
 }
 
-void JoystickHandler::set(SpeedResolver* speedResolver) {
-  _speedResolver = speedResolver;
+void JoystickHandler::set(MovingResolver* movingResolver) {
+  _movingResolver = movingResolver;
 }
 
 int JoystickHandler::begin() {
@@ -132,8 +132,8 @@ int JoystickHandler::check(JoystickAction* action) {
 
   SpeedPacket speedPacket;
 
-  if (_speedResolver != NULL) {
-    _speedResolver->resolve(&speedPacket, action);
+  if (_movingResolver != NULL) {
+    _movingResolver->resolve(&speedPacket, action);
   }
 
 #if JOYSTICK_CHECKING_CHANGE

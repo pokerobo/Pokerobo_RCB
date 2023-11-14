@@ -33,7 +33,7 @@ class RF24Receiver {
 #if MULTIPLE_RENDERERS_SUPPORTED
     bool add(MessageRenderer* messageRenderer);
 #endif
-    void set(SpeedResolver* speedResolver);
+    void set(MovingResolver* movingResolver);
     void reset();
   protected:
     bool available();
@@ -50,7 +50,7 @@ class RF24Receiver {
     MessageRenderer* _messageRenderers[MESSAGE_RENDERERS_LIMIT] = {};
     uint8_t _messageRenderersTotal = 0;
 #endif
-    SpeedResolver* _speedResolver = NULL;
+    MovingResolver* _movingResolver = NULL;
 };
 
 class RF24Tranceiver: public RF24Transmitter, public RF24Receiver {

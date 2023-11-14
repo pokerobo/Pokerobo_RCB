@@ -6,7 +6,7 @@ DisplayHandler displayHandler;
 RF24Tranceiver tranceiver;
 JoystickHandler joystickHandler;
 ProgramSelector programSelector;
-SpeedResolver speedResolver;
+MovingResolver movingResolver;
 
 int count = 0;
 
@@ -16,12 +16,12 @@ void setup() {
   displayHandler.begin();
 
   tranceiver.set(&displayHandler);
-  tranceiver.set(&speedResolver);
-  tranceiver.begin(TX, address);
+  tranceiver.set(&movingResolver);
+  tranceiver.begin(RF24_TX, address);
 
   joystickHandler.set(&tranceiver);
   joystickHandler.set(&displayHandler);
-  joystickHandler.set(&speedResolver);
+  joystickHandler.set(&movingResolver);
   joystickHandler.begin();
 
   programSelector.set(&joystickHandler);
