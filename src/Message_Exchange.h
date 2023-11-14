@@ -112,6 +112,16 @@ class JoystickAction: public MessageInterface {
     message_source_t _source = TX_MSG;
 };
 
+class MessagePacket: public MessageInterface {
+  public:
+    MessagePacket(JoystickAction* action, SpeedPacket* command=NULL);
+    uint8_t length();
+    uint8_t* serialize(uint8_t* buf, uint8_t len);
+  private:
+    JoystickAction* _action = NULL;
+    SpeedPacket* _command = NULL;
+};
+
 class MessageSender {
   public:
     virtual bool write(const void* buf, uint8_t len);

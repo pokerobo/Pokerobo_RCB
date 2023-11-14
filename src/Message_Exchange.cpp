@@ -73,6 +73,33 @@ uint8_t* JoystickAction::serialize(uint8_t* buf, uint8_t len) {
   return encodeMessage(buf, MESSAGE_SIGNATURE, _pressingFlags, _x, _y, _extras);
 }
 
+//-------------------------------------------------------------------------------------------------
+
+MessagePacket::MessagePacket(JoystickAction* action, SpeedPacket* command) {
+  _action = action;
+  _command = command;
+}
+
+uint8_t MessagePacket::length() {
+  return (JoystickAction::messageSize + SpeedPacket::messageSize);
+}
+
+uint8_t* MessagePacket::serialize(uint8_t* buf, uint8_t len) {
+  if (_action == NULL) {
+    return NULL;
+  }
+
+  _action->serialize(buf, JoystickAction::messageSize);
+
+  if (_command != NULL) {
+    _command->serialize(&buf[JoystickAction::messageSize], SpeedPacket::messageSize);
+  }
+
+  return buf;
+}
+
+//-------------------------------------------------------------------------------------------------
+
 void ConsoleMessageRenderer::clear() {}
 
 void ConsoleMessageRenderer::splash(char* title, byte align) {}

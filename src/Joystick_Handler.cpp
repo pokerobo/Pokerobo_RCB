@@ -143,7 +143,8 @@ int JoystickHandler::check(JoystickAction* action) {
 #endif
 
   if (_messageSender != NULL) {
-    bool ok = _messageSender->write(action);
+    MessagePacket packet(action);
+    bool ok = _messageSender->write(&packet);
     if (ok) {
       _counter.packetLossTotal -= 1;
     }
