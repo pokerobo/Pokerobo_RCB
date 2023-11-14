@@ -3,7 +3,7 @@
 
 #include "Commons.h"
 #include "Message_Exchange.h"
-#include "Speed_Resolver.h"
+#include "Moving_Resolver.h"
 
 #define RF24_DEFAULT_ADDRESS 0x123456789ABCDEF0LL
 

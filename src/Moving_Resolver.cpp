@@ -1,4 +1,4 @@
-#include "Speed_Resolver.h"
+#include "Moving_Resolver.h"
 
 #define BOUND_X    40
 #define BOUND_Y    40

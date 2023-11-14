@@ -3,7 +3,7 @@
 
 #include "Commons.h"
 #include "Message_Exchange.h"
-#include "Speed_Resolver.h"
+#include "Moving_Resolver.h"
 
 #ifndef __JOYSTICK_READ_BUTTONS_DEBUG__
 #define __JOYSTICK_READ_BUTTONS_DEBUG__  0
