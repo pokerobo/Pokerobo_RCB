@@ -2,7 +2,7 @@
 #define __JOYSTICK_HANDLER_H__
 
 #include "Commons.h"
-#include "Message_Sender.h"
+#include "Message_Exchange.h"
 #include "Speed_Resolver.h"
 
 #ifndef __JOYSTICK_READ_BUTTONS_DEBUG__
@@ -61,7 +61,7 @@
 #define PIN_SELECT_BUTTON 7 // E
 #define PIN_ANALOG_BUTTON 8 // JOYSTICK
 
-#define MESSAGE_SENDER_MAX  7
+#define MESSAGE_EXCHANGE_MAX  7
 #define MULTIPLE_SENDERS_SUPPORTED false
 
 class JoystickHandler {
@@ -99,7 +99,7 @@ class JoystickHandler {
     int16_t _maxY = JOYSTICK_MAX_Y;
     MessageRenderer* _messageRenderer = NULL;
 #if MULTIPLE_SENDERS_SUPPORTED
-    MessageSender* _messageSenders[MESSAGE_SENDER_MAX] = {};
+    MessageSender* _messageSenders[MESSAGE_EXCHANGE_MAX] = {};
     uint8_t _messageSendersTotal = 0;
 #endif
     MessageSender* _messageSender = NULL;

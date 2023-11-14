@@ -85,7 +85,7 @@ bool JoystickHandler::add(MessageSender* messageSender) {
   if (messageSender == NULL) {
     return false;
   }
-  if (_messageSendersTotal > MESSAGE_SENDER_MAX) {
+  if (_messageSendersTotal > MESSAGE_EXCHANGE_MAX) {
     return false;
   }
 #if __STRICT_MODE__

@@ -2,7 +2,7 @@
 #define __DISPLAY_HANDLER_H__
 
 #include "Commons.h"
-#include "Message_Sender.h"
+#include "Message_Exchange.h"
 
 class DisplayHandler: public MessageRenderer {
   public:

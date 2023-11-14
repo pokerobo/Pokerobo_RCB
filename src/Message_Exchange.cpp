@@ -1,4 +1,4 @@
-#include "Message_Sender.h"
+#include "Message_Exchange.h"
 
 const uint8_t JoystickAction::messageSize = 2
     + sizeof(uint16_t)

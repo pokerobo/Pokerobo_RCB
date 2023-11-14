@@ -1,5 +1,5 @@
-#ifndef __MESSAGE_SENDER_H__
-#define __MESSAGE_SENDER_H__
+#ifndef __MESSAGE_EXCHANGE_H__
+#define __MESSAGE_EXCHANGE_H__
 
 #include "Commons.h"
 

@@ -2,7 +2,7 @@
 #define __RF24_TRANSMITTER_H__
 
 #include "Commons.h"
-#include "Message_Sender.h"
+#include "Message_Exchange.h"
 #include "Speed_Resolver.h"
 
 #define RF24_DEFAULT_ADDRESS 0x123456789ABCDEF0LL
