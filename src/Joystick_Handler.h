@@ -88,7 +88,7 @@ class JoystickHandler {
     bool isChanged(JoystickAction* msg);
 #endif
 #if MULTIPLE_SENDERS_SUPPORTED
-    byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessageInterface* packet=NULL);
+    byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet=NULL);
 #endif
   private:
     TransmissionCounter _counter;

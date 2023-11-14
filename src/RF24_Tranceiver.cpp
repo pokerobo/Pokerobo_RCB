@@ -65,7 +65,7 @@ void RF24Transmitter::reset() {
   _tranceiver->powerUp();
 }
 
-bool RF24Transmitter::write(MessageInterface* packet) {
+bool RF24Transmitter::write(MessagePacket* packet) {
   if (packet == NULL) {
     _status = MESSAGE_NULL;
     return false;

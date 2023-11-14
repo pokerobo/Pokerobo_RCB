@@ -151,9 +151,10 @@ int JoystickHandler::check(JoystickAction* action) {
   }
 
 #if MULTIPLE_SENDERS_SUPPORTED
+  MessagePacket packet2(action);
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageSendersTotal; i++) {
-    int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, action);
+    int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, &packet2);
     if (status > 0) {
       sumOk += status;
     } else if (status < 0) {
@@ -267,7 +268,7 @@ bool JoystickHandler::isChanged(JoystickAction* msg) {
 #endif
 
 #if MULTIPLE_SENDERS_SUPPORTED
-byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessageInterface* packet) {
+byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet) {
   if (messageSender != NULL) {
     uint8_t code = 1 << index;
 

@@ -125,7 +125,7 @@ class MessagePacket: public MessageInterface {
 class MessageSender {
   public:
     virtual bool write(const void* buf, uint8_t len);
-    virtual bool write(MessageInterface* packet);
+    virtual bool write(MessagePacket* packet);
 };
 
 class MessageRenderer {
