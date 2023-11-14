@@ -2,6 +2,7 @@
 #define __MESSAGE_EXCHANGE_H__
 
 #include "Commons.h"
+#include "Moving_Command.h"
 
 #define TOTAL_OF_BUTTONS       7
 
@@ -109,24 +110,6 @@ class JoystickAction: public MessageInterface {
     uint16_t _originY = 0;
     uint32_t _extras = 0;
     message_source_t _source = TX_MSG;
-};
-
-class SpeedPacket {
-  public:
-    static const uint8_t messageSize;
-    SpeedPacket(int leftSpeed=0, byte leftDirection=0, int rightSpeed=0, byte rightDirection=0);
-    void update(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection);
-    int getLeftSpeed();
-    byte getLeftDirection();
-    int getRightSpeed();
-    byte getRightDirection();
-    uint8_t length();
-    uint8_t* serialize(uint8_t* buf, uint8_t len);
-  private:
-    int _LeftSpeed;
-    byte _LeftDirection;
-    int _RightSpeed;
-    byte _RightDirection;
 };
 
 class MessageSender {
