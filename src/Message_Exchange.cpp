@@ -8,7 +8,7 @@ MessagePacket::MessagePacket(MessageInterface* action, MessageInterface* command
 }
 
 uint8_t MessagePacket::length() {
-  uint8_t len = 2; // 2 bytes header
+  uint8_t len = strlen(MESSAGE_SIGNATURE); // 2 bytes header
   if (_action != NULL) {
     len += _action->length();
   }
@@ -30,10 +30,10 @@ uint8_t* MessagePacket::serialize(uint8_t* buf, uint8_t len) {
   buf[0] = _signature[0];
   buf[1] = _signature[1];
 
-  _action->serialize(&buf[2], _action->length());
+  _action->serialize(buf + strlen(MESSAGE_SIGNATURE), _action->length());
 
   if (_command != NULL) {
-    _command->serialize(&buf[_action->length()], _command->length());
+    _command->serialize(buf + strlen(MESSAGE_SIGNATURE) + _action->length(), _command->length());
   }
 
   return buf;

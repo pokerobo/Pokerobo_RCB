@@ -206,10 +206,16 @@ int RF24Receiver::check() {
 
   MovingCommand movingCommandInstance;
   MovingCommand* movingCommand = NULL;
+
+#if RECALCULATING_MOVING_COMMAND
   if (_movingResolver != NULL) {
     movingCommand = &movingCommandInstance;
     _movingResolver->resolve(movingCommand, &message);
   }
+#else
+  movingCommandInstance.deserialize(msg + strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize);
+  movingCommand = &movingCommandInstance;
+#endif
 
   if (_counter.ordinalNumber == 0) {
     _counter.baselineNumber = count;
