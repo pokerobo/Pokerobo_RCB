@@ -62,10 +62,10 @@ uint8_t* encodeMessage(uint8_t* msg, char* cmd, uint16_t pressed, uint16_t x, ui
     buf[1] = cmd[1];
     buf += 2;
   }
-  encodeInteger(&buf[2], pressed);
-  encodeInteger(&buf[4], x);
-  encodeInteger(&buf[6], y);
-  encodeInteger(&buf[8], extras);
+  encodeInteger(&buf[0], pressed);
+  encodeInteger(&buf[2], x);
+  encodeInteger(&buf[4], y);
+  encodeInteger(&buf[6], extras);
   return msg;
 }
 
