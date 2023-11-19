@@ -37,6 +37,10 @@
 
 #define idleButtonIcon(offs, buttons, mask, icon) ((offs & mask) ? '-' : (buttons & mask) ? '*' : icon)
 
+char idleButtonIcon_(uint16_t offs, uint16_t buttons, uint16_t mask, char icon) {
+  return ((offs & mask) ? '-' : (buttons & mask) ? '*' : icon);
+}
+
 U8G2_ST7567_ENH_DG128064I_1_HW_I2C u8g2(U8G2_R2, SCL, SDA, U8X8_PIN_NONE); 
 
 int DisplayHandler::begin() {
@@ -80,6 +84,8 @@ void DisplayHandler::splash(char* title, byte align) {
       left = (SCREEN_WIDTH - pixel) / 2;
     }
   }
+#else
+  left = align * _maxCharWidth;
 #endif
 
   u8g2.firstPage();
@@ -155,6 +161,7 @@ void DisplayHandler::render(JoystickAction* message, MovingCommand* movingComman
   } while (u8g2.nextPage());
 }
 
+#if __SPACE_SAVING_MODE__
 void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source) {
   char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
   if (source == RX_MSG) {
@@ -173,6 +180,17 @@ void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source) {
   }
   renderTitle_(lx, ty, title);
 }
+#else
+void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source) {
+  if (source == RX_MSG) {
+    char title[13] = { '<', '<', ' ', 'T', 'E', 'S', 'T', 'E', 'R', ' ', '<', '<', '\0' };
+    renderTitle_(lx, ty, title);
+    return;
+  }
+  char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
+  renderTitle_(lx, ty, title);
+}
+#endif
 
 void renderTitle_(uint8_t lx, uint8_t ty, char* title) {
   if (title == NULL) return;
@@ -239,12 +257,12 @@ void renderSpeedWeight_(uint8_t lx, uint8_t ty, MovingCommand* movingCommand) {
   int mX = lx + SPEED_METER_OX;
   int mY = ty + SPEED_METER_OY;
 
-  int lw = map(movingCommand->getLeftSpeed(), 0, 256, 0, SPEED_METER_MAX_HEIGHT);
+  int lw = map(movingCommand->getLeftSpeed(), 0, MOVING_COMMAND_WEIGHT_MAX, 0, SPEED_METER_MAX_HEIGHT);
   uint8_t ld = movingCommand->getLeftDirection();
-  int rw = map(movingCommand->getRightSpeed(), 0, 256, 0, SPEED_METER_MAX_HEIGHT);
+  int rw = map(movingCommand->getRightSpeed(), 0, MOVING_COMMAND_WEIGHT_MAX, 0, SPEED_METER_MAX_HEIGHT);
   uint8_t rd = movingCommand->getRightDirection();
 
-  u8g2.drawHLine(mX - 2 - SPEED_METER_WIDTH, mY, (SPEED_METER_WIDTH + 2)*2);
+  u8g2.drawLine(mX - 2 - SPEED_METER_WIDTH, mY, mX + 1 + SPEED_METER_WIDTH, mY);
 
   switch(ld) {
     case 1:
@@ -268,7 +286,7 @@ void renderSpeedWeight_(uint8_t lx, uint8_t ty, MovingCommand* movingCommand) {
 void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, TransmissionCounter* counter) {
   if (counter == NULL) return;
 
-  u8g2.drawHLine(lx, ty, (JOYSTICK_INFO_COLUMNS - 1) * _maxCharWidth);
+  u8g2.drawLine(lx, ty, lx - 1 + (JOYSTICK_INFO_COLUMNS - 1) * _maxCharWidth, ty);
 
   char line[JOYSTICK_INFO_COLUMNS] = {};
   char format[6] = { '%', ' ', '7', 'l', 'd', '\0' };

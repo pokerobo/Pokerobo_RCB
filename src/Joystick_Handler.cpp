@@ -20,7 +20,7 @@
 
 #define CLICK_STYLE_BUTTONS       MASK_START_BUTTON | MASK_SELECT_BUTTON | MASK_ANALOG_BUTTON
 
-int JoystickHandler::pinOfButtons[] = {
+const int JoystickHandler::pinOfButtons[] = {
   PIN_UP_BUTTON,
   PIN_RIGHT_BUTTON,
   PIN_DOWN_BUTTON,
@@ -50,8 +50,8 @@ void JoystickHandler::detect() {
 
   for(uint8_t i=0; i<JOYSTICK_DETECTION_TOTAL; i++) {
     delay(JOYSTICK_DETECTION_DELAY);
-    middleX[i] = analogRead(PIN_JOYSTICK_X_AXIS);
-    middleY[i] = analogRead(PIN_JOYSTICK_Y_AXIS);
+    middleX[i] = analogRead(JOYSTICK_PIN_X_AXIS);
+    middleY[i] = analogRead(JOYSTICK_PIN_Y_AXIS);
     if (middleX[i] < minX) {
       minX = middleX[i];
     }
@@ -133,7 +133,7 @@ int JoystickHandler::check(JoystickAction* action) {
   MovingCommand movingCommand;
 
   if (_movingResolver != NULL) {
-    _movingResolver->resolve(&movingCommand, action);
+    _movingResolver->resolve(&movingCommand, action, 3);
   }
 
 #if JOYSTICK_CHECKING_CHANGE
@@ -201,8 +201,8 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
 
   uint16_t pressed = readButtonStates();
 
-  uint16_t x = analogRead(PIN_JOYSTICK_X_AXIS);
-  uint16_t y = analogRead(PIN_JOYSTICK_Y_AXIS);
+  uint16_t x = analogRead(JOYSTICK_PIN_X_AXIS);
+  uint16_t y = analogRead(JOYSTICK_PIN_Y_AXIS);
 
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
   char log[32] = { 0 };

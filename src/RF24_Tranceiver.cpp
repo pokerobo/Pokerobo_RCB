@@ -47,6 +47,14 @@ void RF24Tranceiver::reset(tranceiver_t mode) {
   }
 }
 
+void reset_(RF24* _tranceiver) {
+  _tranceiver->powerDown();
+  delay(100);
+  _tranceiver->powerUp();
+}
+
+//-------------------------------------------------------------------------------------------------
+
 int RF24Transmitter::begin(void* radio, uint64_t address) {
   if (radio == NULL) {
     return -1;
@@ -59,10 +67,7 @@ int RF24Transmitter::begin(void* radio, uint64_t address) {
 }
 
 void RF24Transmitter::reset() {
-  RF24* _tranceiver = (RF24*)_transmitter;
-  _tranceiver->powerDown();
-  delay(100);
-  _tranceiver->powerUp();
+  reset_((RF24*)_transmitter);
 }
 
 bool RF24Transmitter::write(MessagePacket* packet) {
@@ -91,6 +96,8 @@ rf24_tx_status_t RF24Transmitter::getStatus() {
   return _status;
 }
 
+//-------------------------------------------------------------------------------------------------
+
 int RF24Receiver::begin(void* radio, uint64_t address) {
   if (radio == NULL) {
     return -1;
@@ -104,10 +111,7 @@ int RF24Receiver::begin(void* radio, uint64_t address) {
 
 void RF24Receiver::reset() {
   // reset the _receiver
-  RF24* _tranceiver = (RF24*)_receiver;
-  _tranceiver->powerDown();
-  delay(100);
-  _tranceiver->powerUp();
+  reset_((RF24*)_receiver);
   // reset the _counter
   _counter.baselineNumber = 0;
   _counter.ordinalNumber = 0;
@@ -137,30 +141,15 @@ bool RF24Receiver::available() {
   bool status = _tranceiver->available();
 
   if (!status) {
-    bool connected = _tranceiver->isChipConnected();
-    if (connected) {
+    if (_tranceiver->isChipConnected()) {
       if (_messageRenderer != NULL) {
-#if __SPACE_SAVING_MODE__
-        char info[19] = {
-            ' ', ' ', ' ', ' ', ' ',
-            'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0'
-        };
-#else
         char info[14] = { 'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0' };
-#endif
-        _messageRenderer->splash(info);
+        _messageRenderer->splash(info, 5);
       }
     } else {
       if (_messageRenderer != NULL) {
-#if __SPACE_SAVING_MODE__
-        char info[19] = {
-            ' ', ' ', ' ', ' ', ' ',
-            'C', 'o', 'n', 'n', 'e', 'c', 't', 'i', 'n', 'g', '.', '.', '.', '\0'
-        };
-#else
         char info[14] = { 'C', 'o', 'n', 'n', 'e', 'c', 't', 'i', 'n', 'g', '.', '.', '.', '\0' };
-#endif
-        _messageRenderer->splash(info);
+        _messageRenderer->splash(info, 5);
       }
     }
   }

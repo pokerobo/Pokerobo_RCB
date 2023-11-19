@@ -52,8 +52,8 @@ MovingCommand* MovingResolver::resolve(MovingCommand* command, JoystickAction* a
   enaVal = int_max(enaVal, 0);
   enbVal = int_max(enbVal, 0);
 
-  enaVal = map(enaVal, 0, 512, 0, 256);
-  enbVal = map(enbVal, 0, 512, 0, 256);
+  enaVal = map(enaVal, 0, 512, 0, MOVING_COMMAND_WEIGHT_MAX);
+  enbVal = map(enbVal, 0, 512, 0, MOVING_COMMAND_WEIGHT_MAX);
 
   command->update(enaVal, ld, enbVal, rd);
 

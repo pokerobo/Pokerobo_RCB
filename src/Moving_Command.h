@@ -4,6 +4,8 @@
 #include "Commons.h"
 #include "Message_Exchange.h"
 
+#define MOVING_COMMAND_WEIGHT_MAX             255
+
 class MovingCommand: public MessageInterface {
   public:
     static const uint8_t messageSize;

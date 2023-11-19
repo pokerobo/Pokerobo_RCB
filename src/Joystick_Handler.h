@@ -43,13 +43,13 @@
 #define MAX_BOUND_Y      512 + 160
 #endif//MAX_BOUND_Y
 
-#ifndef PIN_JOYSTICK_X_AXIS
-#define PIN_JOYSTICK_X_AXIS   A0
-#endif//PIN_JOYSTICK_X_AXIS
+#ifndef JOYSTICK_PIN_X_AXIS
+#define JOYSTICK_PIN_X_AXIS   A0
+#endif//JOYSTICK_PIN_X_AXIS
 
-#ifndef PIN_JOYSTICK_Y_AXIS
-#define PIN_JOYSTICK_Y_AXIS   A1
-#endif//PIN_JOYSTICK_Y_AXIS
+#ifndef JOYSTICK_PIN_Y_AXIS
+#define JOYSTICK_PIN_Y_AXIS   A1
+#endif//JOYSTICK_PIN_Y_AXIS
 
 #ifndef JOYSTICK_CHECKING_CHANGE
 #define JOYSTICK_CHECKING_CHANGE 0
@@ -67,7 +67,7 @@
 #define MULTIPLE_SENDERS_SUPPORTED false
 
 class JoystickHandler {
-  static int pinOfButtons[];
+  static const int pinOfButtons[];
 #if __STRICT_MODE__
   static void verify();
 #endif
