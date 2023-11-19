@@ -206,9 +206,8 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
 
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
   char log[32] = { 0 };
-  char fmt[12] = { '%', 'd', ',', '%', 'd', ',', '%', 'd', ',', '%', 'd', '\0' };
-  sprintf(log, fmt, pressed, x, y, _counter.ordinalNumber);
-  Serial.print("M1"), Serial.print(':'), Serial.print(' '), Serial.println(log);
+  buildJoystickActionLogStr(log, pressed, x, y, _counter.ordinalNumber);
+  Serial.print('M'), Serial.print('1'), Serial.print(':'), Serial.print(' '), Serial.println(log);
 #endif
 
   if (x > _maxX) {
@@ -239,8 +238,8 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
 #endif
 
 #if __DEBUG_LOG_JOYSTICK_HANDLER__
-    sprintf(log, fmt, pressed, x, y, _counter.ordinalNumber);
-    Serial.print("M2"), Serial.print(':'), Serial.print(' '), Serial.println(log);
+    buildJoystickActionLogStr(log, pressed, x, y, _counter.ordinalNumber);
+    Serial.print('M'), Serial.print('2'), Serial.print(':'), Serial.print(' '), Serial.println(log);
 #endif
 
   action->update(pressed, x, y, _counter.ordinalNumber);

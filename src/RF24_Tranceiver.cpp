@@ -8,6 +8,10 @@
 #define __DEBUG_LOG_RF24_TRANCEIVER__ __RUNNING_LOG_ENABLED__
 #endif//__DEBUG_LOG_RF24_TRANCEIVER__
 
+#ifndef __OPTIMIZING_DYNAMIC_MEMORY__
+#define __OPTIMIZING_DYNAMIC_MEMORY__     1
+#endif
+
 #if __PLATFORM_TYPE__ == __PLATFORM_MEGA2560__
 #ifndef PIN_CE
 #define PIN_CE  48
@@ -140,20 +144,51 @@ bool RF24Receiver::available() {
   // returned data should now be reliable
   bool status = _tranceiver->available();
 
-  if (!status) {
+  if (!status && _messageRenderer != NULL) {
+#if __OPTIMIZING_DYNAMIC_MEMORY__
+    char info[14] = { 0 };
     if (_tranceiver->isChipConnected()) {
-      if (_messageRenderer != NULL) {
-        char info[14] = { 'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0' };
-        _messageRenderer->splash(info, 5);
-      }
+      info[ 0] = 'L';
+      info[ 1] = 'i';
+      info[ 2] = 's';
+      info[ 3] = 't';
+      info[ 4] = 'e';
+      info[ 5] = 'n';
+      info[ 6] = 'n';
+      info[ 7] = 'i';
+      info[ 8] = 'n';
+      info[ 9] = 'g';
+      info[10] = '.';
+      info[11] = '.';
+      info[12] = '.';
+      info[13] = '\0';
     } else {
-      if (_messageRenderer != NULL) {
-        char info[14] = { 'C', 'o', 'n', 'n', 'e', 'c', 't', 'i', 'n', 'g', '.', '.', '.', '\0' };
-        _messageRenderer->splash(info, 5);
-      }
+      info[ 0] = 'C';
+      info[ 1] = 'o';
+      info[ 2] = 'n';
+      info[ 3] = 'n';
+      info[ 4] = 'e';
+      info[ 5] = 'c';
+      info[ 6] = 't';
+      info[ 7] = 'i';
+      info[ 8] = 'n';
+      info[ 9] = 'g';
+      info[10] = '.';
+      info[11] = '.';
+      info[12] = '.';
+      info[13] = '\0';
     }
+    _messageRenderer->splash(info, 5);
+#else
+    if (_tranceiver->isChipConnected()) {
+      char info[14] = { 'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0' };
+      _messageRenderer->splash(info, 5);
+    } else {
+      char info[14] = { 'C', 'o', 'n', 'n', 'e', 'c', 't', 'i', 'n', 'g', '.', '.', '.', '\0' };
+      _messageRenderer->splash(info, 5);
+    }
+#endif
   }
-
   return status;
 }
 
@@ -179,8 +214,7 @@ int RF24Receiver::check() {
 
 #if __DEBUG_LOG_RF24_TRANCEIVER__
   char log[32] = { 0 };
-  char fmt[12] = { '%', 'd', ',', '%', 'd', ',', '%', 'd', ',', '%', 'd', '\0' };
-  sprintf(log, fmt, buttons, jX, jY, count);
+  buildJoystickActionLogStr(log, buttons, jX, jY, count);
   Serial.print("decode"), Serial.print('('), Serial.print(log), Serial.print(')'),
       Serial.print(' '), Serial.print('-'), Serial.print('>'), Serial.print(' '), Serial.print(ok);
   Serial.println();

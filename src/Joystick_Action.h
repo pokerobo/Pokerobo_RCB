@@ -96,4 +96,6 @@ class JoystickAction: public MessageInterface {
     message_source_t _source = TX_MSG;
 };
 
+char* buildJoystickActionLogStr(char* log, uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
+
 #endif

@@ -113,6 +113,33 @@ void DisplayHandler::render(JoystickAction* message, MovingCommand* movingComman
 
   char lines[COORD_LINES_TOTAL][JOYSTICK_INFO_COLUMNS] = { {}, {}, {}, {}, {} };
 
+#if __OPTIMIZING_DYNAMIC_MEMORY__
+  char fmt[JOYSTICK_INFO_COLUMNS] = { 0 };
+  fmt[0] = '~';
+  fmt[1] = 'X';
+  fmt[2] = ':';
+  fmt[3] = '%';
+  fmt[4] = ' ';
+  fmt[5] = '4';
+  fmt[6] = 'd';
+  fmt[7] = '\0';
+
+  sprintf(lines[COORD_LINE_X], fmt, nX);
+  fmt[1] = 'Y';
+  sprintf(lines[COORD_LINE_Y], fmt, nY);
+
+  fmt[0] = 'o';
+  fmt[1] = 'X';
+  fmt[2] = ':';
+  fmt[3] = '%';
+  fmt[4] = '4';
+  fmt[5] = 'd';
+  fmt[6] = '\0';
+
+  sprintf(lines[COORD_LINE_RAW_X], fmt, message->getOriginX());
+  fmt[1] = 'Y';
+  sprintf(lines[COORD_LINE_RAW_Y], fmt, message->getOriginY());
+#else
   char fmt1[JOYSTICK_INFO_COLUMNS] = { '~', 'X', ':', '%', ' ', '4', 'd', '\0' };
   sprintf(lines[COORD_LINE_X], fmt1, nX);
   fmt1[1] = 'Y';
@@ -122,6 +149,7 @@ void DisplayHandler::render(JoystickAction* message, MovingCommand* movingComman
   sprintf(lines[COORD_LINE_RAW_X], fmt2, message->getOriginX());
   fmt2[1] = 'Y';
   sprintf(lines[COORD_LINE_RAW_Y], fmt2, message->getOriginY());
+#endif
 
   uint16_t pressingFlags = message->getPressingFlags();
   lines[COORD_LINE_FLAGS][POS_UP_BUTTON] = idleButtonIcon(buttonOffs, pressingFlags, MASK_UP_BUTTON, 'U');
@@ -162,6 +190,40 @@ void DisplayHandler::render(JoystickAction* message, MovingCommand* movingComman
 }
 
 #if __SPACE_SAVING_MODE__
+#if __OPTIMIZING_DYNAMIC_MEMORY__
+void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source) {
+  char title[13] = { 0 };
+  if (source == TX_MSG) {
+    title[ 0] = '>';
+    title[ 1] = '>';
+    title[ 2] = ' ';
+    title[ 3] = 'P';
+    title[ 4] = 'L';
+    title[ 5] = 'A';
+    title[ 6] = 'Y';
+    title[ 7] = 'E';
+    title[ 8] = 'R';
+    title[ 9] = ' ';
+    title[10] = '>';
+    title[11] = '>';
+  }
+  if (source == RX_MSG) {
+    title[ 0] = '<';
+    title[ 1] = '<';
+    title[ 2] = ' ';
+    title[ 3] = 'T';
+    title[ 4] = 'E';
+    title[ 5] = 'S';
+    title[ 6] = 'T';
+    title[ 7] = 'E';
+    title[ 8] = 'R';
+    title[ 9] = ' ';
+    title[10] = '<';
+    title[11] = '<';
+  }
+  renderTitle_(lx, ty, title);
+}
+#else//__OPTIMIZING_DYNAMIC_MEMORY__
 void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source) {
   char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
   if (source == RX_MSG) {
@@ -180,7 +242,8 @@ void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source) {
   }
   renderTitle_(lx, ty, title);
 }
-#else
+#endif//__OPTIMIZING_DYNAMIC_MEMORY__
+#else//__SPACE_SAVING_MODE__
 void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source) {
   if (source == RX_MSG) {
     char title[13] = { '<', '<', ' ', 'T', 'E', 'S', 'T', 'E', 'R', ' ', '<', '<', '\0' };
@@ -190,7 +253,7 @@ void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source) {
   char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
   renderTitle_(lx, ty, title);
 }
-#endif
+#endif//__SPACE_SAVING_MODE__
 
 void renderTitle_(uint8_t lx, uint8_t ty, char* title) {
   if (title == NULL) return;
@@ -289,7 +352,18 @@ void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, 
   u8g2.drawLine(lx, ty, lx - 1 + (JOYSTICK_INFO_COLUMNS - 1) * _maxCharWidth, ty);
 
   char line[JOYSTICK_INFO_COLUMNS] = {};
+
+#if __OPTIMIZING_DYNAMIC_MEMORY__
+  char format[6] = { 0 };
+  format[0] = '%';
+  format[1] = ' ';
+  format[2] = '7';
+  format[3] = 'l';
+  format[4] = 'd';
+  format[5] = '\0';
+#else
   char format[6] = { '%', ' ', '7', 'l', 'd', '\0' };
+#endif
 
   sprintf(line, format, counter->ordinalNumber - counter->baselineNumber);
   u8g2.drawStr(lx, ty + 1 + _maxCharHeight, line);
