@@ -120,6 +120,10 @@ int JoystickHandler::begin() {
     if (!((JOYSTICK_HIGH_LEVEL_PINS >> i) & 1)) {
       continue;
     }
+#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+    pinMode(pinOfButtons[i], INPUT_PULLUP);
+    continue;
+#endif
     pinMode(pinOfButtons[i], INPUT);
     digitalWrite(pinOfButtons[i], HIGH);
   }
