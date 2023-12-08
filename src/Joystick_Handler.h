@@ -55,13 +55,27 @@
 #define JOYSTICK_CHECKING_CHANGE 0
 #endif
 
+#ifndef PIN_UP_BUTTON
 #define PIN_UP_BUTTON     2 // A
+#endif
+#ifndef PIN_RIGHT_BUTTON
 #define PIN_RIGHT_BUTTON  3 // B
+#endif
+#ifndef PIN_DOWN_BUTTON
 #define PIN_DOWN_BUTTON   4 // C
+#endif
+#ifndef PIN_LEFT_BUTTON
 #define PIN_LEFT_BUTTON   5 // D
+#endif
+#ifndef PIN_START_BUTTON
 #define PIN_START_BUTTON  6 // F
+#endif
+#ifndef PIN_SELECT_BUTTON
 #define PIN_SELECT_BUTTON 7 // E
+#endif
+#ifndef PIN_ANALOG_BUTTON
 #define PIN_ANALOG_BUTTON 8 // JOYSTICK
+#endif
 
 #define MESSAGE_EXCHANGE_MAX  7
 #define MULTIPLE_SENDERS_SUPPORTED false

@@ -1,7 +1,12 @@
 #include "Program_Selector.h"
 
+#ifndef __DEBUG_LOG_PROGRAM_SELECTOR__
+#define __DEBUG_LOG_PROGRAM_SELECTOR__ __RUNNING_LOG_ENABLED__
+#endif//__DEBUG_LOG_PROGRAM_SELECTOR__
+
 int ProgramSelector::begin(uint8_t mode) {
   _mode = mode;
+  return 0;
 }
 
 int ProgramSelector::check() {
@@ -30,21 +35,49 @@ int ProgramSelector::move_() {
         if (_mode == PROGRAM_MODE_PLAYER) {
           _rf24Tranceiver->begin(RF24_TX);
           _currentState = PROGRAM_NRF24_TEST_TRANSMITTER;
+#if __DEBUG_LOG_PROGRAM_SELECTOR__
+          Serial.print("ProgramSelector"), Serial.print("::"), Serial.print("move_"), Serial.print(": "),
+            Serial.print("PROGRAM_NRF24"), Serial.print("_REAL"), Serial.print("_TRANSMITTER"),
+            Serial.print('-'), Serial.print('>'),
+            Serial.print("PROGRAM_NRF24"), Serial.print("_TEST"), Serial.print("_TRANSMITTER"),
+            Serial.println();
+#endif
         }
         if (_mode == PROGRAM_MODE_TESTER) {
           _rf24Tranceiver->begin(RF24_RX);
           _currentState = PROGRAM_NRF24_TEST_RECEIVER;
+#if __DEBUG_LOG_PROGRAM_SELECTOR__
+          Serial.print("ProgramSelector"), Serial.print("::"), Serial.print("move_"), Serial.print(": "),
+            Serial.print("PROGRAM_NRF24"), Serial.print("_REAL"), Serial.print("_TRANSMITTER"),
+            Serial.print('-'), Serial.print('>'),
+            Serial.print("PROGRAM_NRF24"), Serial.print("_TEST"), Serial.print("_RECEIVER"),
+            Serial.println();
+#endif
         }
         break;
       case PROGRAM_NRF24_TEST_TRANSMITTER:
         _rf24Tranceiver->reset(RF24_TX);
         _rf24Tranceiver->begin(RF24_TX, _rf24Address);
         _currentState = PROGRAM_NRF24_REAL_TRANSMITTER;
+#if __DEBUG_LOG_PROGRAM_SELECTOR__
+        Serial.print("ProgramSelector"), Serial.print("::"), Serial.print("move_"), Serial.print(": "),
+          Serial.print("PROGRAM_NRF24"), Serial.print("_TEST"), Serial.print("_TRANSMITTER"),
+          Serial.print('-'), Serial.print('>'),
+          Serial.print("PROGRAM_NRF24"), Serial.print("_REAL"), Serial.print("_TRANSMITTER"),
+          Serial.println();
+#endif
         break;
       case PROGRAM_NRF24_TEST_RECEIVER:
         _rf24Tranceiver->reset(RF24_RX);
         _rf24Tranceiver->begin(RF24_TX, _rf24Address);
         _currentState = PROGRAM_NRF24_REAL_TRANSMITTER;
+#if __DEBUG_LOG_PROGRAM_SELECTOR__
+        Serial.print("ProgramSelector"), Serial.print("::"), Serial.print("move_"), Serial.print(": "),
+          Serial.print("PROGRAM_NRF24"), Serial.print("_TEST"), Serial.print("_RECEIVER"),
+          Serial.print('-'), Serial.print('>'),
+          Serial.print("PROGRAM_NRF24"), Serial.print("_REAL"), Serial.print("_TRANSMITTER"),
+          Serial.println();
+#endif
         break;
     }
   } else {
@@ -57,6 +90,7 @@ int ProgramSelector::move_() {
         return _rf24Tranceiver->check();
     }
   }
+  return 0;
 }
 
 void ProgramSelector::set(MessageRenderer* messageRenderer) {

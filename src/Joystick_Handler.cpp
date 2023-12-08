@@ -12,6 +12,10 @@
 #define JOYSTICK_DETECTION_DELAY  50
 #endif//JOYSTICK_DETECTION_DELAY
 
+#ifndef JOYSTICK_HIGH_LEVEL_PINS
+#define JOYSTICK_HIGH_LEVEL_PINS  0b1111111
+#endif//JOYSTICK_HIGH_LEVEL_PINS
+
 #if __JOYSTICK_FUNDUINO_SHIELD__
 #define BUTTON_PRESS_PIN_VALUES   0b0000000
 #else
@@ -113,10 +117,14 @@ int JoystickHandler::begin() {
   verify();
 #endif
   for(int i; i < TOTAL_OF_BUTTONS; i++) {
+    if (!((JOYSTICK_HIGH_LEVEL_PINS >> i) & 1)) {
+      continue;
+    }
     pinMode(pinOfButtons[i], INPUT);
     digitalWrite(pinOfButtons[i], HIGH);
   }
   detect();
+  return 0;
 }
 
 inline void _adjustCounter(TransmissionCounter *counter);

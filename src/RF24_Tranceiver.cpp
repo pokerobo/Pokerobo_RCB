@@ -12,16 +12,6 @@
 #define __OPTIMIZING_DYNAMIC_MEMORY__     1
 #endif
 
-#if __PLATFORM_TYPE__ == __PLATFORM_MEGA2560__
-#ifndef PIN_CE
-#define PIN_CE  48
-#endif
-
-#ifndef PIN_CSN
-#define PIN_CSN 49
-#endif
-#endif//__PLATFORM_TYPE__
-
 #ifndef PIN_CE
 #define PIN_CE  9
 #endif
@@ -44,10 +34,12 @@ int RF24Tranceiver::begin(tranceiver_t mode, uint64_t address) {
 
 void RF24Tranceiver::reset(tranceiver_t mode) {
   if (mode == RF24_TX) {
-    return RF24Transmitter::reset();
+    RF24Transmitter::reset();
+    return;
   }
   if (mode == RF24_RX) {
-    return RF24Receiver::reset();
+    RF24Receiver::reset();
+    return;
   }
 }
 
@@ -68,6 +60,7 @@ int RF24Transmitter::begin(void* radio, uint64_t address) {
   _tranceiver->begin();
   _tranceiver->openWritingPipe(address);
   _tranceiver->stopListening();
+  return 0;
 }
 
 void RF24Transmitter::reset() {
@@ -92,6 +85,13 @@ bool RF24Transmitter::write(const void* buf, uint8_t len) {
   }
   RF24* _tranceiver = (RF24*)_transmitter;
   bool result = _tranceiver->write(buf, len);
+#if __DEBUG_LOG_RF24_TRANCEIVER__
+  if (!result) {
+    Serial.print("RF24Transmitter"), Serial.print("::"), Serial.print("write"),
+      Serial.print('-'), Serial.print('>'),
+      Serial.println(result);
+  }
+#endif
   _status = result ? ACK_OK : ACK_FAILED;
   return result;
 }
@@ -111,6 +111,7 @@ int RF24Receiver::begin(void* radio, uint64_t address) {
   _tranceiver->begin();
   _tranceiver->openReadingPipe(0, address);
   _tranceiver->startListening();
+  return 0;
 }
 
 void RF24Receiver::reset() {

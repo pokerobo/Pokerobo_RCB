@@ -7,6 +7,14 @@
 #define __DEBUG_LOG_DISPLAY_HANDLER__ __RUNNING_LOG_ENABLED__
 #endif//__DEBUG_LOG_DISPLAY_HANDLER__
 
+#ifndef LCD_PIN_SCL
+#define LCD_PIN_SCL                     SCL
+#endif//LCD_PIN_SCL
+
+#ifndef LCD_PIN_SDA
+#define LCD_PIN_SDA                     SDA
+#endif//LCD_PIN_SDA
+
 #define SCREEN_HEIGHT                   64
 #define SCREEN_WIDTH                   128
 
@@ -41,7 +49,7 @@ char idleButtonIcon_(uint16_t offs, uint16_t buttons, uint16_t mask, char icon) 
   return ((offs & mask) ? '-' : (buttons & mask) ? '*' : icon);
 }
 
-U8G2_ST7567_ENH_DG128064I_1_HW_I2C u8g2(U8G2_R2, SCL, SDA, U8X8_PIN_NONE); 
+U8G2_ST7567_ENH_DG128064I_1_HW_I2C u8g2(U8G2_R2, LCD_PIN_SCL, LCD_PIN_SDA, U8X8_PIN_NONE);
 
 int DisplayHandler::begin() {
   Wire.begin();

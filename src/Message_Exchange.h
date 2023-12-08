@@ -25,7 +25,7 @@ class MessagePacket: public MessageInterface {
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
   private:
-    uint8_t* _signature = MESSAGE_SIGNATURE;
+    uint8_t* _signature = (uint8_t*)MESSAGE_SIGNATURE;
     MessageInterface* _action = NULL;
     MessageInterface* _command = NULL;
 };

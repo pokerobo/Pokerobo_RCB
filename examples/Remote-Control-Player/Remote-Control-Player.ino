@@ -8,8 +8,6 @@ JoystickHandler joystickHandler;
 ProgramSelector programSelector;
 MovingResolver movingResolver;
 
-int count = 0;
-
 void setup() {
   Serial.begin(57600);
 
