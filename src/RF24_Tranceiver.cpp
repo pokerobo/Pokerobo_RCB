@@ -12,6 +12,10 @@
 #define __OPTIMIZING_DYNAMIC_MEMORY__     1
 #endif
 
+#ifndef RF24_RECEIVER_DISCONTINUITY_MAX
+#define RF24_RECEIVER_DISCONTINUITY_MAX  5000
+#endif//RF24_RECEIVER_DISCONTINUITY_MAX
+
 #ifndef PIN_CE
 #define PIN_CE  9
 #endif
@@ -151,24 +155,33 @@ bool RF24Receiver::available() {
   // returned data should now be reliable
   bool status = _tranceiver->available();
 
+  if (status) {
+    _discontinuityCount = 0;
+    return status;
+  }
+  _discontinuityCount++;
+
   if (!status && _messageRenderer != NULL) {
 #if __OPTIMIZING_DYNAMIC_MEMORY__
     char info[14] = { 0 };
     if (_tranceiver->isChipConnected()) {
-      info[ 0] = 'L';
-      info[ 1] = 'i';
-      info[ 2] = 's';
-      info[ 3] = 't';
-      info[ 4] = 'e';
-      info[ 5] = 'n';
-      info[ 6] = 'n';
-      info[ 7] = 'i';
-      info[ 8] = 'n';
-      info[ 9] = 'g';
-      info[10] = '.';
-      info[11] = '.';
-      info[12] = '.';
-      info[13] = '\0';
+      if (_discontinuityCount > RF24_RECEIVER_DISCONTINUITY_MAX) {
+        info[ 0] = 'L';
+        info[ 1] = 'i';
+        info[ 2] = 's';
+        info[ 3] = 't';
+        info[ 4] = 'e';
+        info[ 5] = 'n';
+        info[ 6] = 'n';
+        info[ 7] = 'i';
+        info[ 8] = 'n';
+        info[ 9] = 'g';
+        info[10] = '.';
+        info[11] = '.';
+        info[12] = '.';
+        info[13] = '\0';
+        _messageRenderer->splash(info, 5);
+      }
     } else {
       info[ 0] = 'C';
       info[ 1] = 'o';
@@ -188,8 +201,10 @@ bool RF24Receiver::available() {
     }
 #else
     if (_tranceiver->isChipConnected()) {
-      char info[14] = { 'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0' };
-      _messageRenderer->splash(info, 5);
+      if (_discontinuityCount > RF24_RECEIVER_DISCONTINUITY_MAX) {
+        char info[14] = { 'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0' };
+        _messageRenderer->splash(info, 5);
+      }
     } else {
       char info[14] = { 'C', 'o', 'n', 'n', 'e', 'c', 't', 'i', 'n', 'g', '.', '.', '.', '\0' };
       _messageRenderer->splash(info, 5);
