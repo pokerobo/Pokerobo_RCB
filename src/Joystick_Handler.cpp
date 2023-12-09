@@ -116,7 +116,7 @@ int JoystickHandler::begin() {
 #if __STRICT_MODE__
   verify();
 #endif
-  for(int i; i < TOTAL_OF_BUTTONS; i++) {
+  for(int i=0; i < TOTAL_OF_BUTTONS; i++) {
     if (!((JOYSTICK_HIGH_LEVEL_PINS >> i) & 1)) {
       continue;
     }
