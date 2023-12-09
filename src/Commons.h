@@ -53,6 +53,13 @@
 #define int_max(a,b) ((a)>(b)?(a):(b))
 #endif
 
+#if __JOYSTICK_FUNDUINO_SHIELD__
+#define JOYSTICK_MID_X   333
+#define JOYSTICK_MID_Y   333
+#define JOYSTICK_MAX_X   723
+#define JOYSTICK_MAX_Y   723
+#endif
+
 #if __PLATFORM_TYPE__ != __PLATFORM_ESP32__
 #define WIRE_HAS_TIMEOUT                  1
 #endif
@@ -77,6 +84,13 @@
 #if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
 #define JOYSTICK_HIGH_LEVEL_PINS  0b1000000
 #define JOYSTICK_DISABLED_BUTTONS 0b0111111
+#endif
+
+#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+#define JOYSTICK_MID_X   2810
+#define JOYSTICK_MID_Y   2810
+#define JOYSTICK_MAX_X   4095
+#define JOYSTICK_MAX_Y   4095
 #endif
 
 #if __PLATFORM_TYPE__ == __PLATFORM_MEGA2560__

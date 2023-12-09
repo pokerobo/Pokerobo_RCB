@@ -8,24 +8,28 @@
 #include "Moving_Resolver.h"
 
 #ifndef __JOYSTICK_READ_BUTTONS_DEBUG__
-#define __JOYSTICK_READ_BUTTONS_DEBUG__  0
+#define __JOYSTICK_READ_BUTTONS_DEBUG__   0
 #endif//__JOYSTICK_READ_BUTTONS_DEBUG__
 
 #ifndef __JOYSTICK_FUNDUINO_SHIELD__
-#define __JOYSTICK_FUNDUINO_SHIELD__  1
+#define __JOYSTICK_FUNDUINO_SHIELD__      1
 #endif//__JOYSTICK_FUNDUINO_SHIELD__
 
-#if __JOYSTICK_FUNDUINO_SHIELD__
-#define JOYSTICK_MID_X   333
-#define JOYSTICK_MID_Y   333
-#define JOYSTICK_MAX_X   723
-#define JOYSTICK_MAX_Y   723
-#else
+#ifndef JOYSTICK_MID_X
 #define JOYSTICK_MID_X   580
+#endif//JOYSTICK_MID_X
+
+#ifndef JOYSTICK_MID_Y
 #define JOYSTICK_MID_Y   590
+#endif//JOYSTICK_MID_Y
+
+#ifndef JOYSTICK_MAX_X
 #define JOYSTICK_MAX_X   900
+#endif//JOYSTICK_MAX_X
+
+#ifndef JOYSTICK_MAX_Y
 #define JOYSTICK_MAX_Y   900
-#endif
+#endif//JOYSTICK_MAX_Y
 
 #ifndef MIN_BOUND_X
 #define MIN_BOUND_X      512 - 160

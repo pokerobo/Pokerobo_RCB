@@ -68,9 +68,11 @@ int DisplayHandler::begin() {
 
 #if __DEBUG_LOG_DISPLAY_HANDLER__
   // maxCharHeight: 8
-  Serial.print("max"), Serial.print("Char"), Serial.print("Height"), Serial.print(':'), Serial.print(' '), Serial.println(_maxCharHeight);
+  Serial.print("max"), Serial.print("Char"), Serial.print("Height"), Serial.print(':'),
+      Serial.print(' '), Serial.println(_maxCharHeight);
   // maxCharWidth: 5
-  Serial.print("max"), Serial.print("Char"), Serial.print("Width"), Serial.print(':'), Serial.print(' '), Serial.println(_maxCharWidth);
+  Serial.print("max"), Serial.print("Char"), Serial.print("Width"), Serial.print(':'),
+      Serial.print(' '), Serial.println(_maxCharWidth);
 #endif
 
   return 1;
