@@ -10,38 +10,8 @@
 #define __PLATFORM_ESP32__                8
 
 #ifndef __PLATFORM_TYPE__
-#define __PLATFORM_TYPE__                 __PLATFORM_ESP32__
+#define __PLATFORM_TYPE__                 __PLATFORM_NANO__
 #endif
-
-#if __PLATFORM_TYPE__ != __PLATFORM_ESP32__
-#define WIRE_HAS_TIMEOUT                  1
-#endif
-
-#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
-#define PIN_CE  4
-#define PIN_CSN 5
-#endif
-
-#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
-#define JOYSTICK_PIN_X_AXIS   36
-#define JOYSTICK_PIN_Y_AXIS   39
-#define PIN_UP_BUTTON     27 // A
-#define PIN_RIGHT_BUTTON  26 // B
-#define PIN_DOWN_BUTTON   25 // C
-#define PIN_LEFT_BUTTON   33 // D
-#define PIN_START_BUTTON  34 // F
-#define PIN_SELECT_BUTTON 35 // E
-#define PIN_ANALOG_BUTTON 32 // JOYSTICK
-#endif
-
-#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
-#define JOYSTICK_HIGH_LEVEL_PINS  0b1000000
-#endif
-
-#if __PLATFORM_TYPE__ == __PLATFORM_MEGA2560__
-#define PIN_CE  48
-#define PIN_CSN 49
-#endif//__PLATFORM_TYPE__
 
 #define __JOYSTICK_FUNDUINO_SHIELD__      0
 #define __JOYSTICK_READ_BUTTONS_DEBUG__   0
@@ -82,5 +52,36 @@
 #ifndef int_max
 #define int_max(a,b) ((a)>(b)?(a):(b))
 #endif
+
+#if __PLATFORM_TYPE__ != __PLATFORM_ESP32__
+#define WIRE_HAS_TIMEOUT                  1
+#endif
+
+#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+#define PIN_CE  4
+#define PIN_CSN 5
+#endif
+
+#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+#define JOYSTICK_PIN_X_AXIS   36
+#define JOYSTICK_PIN_Y_AXIS   39
+#define PIN_UP_BUTTON     27 // A
+#define PIN_RIGHT_BUTTON  26 // B
+#define PIN_DOWN_BUTTON   25 // C
+#define PIN_LEFT_BUTTON   33 // D
+#define PIN_START_BUTTON  34 // F
+#define PIN_SELECT_BUTTON 35 // E
+#define PIN_ANALOG_BUTTON 32 // JOYSTICK
+#endif
+
+#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+#define JOYSTICK_HIGH_LEVEL_PINS  0b1000000
+#define JOYSTICK_DISABLED_BUTTONS 0b0111111
+#endif
+
+#if __PLATFORM_TYPE__ == __PLATFORM_MEGA2560__
+#define PIN_CE  48
+#define PIN_CSN 49
+#endif//__PLATFORM_TYPE__
 
 #endif

@@ -85,13 +85,19 @@ bool RF24Transmitter::write(const void* buf, uint8_t len) {
   }
   RF24* _tranceiver = (RF24*)_transmitter;
   bool result = _tranceiver->write(buf, len);
-#if __DEBUG_LOG_RF24_TRANCEIVER__
   if (!result) {
-    Serial.print("RF24Transmitter"), Serial.print("::"), Serial.print("write"),
-      Serial.print('-'), Serial.print('>'),
-      Serial.println(result);
-  }
+#if __DEBUG_LOG_RF24_TRANCEIVER__
+    if (_tranceiver->isChipConnected()) {
+      Serial.print("RF24Transmitter"), Serial.print("::"), Serial.print("write"),
+        Serial.print('-'), Serial.print('>'),
+        Serial.println("error");
+    } else {
+      Serial.print("RF24Transmitter"), Serial.print("::"), Serial.print("write"),
+        Serial.print(':'), Serial.print(' '),
+        Serial.println("broken");
+    }
 #endif
+  }
   _status = result ? ACK_OK : ACK_FAILED;
   return result;
 }
@@ -178,8 +184,8 @@ bool RF24Receiver::available() {
       info[11] = '.';
       info[12] = '.';
       info[13] = '\0';
+      _messageRenderer->splash(info, 5);
     }
-    _messageRenderer->splash(info, 5);
 #else
     if (_tranceiver->isChipConnected()) {
       char info[14] = { 'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0' };

@@ -10,7 +10,7 @@ void setup() {
 
   displayHandler.begin();
 
-  rf24Tranceiver.add(&displayHandler);
+  rf24Tranceiver.set(&displayHandler);
   rf24Tranceiver.begin(RF24_RX, address);
 }
 
