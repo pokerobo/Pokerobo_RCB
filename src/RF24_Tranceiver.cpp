@@ -28,10 +28,10 @@ RF24 radio(PIN_CE, PIN_CSN);
 
 int RF24Tranceiver::begin(tranceiver_t mode, uint64_t address) {
   if (mode == RF24_TX) {
-    return RF24Transmitter::begin(&radio, address);
+    return RF24Transmitter::begin(address, &radio);
   }
   if (mode == RF24_RX) {
-    return RF24Receiver::begin(&radio, address);
+    return RF24Receiver::begin(address, &radio);
   }
   return -1;
 }
@@ -55,7 +55,7 @@ void reset_(RF24* _tranceiver) {
 
 //-------------------------------------------------------------------------------------------------
 
-int RF24Transmitter::begin(void* radio, uint64_t address) {
+int RF24Transmitter::begin(uint64_t address, void* radio) {
   if (radio == NULL) {
     return -1;
   }
@@ -112,7 +112,7 @@ rf24_tx_status_t RF24Transmitter::getStatus() {
 
 //-------------------------------------------------------------------------------------------------
 
-int RF24Receiver::begin(void* radio, uint64_t address) {
+int RF24Receiver::begin(uint64_t address, void* radio) {
   if (radio == NULL) {
     return -1;
   }

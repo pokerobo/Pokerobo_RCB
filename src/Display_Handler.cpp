@@ -32,11 +32,11 @@
 #define JOYSTICK_PAD_IR                 4
 #define JOYSTICK_PAD_PADDING_TOP        1
 
-#define JOYSTICK_VISUAL_PAD_CIRCLE      1
-#define JOYSTICK_VISUAL_PAD_SQUARE1     2
-#define JOYSTICK_VISUAL_PAD_SQUARE2     3
+#define JOYSTICK_PAD_STYLE_CIRCLE       1
+#define JOYSTICK_PAD_STYLE_SQUARE1      2
+#define JOYSTICK_PAD_STYLE_SQUARE2      3
 
-#define JOYSTICK_VISUAL_PAD_STYLE   JOYSTICK_VISUAL_PAD_SQUARE2
+#define JOYSTICK_PAD_STYLE_ACTIVE       JOYSTICK_PAD_STYLE_SQUARE2
 
 #define SPEED_METER_WIDTH               7
 #define SPEED_METER_OX                  3 + SPEED_METER_WIDTH
@@ -315,10 +315,10 @@ void drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, i
 }
 
 void renderJoystickPad_(uint8_t lx, uint8_t ty, uint8_t r, uint8_t ir, int x, int y) {
-#if JOYSTICK_VISUAL_PAD_STYLE == JOYSTICK_VISUAL_PAD_CIRCLE
+#if JOYSTICK_PAD_STYLE_ACTIVE == JOYSTICK_PAD_STYLE_CIRCLE
   return drawJoystickCircle(lx + JOYSTICK_PAD_OX, ty + JOYSTICK_PAD_OY, r, ir, x, y);
 #endif
-#if JOYSTICK_VISUAL_PAD_STYLE == JOYSTICK_VISUAL_PAD_SQUARE1
+#if JOYSTICK_PAD_STYLE_ACTIVE == JOYSTICK_PAD_STYLE_SQUARE1
   return drawJoystickSquare1(lx + JOYSTICK_PAD_OX, ty + JOYSTICK_PAD_OY, r, ir, x, y);
 #endif
   return drawJoystickSquare2(lx + JOYSTICK_PAD_OX, ty + JOYSTICK_PAD_OY, r, ir, x, y);

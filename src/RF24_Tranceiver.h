@@ -17,7 +17,7 @@ typedef enum { ACK_OK = 0, ACK_FAILED, MESSAGE_NULL, TRANSMITTER_NULL } rf24_tx_
 
 class RF24Transmitter: public MessageSender {
   public:
-    int begin(void* radio, uint64_t address=RF24_DEFAULT_ADDRESS);
+    int begin(uint64_t address=RF24_DEFAULT_ADDRESS, void* radio=NULL);
     bool write(const void* buf, uint8_t len);
     bool write(MessagePacket* packet);
     rf24_tx_status_t getStatus();
@@ -29,7 +29,7 @@ class RF24Transmitter: public MessageSender {
 
 class RF24Receiver {
   public:
-    int begin(void* radio, uint64_t address=RF24_DEFAULT_ADDRESS);
+    int begin(uint64_t address=RF24_DEFAULT_ADDRESS, void* radio = NULL);
     int check();
     void set(MessageRenderer* messageRenderer);
 #if MULTIPLE_RENDERERS_SUPPORTED
