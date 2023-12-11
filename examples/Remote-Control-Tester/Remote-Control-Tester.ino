@@ -25,6 +25,10 @@ void setup() {
   programSelector.set(&joystickHandler);
   programSelector.set(&rf24Tranceiver, address);
   programSelector.set(&displayHandler);
+
+  programSelector.add(new ProgramTransmitter(&joystickHandler, &rf24Tranceiver, address));
+  programSelector.add(new ProgramReceiver(&rf24Tranceiver, 0LL));
+
   programSelector.begin(PROGRAM_MODE_TESTER);
 }
 

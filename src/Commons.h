@@ -64,6 +64,12 @@
 
 //-------------------------------------------------------------------------------------------------
 
+#if __PLATFORM_TYPE__ & __PLATFORM_NANO__
+#define RF24_RECEIVER_DISCONTINUITY_MAX  40
+#endif
+
+//-------------------------------------------------------------------------------------------------
+
 #if __PLATFORM_TYPE__ != __PLATFORM_ESP32__
 #define WIRE_HAS_TIMEOUT                  1
 #endif
@@ -96,6 +102,10 @@
 #define JOYSTICK_MID_Y   1920   // 2810 (5V)
 #define JOYSTICK_MAX_X   4095
 #define JOYSTICK_MAX_Y   4095
+#endif
+
+#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+#define RF24_RECEIVER_DISCONTINUITY_MAX  5000
 #endif
 
 //-------------------------------------------------------------------------------------------------
