@@ -3,7 +3,7 @@
 
 #include "Commons.h"
 #include "Joystick_Handler.h"
-#include "Program_Collections.h"
+#include "Program_Definition.h"
 
 #ifndef PROGRAM_CAPSULES_LIMIT
 #define PROGRAM_CAPSULES_LIMIT              20
