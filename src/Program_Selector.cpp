@@ -12,6 +12,9 @@ ProgramSelector::ProgramSelector() {
 
 int ProgramSelector::begin(uint8_t mode) {
   _mode = mode;
+  if (!_programCollection->isReady()) {
+    exit(1);
+  }
   return 0;
 }
 
@@ -25,10 +28,6 @@ int ProgramSelector::wait_(int state) {
 }
 
 int ProgramSelector::move_() {
-  if (!_programCollection->isReady()) {
-    exit(1);
-  }
-
   JoystickAction message;
   _joystickHandler->input(&message);
 
@@ -61,10 +60,19 @@ bool ProgramSelector::add(ProgramCapsule* programCapsule) {
   return _programCollection->add(programCapsule);
 }
 
-void ProgramSelector::set(MessageRenderer* messageRenderer) {
-  _messageRenderer = messageRenderer;
+void ProgramSelector::set(DisplayHandler* displayHandler) {
+  _displayHandler = displayHandler;
 }
 
 void ProgramSelector::set(JoystickHandler* joystickHandler) {
   _joystickHandler = joystickHandler;
 }
+
+#if __DEVMODE_PROGRAM_SELECTOR__
+void ProgramSelector::showMenu() {
+  if (_displayHandler == NULL) {
+    return;
+  }
+  _displayHandler->render(_programCollection);
+}
+#endif

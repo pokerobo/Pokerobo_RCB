@@ -12,7 +12,7 @@ class DisplayHandler: public MessageRenderer {
     void clear();
     void splash(char* title, byte align = 0);
     void render(JoystickAction* message, MovingCommand* movingCommand=NULL, TransmissionCounter* counter=NULL);
-    void showMenu(ProgramCollection* programCollection=NULL);
+    void render(ProgramCollection* programCollection=NULL);
   private:
     uint8_t _maxCharHeight = 8;
     uint8_t _maxCharWidth = 5;

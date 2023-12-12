@@ -1,12 +1,17 @@
 #include "Program_Definition.h"
 
 ProgramTransmitter::ProgramTransmitter(JoystickHandler* joystickHandler,
-    RF24Tranceiver* tranceiver, uint64_t address) {
+    RF24Tranceiver* tranceiver, uint64_t address, char* title) {
+  _title = title;
   if (address != 0) {
     _rf24Address = address;
   }
   _rf24Tranceiver = tranceiver;
   _joystickHandler = joystickHandler;
+}
+
+char* ProgramTransmitter::getTitle() {
+  return _title;
 }
 
 int ProgramTransmitter::begin() {
@@ -22,12 +27,17 @@ int ProgramTransmitter::close() {
   return 0;
 }
 
-ProgramReceiver::ProgramReceiver(RF24Tranceiver* tranceiver, uint64_t address) {
+ProgramReceiver::ProgramReceiver(RF24Tranceiver* tranceiver, uint64_t address, char* title) {
+  _title = title;
   if (address != 0) {
     _rf24Address = address;
   }
   _rf24Tranceiver = tranceiver;
-  }
+}
+
+char* ProgramReceiver::getTitle() {
+  return _title;
+}
 
 int ProgramReceiver::begin() {
   return _rf24Tranceiver->begin(RF24_RX, _rf24Address);

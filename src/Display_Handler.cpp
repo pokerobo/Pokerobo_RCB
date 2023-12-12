@@ -4,8 +4,12 @@
 #include <Wire.h>
 
 #ifndef __DEBUG_LOG_DISPLAY_HANDLER__
-#define __DEBUG_LOG_DISPLAY_HANDLER__ __RUNNING_LOG_ENABLED__
+#define __DEBUG_LOG_DISPLAY_HANDLER__   __RUNNING_LOG_ENABLED__
 #endif//__DEBUG_LOG_DISPLAY_HANDLER__
+
+#ifndef __DEVMODE_DISPLAY_HANDLER__
+#define __DEVMODE_DISPLAY_HANDLER__     0
+#endif//__DEVMODE_DISPLAY_HANDLER__
 
 #ifndef LCD_PIN_SCL
 #define LCD_PIN_SCL                     SCL
@@ -104,15 +108,23 @@ void DisplayHandler::splash(char* title, byte align) {
   } while (u8g2.nextPage());
 }
 
-void DisplayHandler::showMenu(ProgramCollection* programCollection) {
+void DisplayHandler::render(ProgramCollection* programCollection) {
   u8g2.firstPage();
   do {
-    u8g2.drawButtonUTF8(1, 1 + 1 * (_maxCharHeight), U8G2_BTN_BW1, 126,  0,  2, " Control Panel" );
-    u8g2.drawButtonUTF8(1, 1 + 2 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn2" );
-    u8g2.drawButtonUTF8(1, 1 + 3 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, ">Btn3" );
-    u8g2.drawButtonUTF8(1, 1 + 4 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn4" );
-    u8g2.drawButtonUTF8(1, 1 + 5 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn5" );
-    u8g2.drawButtonUTF8(1, 1 + 6 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn6" );
+    u8g2.drawButtonUTF8(1, 1 + 1 * (_maxCharHeight), U8G2_BTN_SHADOW0|U8G2_BTN_BW1, 126,  0,  2, "CONTROL PANEL" );
+#if __DEVMODE_DISPLAY_HANDLER__
+    u8g2.drawButtonUTF8(1, 1 + 2 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn1" );
+    u8g2.drawButtonUTF8(1, 1 + 3 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, ">Btn2" );
+    u8g2.drawButtonUTF8(1, 1 + 4 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn3" );
+    u8g2.drawButtonUTF8(1, 1 + 5 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn4" );
+    u8g2.drawButtonUTF8(1, 1 + 6 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn5" );
+#else
+    uint8_t total = programCollection->getTotal();
+    for(uint8_t i=0; i<total; i++) {
+      ProgramCapsule* capsule = programCollection->getItem(i);
+      u8g2.drawButtonUTF8(1, 1 + (i+2) * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, capsule->getTitle());
+    }
+#endif
   } while (u8g2.nextPage());
 }
 

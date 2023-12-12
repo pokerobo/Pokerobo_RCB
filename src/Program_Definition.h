@@ -7,11 +7,16 @@
 
 class ProgramTransmitter: public ProgramCapsule {
   public:
-    ProgramTransmitter(JoystickHandler* joystickHandler, RF24Tranceiver* tranceiver, uint64_t address);
+    ProgramTransmitter(JoystickHandler* joystickHandler,
+      RF24Tranceiver* tranceiver,
+      uint64_t address,
+      char* title);
+    char* getTitle();
     int begin();
     int check(void* action);
     int close();
   private:
+    char* _title;
     uint64_t _rf24Address = RF24_DEFAULT_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver;
     JoystickHandler* _joystickHandler;
@@ -19,11 +24,13 @@ class ProgramTransmitter: public ProgramCapsule {
 
 class ProgramReceiver: public ProgramCapsule {
   public:
-    ProgramReceiver(RF24Tranceiver* tranceiver, uint64_t address);
+    ProgramReceiver(RF24Tranceiver* tranceiver, uint64_t address, char* title);
+    char* getTitle();
     int begin();
     int check(void* action);
     int close();
   private:
+    char* _title;
     uint64_t _rf24Address = RF24_DEFAULT_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver;
 };
