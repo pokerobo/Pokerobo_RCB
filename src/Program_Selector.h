@@ -10,6 +10,9 @@
 #define PROGRAM_MODE_PLAYER                 5
 #define PROGRAM_MODE_TESTER                 9
 
+#define DASHBOARD_FLOW_CONFIGURATION        1
+#define DASHBOARD_FLOW_EXECUTION            2
+
 #define PROGRAM_MENU_TOGGLE_BUTTON          MASK_ANALOG_BUTTON
 
 #ifndef __DEVMODE_PROGRAM_SELECTOR__
@@ -29,12 +32,19 @@ class ProgramSelector {
 #endif
   protected:
     int wait_(int state);
+    int move_();
+    int enterDashboard_(JoystickAction* action);
+    int processDashboard_(JoystickAction* action);
+    int leaveDashboard_(JoystickAction* action);
+    int enterProgram_(JoystickAction* action);
+    int executeProgram_(JoystickAction* action);
+    int leaveProgram_(JoystickAction* action);
   private:
     uint8_t _mode = PROGRAM_MODE_PLAYER;
+    uint8_t _flow = DASHBOARD_FLOW_EXECUTION;
     ProgramCollection* _programCollection = NULL;
     DisplayHandler* _displayHandler = NULL;
     JoystickHandler* _joystickHandler = NULL;
-    int move_();
 };
 
 #endif

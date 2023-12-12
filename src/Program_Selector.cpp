@@ -27,6 +27,60 @@ int ProgramSelector::wait_(int state) {
   return state;
 }
 
+#if __DEVMODE_PROGRAM_SELECTOR__
+int ProgramSelector::move_() {
+  JoystickAction message;
+  _joystickHandler->input(&message);
+
+  uint16_t clickingFlags = message.getClickingFlags();
+  if ((clickingFlags & PROGRAM_MENU_TOGGLE_BUTTON)) {
+    switch(_flow) {
+      case DASHBOARD_FLOW_EXECUTION:
+        leaveProgram_(&message);
+        _flow = DASHBOARD_FLOW_CONFIGURATION;
+        return enterDashboard_(&message);
+      case DASHBOARD_FLOW_CONFIGURATION:
+        leaveDashboard_(&message);
+        _flow = DASHBOARD_FLOW_EXECUTION;
+        return enterProgram_(&message);
+    }
+  }
+
+  switch(_flow) {
+    case DASHBOARD_FLOW_CONFIGURATION:
+      return processDashboard_(&message);
+    case DASHBOARD_FLOW_EXECUTION:
+      return executeProgram_(&message);
+  }
+}
+
+int ProgramSelector::enterDashboard_(JoystickAction* action) {
+  if (_displayHandler != NULL) {
+    _displayHandler->render(_programCollection);
+  }
+  return 0;
+}
+
+int ProgramSelector::processDashboard_(JoystickAction* action) {
+  return 0;
+}
+
+int ProgramSelector::leaveDashboard_(JoystickAction* action) {
+  return 0;
+}
+
+int ProgramSelector::enterProgram_(JoystickAction* action) {
+  return 0;
+}
+
+int ProgramSelector::executeProgram_(JoystickAction* action) {
+  return _programCollection->getCurrentItem()->check(action);
+}
+
+int ProgramSelector::leaveProgram_(JoystickAction* action) {
+  return 0;
+}
+#else
 int ProgramSelector::move_() {
   JoystickAction message;
   _joystickHandler->input(&message);
@@ -54,6 +108,7 @@ int ProgramSelector::move_() {
 
   return 0;
 }
+#endif
 
 bool ProgramSelector::add(ProgramCapsule* programCapsule) {
   return _programCollection->add(programCapsule);
