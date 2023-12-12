@@ -4,6 +4,7 @@
 #include "Commons.h"
 #include "Message_Exchange.h"
 #include "Message_Renderer.h"
+#include "Program_Collection.h"
 
 class DisplayHandler: public MessageRenderer {
   public:
@@ -11,6 +12,7 @@ class DisplayHandler: public MessageRenderer {
     void clear();
     void splash(char* title, byte align = 0);
     void render(JoystickAction* message, MovingCommand* movingCommand=NULL, TransmissionCounter* counter=NULL);
+    void showMenu(ProgramCollection* programCollection=NULL);
   private:
     uint8_t _maxCharHeight = 8;
     uint8_t _maxCharWidth = 5;

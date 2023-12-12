@@ -23,7 +23,6 @@ void setup() {
   joystickHandler.begin();
 
   programSelector.set(&joystickHandler);
-  programSelector.set(&rf24Tranceiver, address);
   programSelector.set(&displayHandler);
 
   programSelector.add(new ProgramTransmitter(&joystickHandler, &rf24Tranceiver, address));

@@ -1,8 +1,8 @@
-#ifndef __PROGRAM_COLLECTIONS_H__
-#define __PROGRAM_COLLECTIONS_H__
+#ifndef __PROGRAM_DEFINITION_H__
+#define __PROGRAM_DEFINITION_H__
 
-#include "Joystick_Handler.h"
 #include "Program_Capsule.h"
+#include "Joystick_Handler.h"
 #include "RF24_Tranceiver.h"
 
 class ProgramTransmitter: public ProgramCapsule {

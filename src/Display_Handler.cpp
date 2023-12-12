@@ -104,6 +104,18 @@ void DisplayHandler::splash(char* title, byte align) {
   } while (u8g2.nextPage());
 }
 
+void DisplayHandler::showMenu(ProgramCollection* programCollection) {
+  u8g2.firstPage();
+  do {
+    u8g2.drawButtonUTF8(1, 1 + 1 * (_maxCharHeight), U8G2_BTN_BW1, 126,  0,  2, " Control Panel" );
+    u8g2.drawButtonUTF8(1, 1 + 2 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn2" );
+    u8g2.drawButtonUTF8(1, 1 + 3 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, ">Btn3" );
+    u8g2.drawButtonUTF8(1, 1 + 4 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn4" );
+    u8g2.drawButtonUTF8(1, 1 + 5 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn5" );
+    u8g2.drawButtonUTF8(1, 1 + 6 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn6" );
+  } while (u8g2.nextPage());
+}
+
 void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source);
 void renderTitle_(uint8_t lx, uint8_t ty, char* title);
 void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, char lines[][JOYSTICK_INFO_COLUMNS]);
