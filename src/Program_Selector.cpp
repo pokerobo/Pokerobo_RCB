@@ -31,11 +31,9 @@ int ProgramSelector::move_() {
   JoystickAction message;
   _joystickHandler->input(&message);
 
-  ProgramCapsule* program = _programCollection->getCurrentItem();
-
   uint16_t clickingFlags = message.getClickingFlags();
   if (!(clickingFlags & PROGRAM_MENU_TOGGLE_BUTTON)) {
-    return program->check(&message);
+    return _programCollection->getCurrentItem()->check(&message);
   }
 
   if (_programCollection->getTotal() < 2) {
@@ -47,6 +45,7 @@ int ProgramSelector::move_() {
     programNextIndex = 0;
   }
   ProgramCapsule* programNext = _programCollection->getItem(programNextIndex);
+  ProgramCapsule* program = _programCollection->getCurrentItem();
 
   program->close();
   programNext->begin();

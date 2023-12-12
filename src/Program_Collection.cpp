@@ -1,7 +1,7 @@
 #include "Program_Collection.h"
 
 bool ProgramCollection::isReady() {
-  return _programCapsulesTotal > 0 && _programIndex < PROGRAM_CAPSULES_LIMIT;
+  return _programCapsulesTotal > 0 && _programIndex < PROGRAM_COLLECTION_LIMIT;
 }
 
 uint8_t ProgramCollection::getTotal() {
@@ -55,7 +55,7 @@ bool ProgramCollection::add(ProgramCapsule* programCapsule) {
   if (programCapsule == NULL) {
     return false;
   }
-  if (_programCapsulesTotal > PROGRAM_CAPSULES_LIMIT) {
+  if (_programCapsulesTotal > PROGRAM_COLLECTION_LIMIT) {
     return false;
   }
   for(int i=0; i<_programCapsulesTotal; i++) {

@@ -3,9 +3,9 @@
 
 #include "Program_Capsule.h"
 
-#ifndef PROGRAM_CAPSULES_LIMIT
-#define PROGRAM_CAPSULES_LIMIT              20
-#endif//PROGRAM_CAPSULES_LIMIT
+#ifndef PROGRAM_COLLECTION_LIMIT
+#define PROGRAM_COLLECTION_LIMIT              20
+#endif//PROGRAM_COLLECTION_LIMIT
 
 class ProgramCollection {
   public:
@@ -25,10 +25,10 @@ class ProgramCollection {
     bool updateFrameEnd(uint8_t pos);
     static const uint8_t frameHeight;
   private:
-    ProgramCapsule* _programCapsules[PROGRAM_CAPSULES_LIMIT] = {};
+    ProgramCapsule* _programCapsules[PROGRAM_COLLECTION_LIMIT] = {};
     uint8_t _programCapsulesTotal = 0;
-    uint8_t _programIndex = PROGRAM_CAPSULES_LIMIT;
-    uint8_t _focusIndex = PROGRAM_CAPSULES_LIMIT;
+    uint8_t _programIndex = PROGRAM_COLLECTION_LIMIT;
+    uint8_t _focusIndex = PROGRAM_COLLECTION_LIMIT;
     uint8_t _frameBegin = 0;
 };
 
