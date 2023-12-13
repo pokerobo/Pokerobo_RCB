@@ -27,8 +27,16 @@ void setup() {
 
   programSelector.add(new ProgramTransmitter(&joystickHandler, &rf24Tranceiver, address,
       " Car RC Dashboard"));
+  programSelector.add(new ProgramTransmitter(&joystickHandler, &rf24Tranceiver, 0LL,
+      " Car RC TX:default"));
   programSelector.add(new ProgramReceiver(&rf24Tranceiver, 0LL,
       " Car RC RX:default"));
+  programSelector.add(new ProgramReceiver(&rf24Tranceiver, 0x18580831LL,
+      " Car RC RX:18580831"));
+  programSelector.add(new ProgramReceiver(&rf24Tranceiver, 0x18580902LL,
+      " Car RC RX:18580902"));
+  programSelector.add(new ProgramReceiver(&rf24Tranceiver, 0x18580903LL,
+      " Car RC RX:18580903"));
 
   programSelector.begin(PROGRAM_MODE_TESTER);
 }

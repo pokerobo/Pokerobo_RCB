@@ -111,7 +111,7 @@ void DisplayHandler::splash(char* title, byte align) {
 void DisplayHandler::render(ProgramCollection* programCollection) {
   u8g2.firstPage();
   do {
-    u8g2.drawButtonUTF8(1, 1 + 1 * (_maxCharHeight), U8G2_BTN_SHADOW0|U8G2_BTN_BW1, 126,  0,  2, "CONTROL PANEL" );
+    u8g2.drawButtonUTF8(1, 1 + 1 * (_maxCharHeight), U8G2_BTN_SHADOW0|U8G2_BTN_BW1, 126,  0,  2, " CONTROL PANEL" );
 #if __DEVMODE_DISPLAY_HANDLER__
     u8g2.drawButtonUTF8(1, 1 + 2 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn1" );
     u8g2.drawButtonUTF8(1, 1 + 3 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, ">Btn2" );
@@ -120,9 +120,21 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
     u8g2.drawButtonUTF8(1, 1 + 6 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn5" );
 #else
     uint8_t total = programCollection->getTotal();
+    uint8_t current = programCollection->getCurrentIndex();
+    uint8_t focus = programCollection->getFocusIndex();
     for(uint8_t i=0; i<total; i++) {
+      uint16_t flags = U8G2_BTN_BW1;
       ProgramCapsule* capsule = programCollection->getItem(i);
-      u8g2.drawButtonUTF8(1, 1 + (i+2) * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, capsule->getTitle());
+      char* title = capsule->getTitle();
+      if (i == focus) {
+        flags |= U8G2_BTN_INV;
+      }
+      if (i == current) {
+        title[0] = '>';
+      } else {
+        title[0] = ' ';
+      }
+      u8g2.drawButtonUTF8(1, 1 + (i+2) * (_maxCharHeight + 2), flags, 126,  0,  1, title);
     }
 #endif
   } while (u8g2.nextPage());

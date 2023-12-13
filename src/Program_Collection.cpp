@@ -16,9 +16,18 @@ bool ProgramCollection::setCurrentIndex(uint8_t j) {
   if (j >= _programCapsulesTotal) {
     return false;
   }
-  if (j != _programIndex) {
-    _programIndex = j;
+  if (j == _programIndex) {
+    return true;
   }
+  ProgramCapsule* currentItem = getItem(_programIndex);
+  ProgramCapsule* newItem = getItem(j);
+  if (currentItem != NULL) {
+    currentItem->close();
+  }
+  if (newItem != NULL) {
+    newItem->begin();
+  }
+  _programIndex = j;
   return true;
 }
 
@@ -37,7 +46,15 @@ bool ProgramCollection::setFocusIndex(uint8_t j) {
 }
 
 bool ProgramCollection::setFocusAsCurrent() {
-  return setCurrentIndex(_focusIndex);
+  return setCurrentIndex(getFocusIndex());
+}
+
+bool ProgramCollection::moveFocusUp() {
+  return setFocusIndex(getFocusIndex() - 1);
+}
+
+bool ProgramCollection::moveFocusDown() {
+  return setFocusIndex(getFocusIndex() + 1);
 }
 
 ProgramCapsule* ProgramCollection::getItem(uint8_t i) {
@@ -65,7 +82,9 @@ bool ProgramCollection::add(ProgramCapsule* programCapsule) {
   }
   _programCapsules[_programCapsulesTotal++] = programCapsule;
   if (_programCapsulesTotal == 1) {
-    _programIndex = 0;
+    setFrameBegin(0);
+    setCurrentIndex(0);
+    setFocusIndex(0);
   }
   return true;
 }
@@ -76,7 +95,7 @@ uint8_t ProgramCollection::getFrameBegin() {
   return _frameBegin;
 }
 
-bool ProgramCollection::updateFrameBegin(uint8_t pos) {
+bool ProgramCollection::setFrameBegin(uint8_t pos) {
   if (pos >= _programCapsulesTotal) {
     return false;
   }
@@ -92,7 +111,7 @@ uint8_t ProgramCollection::getFrameEnd() {
   return frameEnd;
 }
 
-bool ProgramCollection::updateFrameEnd(uint8_t pos) {
+bool ProgramCollection::setFrameEnd(uint8_t pos) {
   if (pos >= _programCapsulesTotal) {
     return false;
   }

@@ -309,6 +309,36 @@ byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const 
 }
 #endif
 
+uint8_t JoystickHandler::checkArrowKeysToggle(uint16_t x, uint16_t y) {
+  uint8_t pressed = 0;
+  if (x < _middleX - 255) {
+    pressed |= 0b0001; // LEFT
+  } else if (x > _middleX + 255) {
+    pressed |= 0b1000; // RIGHT
+  }
+  if (y < _middleY - 255) {
+    pressed |= 0b0100; // DOWN
+  } else if (y > _middleX + 255) {
+    pressed |= 0b0010; // UP
+  }
+
+  uint8_t clicked = pressed;
+  for (int i = 0; i < 4; i++) {
+    uint8_t mask = 1U << i;
+    clicked &= (~mask);
+    if (pressed & mask) {
+      _arrowKeysToggleTrail |= mask;
+    } else {
+      if (_arrowKeysToggleTrail & mask) {
+        _arrowKeysToggleTrail &= (~mask);
+        clicked |= mask;
+      }
+    }
+  }
+
+  return clicked;
+}
+
 uint16_t JoystickHandler::checkButtonClickingFlags(uint16_t pressed) {
   uint16_t clicked = pressed;
   for (int i = 0; i < TOTAL_OF_BUTTONS; i++) {

@@ -62,6 +62,22 @@ int ProgramSelector::enterDashboard_(JoystickAction* action) {
 }
 
 int ProgramSelector::processDashboard_(JoystickAction* action) {
+  uint8_t toggle = _joystickHandler->checkArrowKeysToggle(action->getX(), action->getY());
+  if (toggle & 0b0001) { // LEFT -> BACK
+    _flow = DASHBOARD_FLOW_EXECUTION;
+  } else
+  if (toggle & 0b0010) { // UP -> PREV
+    _programCollection->moveFocusUp();
+    _displayHandler->render(_programCollection);
+  } else
+  if (toggle & 0b0100) { // DOWN -> NEXT
+    _programCollection->moveFocusDown();
+    _displayHandler->render(_programCollection);
+  } else
+  if (toggle & 0b1000) { // RIGHT -> SELECT
+    _programCollection->setFocusAsCurrent();
+    _displayHandler->render(_programCollection);
+  }
   return 0;
 }
 

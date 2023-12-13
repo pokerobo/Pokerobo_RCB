@@ -101,6 +101,7 @@ class JoystickHandler {
     void set(MessageSender* messageSender);
     void set(MessageRenderer* messageRenderer);
     void set(MovingResolver* movingResolver);
+    uint8_t checkArrowKeysToggle(uint16_t x, uint16_t y);
   protected:
     uint16_t readButtonStates();
     uint16_t checkButtonClickingFlags(uint16_t pressed);
@@ -117,6 +118,8 @@ class JoystickHandler {
     int16_t _middleY = JOYSTICK_MID_Y;
     int16_t _maxX = JOYSTICK_MAX_X;
     int16_t _maxY = JOYSTICK_MAX_Y;
+    bool _arrowKeysToggleTrapped = true;
+    uint8_t _arrowKeysToggleTrail = 0;
     MessageRenderer* _messageRenderer = NULL;
 #if MULTIPLE_SENDERS_SUPPORTED
     MessageSender* _messageSenders[MESSAGE_EXCHANGE_MAX] = {};
