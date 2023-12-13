@@ -82,6 +82,7 @@ int ProgramSelector::processDashboard_(JoystickAction* action) {
 }
 
 int ProgramSelector::leaveDashboard_(JoystickAction* action) {
+  _programCollection->setFocusAsCurrent();
   return 0;
 }
 

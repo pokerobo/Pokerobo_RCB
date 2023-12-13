@@ -345,6 +345,8 @@ byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, Joyst
 }
 #endif
 
+#if RECALCULATING_MOVING_COMMAND
 void RF24Receiver::set(MovingResolver* movingResolver) {
   _movingResolver = movingResolver;
 }
+#endif
