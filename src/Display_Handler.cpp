@@ -122,7 +122,9 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
     uint8_t total = programCollection->getTotal();
     uint8_t current = programCollection->getCurrentIndex();
     uint8_t focus = programCollection->getFocusIndex();
-    for(uint8_t i=0; i<total; i++) {
+    uint8_t begin = programCollection->getFrameBegin();
+    uint8_t end = programCollection->getFrameEnd();
+    for(uint8_t i=begin; i<=end; i++) {
       uint16_t flags = U8G2_BTN_BW1;
       ProgramCapsule* capsule = programCollection->getItem(i);
       char* title = capsule->getTitle();
@@ -134,7 +136,7 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
       } else {
         title[0] = ' ';
       }
-      u8g2.drawButtonUTF8(1, 1 + (i+2) * (_maxCharHeight + 2), flags, 126,  0,  1, title);
+      u8g2.drawButtonUTF8(1, 1 + (i-begin+2) * (_maxCharHeight + 2), flags, 126,  0,  1, title);
     }
 #endif
   } while (u8g2.nextPage());

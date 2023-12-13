@@ -39,9 +39,16 @@ bool ProgramCollection::setFocusIndex(uint8_t j) {
   if (j >= _programCapsulesTotal) {
     return false;
   }
-  if (j != _focusIndex) {
-    _focusIndex = j;
+  if (j == _focusIndex) {
+    return false;
   }
+  if (j < getFrameBegin()) {
+    setFrameBegin(j);
+  }
+  if (j > getFrameEnd()) {
+    setFrameEnd(j);
+  }
+  _focusIndex = j;
   return true;
 }
 
@@ -106,13 +113,17 @@ bool ProgramCollection::setFrameBegin(uint8_t pos) {
 uint8_t ProgramCollection::getFrameEnd() {
   uint8_t frameEnd = _frameBegin + frameHeight - 1;
   if (frameEnd >= _programCapsulesTotal) {
-    return _programCapsulesTotal - 1;
+    frameEnd = _programCapsulesTotal - 1;
   }
   return frameEnd;
 }
 
 bool ProgramCollection::setFrameEnd(uint8_t pos) {
   if (pos >= _programCapsulesTotal) {
+    return false;
+  }
+  uint8_t frameEnd = _frameBegin + frameHeight - 1;
+  if (pos == frameEnd) {
     return false;
   }
   if (pos < frameHeight - 1) {
