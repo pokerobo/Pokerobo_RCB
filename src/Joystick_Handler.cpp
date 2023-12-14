@@ -74,10 +74,10 @@ void JoystickHandler::detect() {
   _middleX = minX + (sumX / JOYSTICK_DETECTION_TOTAL);
   _middleY = minY + (sumY / JOYSTICK_DETECTION_TOTAL);
 
-#if __DEBUG_LOG_JOYSTICK_HANDLER__
+  #if __DEBUG_LOG_JOYSTICK_HANDLER__
   Serial.print("Origin"), Serial.print(' '), Serial.print('X'), Serial.print(':'), Serial.print(' '), Serial.println(_middleX);
   Serial.print("Origin"), Serial.print(' '), Serial.print('Y'), Serial.print(':'), Serial.print(' '), Serial.println(_middleY);
-#endif
+  #endif
 }
 
 void JoystickHandler::set(MessageSender* messageSender) {
@@ -92,13 +92,13 @@ bool JoystickHandler::add(MessageSender* messageSender) {
   if (_messageSendersTotal > MESSAGE_EXCHANGE_MAX) {
     return false;
   }
-#if __STRICT_MODE__
+  #if __STRICT_MODE__
   for(int i=0; i<_messageSendersTotal; i++) {
     if (_messageSenders[i] == messageSender) {
       return false;
     }
   }
-#endif
+  #endif
   _messageSenders[_messageSendersTotal++] = messageSender;
   return true;
 }
@@ -113,17 +113,17 @@ void JoystickHandler::set(MovingResolver* movingResolver) {
 }
 
 int JoystickHandler::begin() {
-#if __STRICT_MODE__
+  #if __STRICT_MODE__
   verify();
-#endif
+  #endif
   for(int i=0; i < TOTAL_OF_BUTTONS; i++) {
     if (!((JOYSTICK_HIGH_LEVEL_PINS >> i) & 1)) {
       continue;
     }
-#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+    #if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
     pinMode(pinOfButtons[i], INPUT_PULLUP);
     continue;
-#endif
+    #endif
     pinMode(pinOfButtons[i], INPUT);
     digitalWrite(pinOfButtons[i], HIGH);
   }
@@ -148,11 +148,11 @@ int JoystickHandler::check(JoystickAction* action) {
     _movingResolver->resolve(&movingCommand, action, 3);
   }
 
-#if JOYSTICK_CHECKING_CHANGE
+  #if JOYSTICK_CHECKING_CHANGE
   if (!isChanged(action)) {
     return 1;
   }
-#endif
+  #endif
 
   if (_messageSender != NULL) {
     MessagePacket packet(action, &movingCommand);
@@ -162,7 +162,7 @@ int JoystickHandler::check(JoystickAction* action) {
     }
   }
 
-#if MULTIPLE_SENDERS_SUPPORTED
+  #if MULTIPLE_SENDERS_SUPPORTED
   MessagePacket packet2(action, &movingCommand);
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageSendersTotal; i++) {
@@ -175,7 +175,7 @@ int JoystickHandler::check(JoystickAction* action) {
       countNulls++;
     }
   }
-#endif
+  #endif
 
   if (_messageRenderer != NULL) {
     _messageRenderer->render(action, &movingCommand, &_counter);
@@ -204,23 +204,23 @@ inline uint16_t adjustAxis(uint16_t z, uint16_t _middleZ, uint16_t _maxZ);
 JoystickAction* JoystickHandler::input(JoystickAction* action) {
   if (action == NULL) return action;
 
-#if __DEBUG_LOG_JOYSTICK_HANDLER__
+  #if __DEBUG_LOG_JOYSTICK_HANDLER__
   if (_counter.ordinalNumber < 10) {
     Serial.print("Origin"), Serial.print(' '), Serial.print('X'), Serial.print(':'), Serial.print(' '), Serial.println(_middleX);
     Serial.print("Origin"), Serial.print(' '), Serial.print('Y'), Serial.print(':'), Serial.print(' '), Serial.println(_middleY);
   }
-#endif
+  #endif
 
   uint16_t pressed = readButtonStates();
 
   uint16_t x = analogRead(JOYSTICK_PIN_X_AXIS);
   uint16_t y = analogRead(JOYSTICK_PIN_Y_AXIS);
 
-#if __DEBUG_LOG_JOYSTICK_HANDLER__
+  #if __DEBUG_LOG_JOYSTICK_HANDLER__
   char log[32] = { 0 };
   buildJoystickActionLogStr(log, pressed, x, y, _counter.ordinalNumber);
   Serial.print('M'), Serial.print('1'), Serial.print(':'), Serial.print(' '), Serial.println(log);
-#endif
+  #endif
 
   if (x > _maxX) {
     _maxX = x;
@@ -232,7 +232,7 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
   action->setSource(TX_MSG);
   action->setOrigin(x, y);
 
-#if __SPACE_SAVING_MODE__
+  #if __SPACE_SAVING_MODE__
   if (x < _middleX) {
     x = map(x, 0, _middleX, 0, 512);
   } else {
@@ -244,15 +244,15 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
   } else {
     y = map(y, _middleY, _maxY, 512, 1024);
   }
-#else
+  #else
   x = adjustAxis(x, _middleX, _maxX);
   y = adjustAxis(y, _middleY, _maxY);
-#endif
+  #endif
 
-#if __DEBUG_LOG_JOYSTICK_HANDLER__
-    buildJoystickActionLogStr(log, pressed, x, y, _counter.ordinalNumber);
-    Serial.print('M'), Serial.print('2'), Serial.print(':'), Serial.print(' '), Serial.println(log);
-#endif
+  #if __DEBUG_LOG_JOYSTICK_HANDLER__
+  buildJoystickActionLogStr(log, pressed, x, y, _counter.ordinalNumber);
+  Serial.print('M'), Serial.print('2'), Serial.print(':'), Serial.print(' '), Serial.println(log);
+  #endif
 
   action->update(pressed, x, y, _counter.ordinalNumber);
   action->setClickingFlags(checkButtonClickingFlags(pressed));
@@ -290,14 +290,14 @@ byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const 
       ok = messageSender->write(buf, len);
     }
 
-#if __DEBUG_LOG_JOYSTICK_HANDLER__
+    #if __DEBUG_LOG_JOYSTICK_HANDLER__
     Serial.print('#'), Serial.print(_counter.ordinalNumber), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {
       Serial.println('v');
     } else {
       Serial.println('x');
     }
-#endif
+    #endif
 
     if (ok) {
       return code;
@@ -381,51 +381,51 @@ uint16_t JoystickHandler::readButtonStates() {
 
   if(digitalRead(PIN_UP_BUTTON)==LOW) {
     pressed |= (1 << BIT_UP_BUTTON);
-#if __DEBUG_LOG_JOYSTICK_HANDLER__
+    #if __DEBUG_LOG_JOYSTICK_HANDLER__
     Serial.print("UP"), Serial.print(' '), Serial.print("Button Pressed");
-#endif
+    #endif
   }
 
   if(digitalRead(PIN_RIGHT_BUTTON)==LOW) {
     pressed |= (1 << BIT_RIGHT_BUTTON);
-#if __DEBUG_LOG_JOYSTICK_HANDLER__
+    #if __DEBUG_LOG_JOYSTICK_HANDLER__
     Serial.print("RIGHT"), Serial.print(' '), Serial.print("Button Pressed");
-#endif
+    #endif
   }
 
   if(digitalRead(PIN_DOWN_BUTTON)==LOW) {
     pressed |= (1 << BIT_DOWN_BUTTON);
-#if __DEBUG_LOG_JOYSTICK_HANDLER__
+    #if __DEBUG_LOG_JOYSTICK_HANDLER__
     Serial.print("DOWN"), Serial.print(' '), Serial.print("Button Pressed");
-#endif
+    #endif
   }
 
   if(digitalRead(PIN_LEFT_BUTTON)==LOW) {
     pressed |= (1 << BIT_LEFT_BUTTON);
-#if __DEBUG_LOG_JOYSTICK_HANDLER__
+    #if __DEBUG_LOG_JOYSTICK_HANDLER__
     Serial.print("LEFT"), Serial.print(' '), Serial.print("Button Pressed");
-#endif
+    #endif
   }
 
   if(digitalRead(PIN_START_BUTTON)==LOW) {
     pressed |= (1 << BIT_START_BUTTON);
-#if __DEBUG_LOG_JOYSTICK_HANDLER__
+    #if __DEBUG_LOG_JOYSTICK_HANDLER__
     Serial.print("START"), Serial.print(' '), Serial.print("Button Pressed");
-#endif
+    #endif
   }
 
   if(digitalRead(PIN_SELECT_BUTTON)==LOW) {
     pressed |= (1 << BIT_SELECT_BUTTON);
-#if __DEBUG_LOG_JOYSTICK_HANDLER__
+    #if __DEBUG_LOG_JOYSTICK_HANDLER__
     Serial.print("SELECT"), Serial.print(' '), Serial.print("Button Pressed");
-#endif
+    #endif
   }
 
   if(digitalRead(PIN_ANALOG_BUTTON)==LOW) {
     pressed |= (1 << BIT_ANALOG_BUTTON);
-#if __DEBUG_LOG_JOYSTICK_HANDLER__
+    #if __DEBUG_LOG_JOYSTICK_HANDLER__
     Serial.print("ANALOG"), Serial.print(' '), Serial.print("Button Pressed");
-#endif
+    #endif
   }
 
   return pressed;

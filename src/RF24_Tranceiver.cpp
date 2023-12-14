@@ -90,7 +90,7 @@ bool RF24Transmitter::write(const void* buf, uint8_t len) {
   RF24* _tranceiver = (RF24*)_transmitter;
   bool result = _tranceiver->write(buf, len);
   if (!result) {
-#if __DEBUG_LOG_RF24_TRANCEIVER__
+    #if __DEBUG_LOG_RF24_TRANCEIVER__
     if (_tranceiver->isChipConnected()) {
       Serial.print("RF24Transmitter"), Serial.print("::"), Serial.print("write"),
         Serial.print('-'), Serial.print('>'),
@@ -100,7 +100,7 @@ bool RF24Transmitter::write(const void* buf, uint8_t len) {
         Serial.print(':'), Serial.print(' '),
         Serial.println("broken");
     }
-#endif
+    #endif
   }
   _status = result ? ACK_OK : ACK_FAILED;
   return result;
@@ -135,14 +135,14 @@ void RF24Receiver::reset() {
   if (_messageRenderer != NULL) {
     _messageRenderer->clear();
   }
-#if MULTIPLE_RENDERERS_SUPPORTED
+  #if MULTIPLE_RENDERERS_SUPPORTED
   for(int i=0; i<_messageRenderersTotal; i++) {
     MessageRenderer* messageRenderer = _messageRenderers[i];
     if (messageRenderer != NULL) {
       messageRenderer->clear();
     }
   }
-#endif
+  #endif
 }
 
 bool RF24Receiver::available() {
@@ -162,7 +162,7 @@ bool RF24Receiver::available() {
   _discontinuityCount++;
 
   if (!status && _messageRenderer != NULL) {
-#if __OPTIMIZING_DYNAMIC_MEMORY__
+    #if __OPTIMIZING_DYNAMIC_MEMORY__
     char info[14] = { 0 };
     if (_tranceiver->isChipConnected()) {
       if (_discontinuityCount > RF24_RECEIVER_DISCONTINUITY_MAX) {
@@ -199,7 +199,7 @@ bool RF24Receiver::available() {
       info[13] = '\0';
       _messageRenderer->splash(info, 5);
     }
-#else
+    #else
     if (_tranceiver->isChipConnected()) {
       if (_discontinuityCount > RF24_RECEIVER_DISCONTINUITY_MAX) {
         char info[14] = { 'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0' };
@@ -209,7 +209,7 @@ bool RF24Receiver::available() {
       char info[14] = { 'C', 'o', 'n', 'n', 'e', 'c', 't', 'i', 'n', 'g', '.', '.', '.', '\0' };
       _messageRenderer->splash(info, 5);
     }
-#endif
+    #endif
   }
   return status;
 }
@@ -234,13 +234,13 @@ int RF24Receiver::check() {
 
   bool ok = decodeMessage(msg, MESSAGE_SIGNATURE, &buttons, &jX, &jY, &count);
 
-#if __DEBUG_LOG_RF24_TRANCEIVER__
+  #if __DEBUG_LOG_RF24_TRANCEIVER__
   char log[32] = { 0 };
   buildJoystickActionLogStr(log, buttons, jX, jY, count);
   Serial.print("decode"), Serial.print('('), Serial.print(log), Serial.print(')'),
       Serial.print(' '), Serial.print('-'), Serial.print('>'), Serial.print(' '), Serial.print(ok);
   Serial.println();
-#endif
+  #endif
 
   if (!ok) {
     return -1;
@@ -252,15 +252,15 @@ int RF24Receiver::check() {
   MovingCommand movingCommandInstance;
   MovingCommand* movingCommand = NULL;
 
-#if RECALCULATING_MOVING_COMMAND
+  #if RECALCULATING_MOVING_COMMAND
   if (_movingResolver != NULL) {
     movingCommand = &movingCommandInstance;
     _movingResolver->resolve(movingCommand, &message);
   }
-#else
+  #else
   movingCommandInstance.deserialize(msg + strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize);
   movingCommand = &movingCommandInstance;
-#endif
+  #endif
 
   if (_counter.ordinalNumber == 0) {
     _counter.baselineNumber = count;
@@ -280,7 +280,7 @@ int RF24Receiver::check() {
     _messageRenderer->render(&message, movingCommand, &_counter);
   }
 
-#if MULTIPLE_RENDERERS_SUPPORTED
+  #if MULTIPLE_RENDERERS_SUPPORTED
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageRenderersTotal; i++) {
     int8_t status = invoke(_messageRenderers[i], i+1, &message, movingCommand, &_counter);
@@ -292,7 +292,7 @@ int RF24Receiver::check() {
       countNulls++;
     }
   }
-#endif
+  #endif
 
   return 0;
 }
@@ -309,13 +309,13 @@ bool RF24Receiver::add(MessageRenderer* messageRenderer) {
   if (_messageRenderersTotal > MESSAGE_RENDERERS_LIMIT) {
     return false;
   }
-#if __STRICT_MODE__
+  #if __STRICT_MODE__
   for(int i=0; i<_messageRenderersTotal; i++) {
     if (_messageRenderers[i] == messageRenderer) {
       return false;
     }
   }
-#endif
+  #endif
   _messageRenderers[_messageRenderersTotal++] = messageRenderer;
   return true;
 }
@@ -327,14 +327,14 @@ byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, Joyst
   if (messageRenderer != NULL) {
     uint8_t code = 1 << index;
     bool ok = messageRenderer->render(message, movingCommand, counter);
-#if __DEBUG_LOG_RF24_TRANCEIVER__
+    #if __DEBUG_LOG_RF24_TRANCEIVER__
     Serial.print('#'), Serial.print(message->getExtras()), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {
       Serial.println('v');
     } else {
       Serial.println('x');
     }
-#endif
+    #endif
     if (ok) {
       return code;
     } else {

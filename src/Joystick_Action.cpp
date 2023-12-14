@@ -83,7 +83,7 @@ MessageInterface* JoystickAction::deserialize(uint8_t* buf) {
 }
 
 char* buildJoystickActionLogStr(char* log, uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras) {
-#if __OPTIMIZING_DYNAMIC_MEMORY__
+  #if __OPTIMIZING_DYNAMIC_MEMORY__
   char fmt[12] = { 0 };
   fmt[ 0] = '%';
   fmt[ 1] = 'd';
@@ -97,9 +97,9 @@ char* buildJoystickActionLogStr(char* log, uint16_t buttons, uint16_t x, uint16_
   fmt[ 9] = '%';
   fmt[10] = 'd';
   fmt[11] = '\0';
-#else
+  #else
   char fmt[12] = { '%', 'd', ',', '%', 'd', ',', '%', 'd', ',', '%', 'd', '\0' };
-#endif
+  #endif
 
   sprintf(log, fmt, buttons, x, y, extras);
 

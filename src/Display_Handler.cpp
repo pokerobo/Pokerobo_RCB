@@ -57,10 +57,10 @@ U8G2_ST7567_ENH_DG128064I_1_HW_I2C u8g2(U8G2_R2, LCD_PIN_SCL, LCD_PIN_SDA, U8X8_
 
 int DisplayHandler::begin() {
   Wire.begin();
-#if defined(WIRE_HAS_TIMEOUT)
+  #if defined(WIRE_HAS_TIMEOUT)
   // Wire.setWireTimeout(timeout, reset_on_timeout)
   Wire.setWireTimeout(3000, true);
-#endif
+  #endif
   u8g2.setI2CAddress(0x3F * 2); 
   u8g2.setBusClock(200000);
   u8g2.begin();
@@ -70,14 +70,14 @@ int DisplayHandler::begin() {
   _maxCharHeight = u8g2.getMaxCharHeight();
   _maxCharWidth = u8g2.getMaxCharWidth();
 
-#if __DEBUG_LOG_DISPLAY_HANDLER__
+  #if __DEBUG_LOG_DISPLAY_HANDLER__
   // maxCharHeight: 8
   Serial.print("max"), Serial.print("Char"), Serial.print("Height"), Serial.print(':'),
       Serial.print(' '), Serial.println(_maxCharHeight);
   // maxCharWidth: 5
   Serial.print("max"), Serial.print("Char"), Serial.print("Width"), Serial.print(':'),
       Serial.print(' '), Serial.println(_maxCharWidth);
-#endif
+  #endif
 
   return 1;
 }
@@ -90,7 +90,7 @@ void DisplayHandler::splash(char* title, byte align) {
   if (title == NULL) return;
 
   uint8_t left = 0;
-#if !__SPACE_SAVING_MODE__
+  #if !__SPACE_SAVING_MODE__
   uint8_t len = strlen(title);
   uint8_t pixel = len * _maxCharWidth;
   if (pixel < SCREEN_WIDTH) {
@@ -98,9 +98,9 @@ void DisplayHandler::splash(char* title, byte align) {
       left = (SCREEN_WIDTH - pixel) / 2;
     }
   }
-#else
+  #else
   left = align * _maxCharWidth;
-#endif
+  #endif
 
   u8g2.firstPage();
   do {
@@ -112,13 +112,13 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
   u8g2.firstPage();
   do {
     u8g2.drawButtonUTF8(1, 1 + 1 * (_maxCharHeight), U8G2_BTN_SHADOW0|U8G2_BTN_BW1, 126,  0,  2, " CONTROL PANEL" );
-#if __DEVMODE_DISPLAY_HANDLER__
+    #if __DEVMODE_DISPLAY_HANDLER__
     u8g2.drawButtonUTF8(1, 1 + 2 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn1" );
     u8g2.drawButtonUTF8(1, 1 + 3 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, ">Btn2" );
     u8g2.drawButtonUTF8(1, 1 + 4 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn3" );
     u8g2.drawButtonUTF8(1, 1 + 5 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn4" );
     u8g2.drawButtonUTF8(1, 1 + 6 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn5" );
-#else
+    #else
     uint8_t total = programCollection->getTotal();
     uint8_t current = programCollection->getCurrentIndex();
     uint8_t focus = programCollection->getFocusIndex();
@@ -138,7 +138,7 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
       }
       u8g2.drawButtonUTF8(1, 1 + (i-begin+2) * (_maxCharHeight + 2), flags, 126,  0,  1, title);
     }
-#endif
+    #endif
   } while (u8g2.nextPage());
 }
 
@@ -161,7 +161,7 @@ void DisplayHandler::render(JoystickAction* message, MovingCommand* movingComman
 
   char lines[COORD_LINES_TOTAL][JOYSTICK_INFO_COLUMNS] = { {}, {}, {}, {}, {} };
 
-#if __OPTIMIZING_DYNAMIC_MEMORY__
+  #if __OPTIMIZING_DYNAMIC_MEMORY__
   char fmt[JOYSTICK_INFO_COLUMNS] = { 0 };
   fmt[0] = '~';
   fmt[1] = 'X';
@@ -187,7 +187,7 @@ void DisplayHandler::render(JoystickAction* message, MovingCommand* movingComman
   sprintf(lines[COORD_LINE_RAW_X], fmt, message->getOriginX());
   fmt[1] = 'Y';
   sprintf(lines[COORD_LINE_RAW_Y], fmt, message->getOriginY());
-#else
+  #else
   char fmt1[JOYSTICK_INFO_COLUMNS] = { '~', 'X', ':', '%', ' ', '4', 'd', '\0' };
   sprintf(lines[COORD_LINE_X], fmt1, nX);
   fmt1[1] = 'Y';
@@ -197,7 +197,7 @@ void DisplayHandler::render(JoystickAction* message, MovingCommand* movingComman
   sprintf(lines[COORD_LINE_RAW_X], fmt2, message->getOriginX());
   fmt2[1] = 'Y';
   sprintf(lines[COORD_LINE_RAW_Y], fmt2, message->getOriginY());
-#endif
+  #endif
 
   uint16_t pressingFlags = message->getPressingFlags();
   lines[COORD_LINE_FLAGS][POS_UP_BUTTON] = idleButtonIcon(buttonOffs, pressingFlags, MASK_UP_BUTTON, 'U');
@@ -353,12 +353,12 @@ void drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, i
 }
 
 void renderJoystickPad_(uint8_t lx, uint8_t ty, uint8_t r, uint8_t ir, int x, int y) {
-#if JOYSTICK_PAD_STYLE_ACTIVE == JOYSTICK_PAD_STYLE_CIRCLE
+  #if JOYSTICK_PAD_STYLE_ACTIVE == JOYSTICK_PAD_STYLE_CIRCLE
   return drawJoystickCircle(lx + JOYSTICK_PAD_OX, ty + JOYSTICK_PAD_OY, r, ir, x, y);
-#endif
-#if JOYSTICK_PAD_STYLE_ACTIVE == JOYSTICK_PAD_STYLE_SQUARE1
+  #endif
+  #if JOYSTICK_PAD_STYLE_ACTIVE == JOYSTICK_PAD_STYLE_SQUARE1
   return drawJoystickSquare1(lx + JOYSTICK_PAD_OX, ty + JOYSTICK_PAD_OY, r, ir, x, y);
-#endif
+  #endif
   return drawJoystickSquare2(lx + JOYSTICK_PAD_OX, ty + JOYSTICK_PAD_OY, r, ir, x, y);
 }
 
@@ -401,7 +401,7 @@ void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, 
 
   char line[JOYSTICK_INFO_COLUMNS] = {};
 
-#if __OPTIMIZING_DYNAMIC_MEMORY__
+  #if __OPTIMIZING_DYNAMIC_MEMORY__
   char format[6] = { 0 };
   format[0] = '%';
   format[1] = ' ';
@@ -409,9 +409,9 @@ void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, 
   format[3] = 'l';
   format[4] = 'd';
   format[5] = '\0';
-#else
+  #else
   char format[6] = { '%', ' ', '7', 'l', 'd', '\0' };
-#endif
+  #endif
 
   sprintf(line, format, counter->ordinalNumber - counter->baselineNumber);
   u8g2.drawStr(lx, ty + 1 + _maxCharHeight, line);

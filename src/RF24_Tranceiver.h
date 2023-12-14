@@ -32,28 +32,28 @@ class RF24Receiver {
     int begin(uint64_t address=RF24_DEFAULT_ADDRESS, void* radio = NULL);
     int check();
     void set(MessageRenderer* messageRenderer);
-#if MULTIPLE_RENDERERS_SUPPORTED
+    #if MULTIPLE_RENDERERS_SUPPORTED
     bool add(MessageRenderer* messageRenderer);
-#endif
+    #endif
     #if RECALCULATING_MOVING_COMMAND
     void set(MovingResolver* movingResolver);
     #endif
     void reset();
   protected:
     bool available();
-#if MULTIPLE_RENDERERS_SUPPORTED
+    #if MULTIPLE_RENDERERS_SUPPORTED
     byte invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message,
         MovingCommand* movingCommand, TransmissionCounter* counter);
-#endif
+    #endif
   private:
     void* _receiver = NULL;
     TransmissionCounter _counter;
     uint32_t _discontinuityCount = 0;
     MessageRenderer* _messageRenderer = NULL;
-#if MULTIPLE_RENDERERS_SUPPORTED
+    #if MULTIPLE_RENDERERS_SUPPORTED
     MessageRenderer* _messageRenderers[MESSAGE_RENDERERS_LIMIT] = {};
     uint8_t _messageRenderersTotal = 0;
-#endif
+    #endif
     #if RECALCULATING_MOVING_COMMAND
     MovingResolver* _movingResolver = NULL;
     #endif

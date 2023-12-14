@@ -27,9 +27,9 @@ class ProgramSelector {
     void set(JoystickHandler* joystickHandler);
     bool add(ProgramCapsule* programCapsule);
     int check();
-#if __DEVMODE_PROGRAM_SELECTOR__
+    #if __DEVMODE_PROGRAM_SELECTOR__
     void showMenu();
-#endif
+    #endif
   protected:
     int wait_(int state);
     int move_();
