@@ -118,7 +118,7 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
     u8g2.drawButtonUTF8(1, 1 + 4 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn3" );
     u8g2.drawButtonUTF8(1, 1 + 5 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn4" );
     u8g2.drawButtonUTF8(1, 1 + 6 * (_maxCharHeight + 2), U8G2_BTN_BW1, 126,  0,  1, " Btn5" );
-    #else
+    #else//__DEVMODE_DISPLAY_HANDLER__
     uint8_t total = programCollection->getTotal();
     uint8_t current = programCollection->getCurrentIndex();
     uint8_t focus = programCollection->getFocusIndex();
@@ -138,7 +138,7 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
       }
       u8g2.drawButtonUTF8(1, 1 + (i-begin+2) * (_maxCharHeight + 2), flags, 126,  0,  1, title);
     }
-    #endif
+    #endif//__DEVMODE_DISPLAY_HANDLER__
   } while (u8g2.nextPage());
 }
 

@@ -8,6 +8,10 @@
 #define __DEBUG_LOG_RF24_TRANCEIVER__ __RUNNING_LOG_ENABLED__
 #endif//__DEBUG_LOG_RF24_TRANCEIVER__
 
+#ifndef __TRACE_LOG_RF24_TRANCEIVER__
+#define __TRACE_LOG_RF24_TRANCEIVER__ __RUNNING_LOG_ENABLED__
+#endif//__TRACE_LOG_RF24_TRANCEIVER__
+
 #ifndef __OPTIMIZING_DYNAMIC_MEMORY__
 #define __OPTIMIZING_DYNAMIC_MEMORY__     1
 #endif
@@ -24,14 +28,42 @@
 #define PIN_CSN 10
 #endif
 
+#ifndef RF24_SECONDARY_RADIO_ENABLED
+#define RF24_SECONDARY_RADIO_ENABLED  false
+#endif//RF24_SECONDARY_RADIO_ENABLED
+
+#ifndef RF24_SECONDARY_PIN_CE
+#define RF24_SECONDARY_PIN_CE           A3
+#endif//RF24_SECONDARY_PIN_CE
+
+#ifndef RF24_SECONDARY_PIN_CSN
+#define RF24_SECONDARY_PIN_CSN          A2
+#endif//RF24_SECONDARY_PIN_CSN
+
 RF24 radio(PIN_CE, PIN_CSN);
+
+RF24* getPrimaryRadio() {
+  return &radio;
+}
+
+#if RF24_SECONDARY_RADIO_ENABLED
+RF24 radio2(RF24_SECONDARY_PIN_CE, RF24_SECONDARY_PIN_CSN);
+
+RF24* getSecondaryRadio() {
+  return &radio2;
+}
+#else
+RF24* getSecondaryRadio() {
+  return &radio;
+}
+#endif
 
 int RF24Tranceiver::begin(tranceiver_t mode, uint64_t address) {
   if (mode == RF24_TX) {
-    return RF24Transmitter::begin(address, &radio);
+    return RF24Transmitter::begin(address, getPrimaryRadio());
   }
   if (mode == RF24_RX) {
-    return RF24Receiver::begin(address, &radio);
+    return RF24Receiver::begin(address, getSecondaryRadio());
   }
   return -1;
 }
@@ -100,6 +132,12 @@ bool RF24Transmitter::write(const void* buf, uint8_t len) {
         Serial.print(':'), Serial.print(' '),
         Serial.println("broken");
     }
+    #endif
+  } else {
+    #if __TRACE_LOG_RF24_TRANCEIVER__
+    Serial.print("RF24Transmitter"), Serial.print("::"), Serial.print("write"),
+        Serial.print('-'), Serial.print('>'),
+        Serial.println("ok");
     #endif
   }
   _status = result ? ACK_OK : ACK_FAILED;
