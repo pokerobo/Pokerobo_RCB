@@ -144,6 +144,7 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
 
 void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source);
 void renderTitle_(uint8_t lx, uint8_t ty, char* title);
+void renderDirectionState_(char *title, message_source_t source, uint8_t &_directionState, uint8_t &_directionTotal);
 void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, char lines[][JOYSTICK_INFO_COLUMNS]);
 void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
 void renderSpeedWeight_(uint8_t lx, uint8_t ty, MovingCommand* movingCommand);
@@ -237,6 +238,64 @@ void DisplayHandler::render(JoystickAction* message, MovingCommand* movingComman
   } while (u8g2.nextPage());
 }
 
+uint8_t _directionState = 0;
+uint8_t _directionTotal = 0;
+
+void renderDirectionState_(char *title, message_source_t source, uint8_t &_directionState, uint8_t &_directionTotal) {
+  uint8_t state = (source == TX_MSG) ? _directionState : (4 - _directionState);
+  char arrow = (source == TX_MSG) ? '>' : '<';
+  switch (state) {
+    case 0:
+      title[ 0] = arrow;
+      title[ 1] = ' ';
+      title[ 2] = ' ';
+      title[ 9] = ' ';
+      title[10] = arrow;
+      title[11] = arrow;
+      break;
+    case 1:
+      title[ 0] = arrow;
+      title[ 1] = arrow;
+      title[ 2] = ' ';
+      title[ 9] = ' ';
+      title[10] = ' ';
+      title[11] = arrow;
+      break;
+    case 2:
+      title[ 0] = ' ';
+      title[ 1] = arrow;
+      title[ 2] = arrow;
+      title[ 9] = ' ';
+      title[10] = ' ';
+      title[11] = ' ';
+      break;
+    case 3:
+      title[ 0] = ' ';
+      title[ 1] = ' ';
+      title[ 2] = arrow;
+      title[ 9] = arrow;
+      title[10] = ' ';
+      title[11] = ' ';
+      break;
+    case 4:
+      title[ 0] = ' ';
+      title[ 1] = ' ';
+      title[ 2] = ' ';
+      title[ 9] = arrow;
+      title[10] = arrow;
+      title[11] = ' ';
+      break;
+  }
+  _directionTotal += 1;
+  if (_directionTotal >= 10) {
+    _directionTotal = 0;
+    _directionState += 1;
+  }
+  if (_directionState >= 5) {
+    _directionState = 0;
+  }
+}
+
 #if __SPACE_SAVING_MODE__
 #if __OPTIMIZING_DYNAMIC_MEMORY__
 void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source) {
@@ -269,6 +328,7 @@ void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source) {
     title[10] = '<';
     title[11] = '<';
   }
+  renderDirectionState_(title, source, _directionState, _directionTotal);
   renderTitle_(lx, ty, title);
 }
 #else//__OPTIMIZING_DYNAMIC_MEMORY__
