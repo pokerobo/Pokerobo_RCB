@@ -158,7 +158,10 @@ int JoystickHandler::check(JoystickAction* action) {
     MessagePacket packet(action, &movingCommand);
     bool ok = _messageSender->write(&packet);
     if (ok) {
+      _counter.continualLossCount = 0;
       _counter.packetLossTotal -= 1;
+    } else {
+      _counter.continualLossCount += 1;
     }
   }
 
@@ -189,6 +192,7 @@ int JoystickHandler::check(JoystickAction* action) {
 void _adjustCounter(TransmissionCounter *counter) {
   if (counter->ordinalNumber >= 999999UL) {
     counter->ordinalNumber = 0;
+    counter->continualLossCount = 0;
     counter->packetLossTotal = 0;
   }
 }

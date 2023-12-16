@@ -254,6 +254,34 @@ void renderDirectionState_(char *title, message_source_t source, TransmissionCou
 
   uint8_t state = (source == TX_MSG) ? _directionState : (4 - _directionState);
   char arrow = (source == TX_MSG) ? '>' : '<';
+
+  if (source == TX_MSG) {
+    if (counter != NULL && counter->continualLossCount > 9) {
+      switch (state) {
+        case 0:
+        case 1:
+          title[ 0] = ' ';
+          title[ 1] = ' ';
+          title[ 2] = ' ';
+          title[ 9] = ' ';
+          title[10] = ' ';
+          title[11] = ' ';
+          break;
+        case 2:
+        case 3:
+        case 4:
+          title[ 0] = arrow;
+          title[ 1] = arrow;
+          title[ 2] = ' ';
+          title[ 9] = ' ';
+          title[10] = arrow;
+          title[11] = '|';
+          break;
+      }
+      return;
+    }
+  }
+
   switch (state) {
     case 0:
       title[ 0] = arrow;

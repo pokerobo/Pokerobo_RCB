@@ -10,6 +10,7 @@
 typedef struct _TransmissionCounter {
   uint32_t baselineNumber = 0;
   uint32_t ordinalNumber = 0;
+  uint32_t continualLossCount = 0;
   uint32_t packetLossTotal = 0;
 } TransmissionCounter;
 
