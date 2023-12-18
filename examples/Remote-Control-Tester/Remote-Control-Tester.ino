@@ -26,8 +26,8 @@ void setup() {
   #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
   joystickHandler.begin();
 
-  programSelector.set(&joystickHandler);
   programSelector.set(&displayHandler);
+  programSelector.set(&joystickHandler);
 
   #if __JOYSTICK_HANDLER_CHECK_ENABLED__
   programSelector.add(new ProgramTransmitter(&joystickHandler, &rf24Tranceiver, address,
@@ -44,6 +44,8 @@ void setup() {
       &rf24Tranceiver, 0LL));
   programSelector.add(new ProgramReceiver(" Car RC RX:18580831",
       &rf24Tranceiver, 0x18580831LL));
+  programSelector.add(new ProgramReceiver(" Car RC RX:18580901",
+      &rf24Tranceiver, 0x18580901LL));
   programSelector.add(new ProgramReceiver(" Car RC RX:18580902",
       &rf24Tranceiver, 0x18580902LL));
   programSelector.add(new ProgramReceiver(" Car RC RX:18580903",

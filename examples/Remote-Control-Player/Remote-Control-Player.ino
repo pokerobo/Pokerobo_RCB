@@ -26,8 +26,8 @@ void setup() {
   #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
   joystickHandler.begin();
 
-  programSelector.set(&joystickHandler);
   programSelector.set(&displayHandler);
+  programSelector.set(&joystickHandler);
 
   #if __JOYSTICK_HANDLER_CHECK_ENABLED__
   programSelector.add(new ProgramTransmitter(&joystickHandler, &rf24Tranceiver, address,

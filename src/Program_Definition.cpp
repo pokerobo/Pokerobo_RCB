@@ -157,8 +157,8 @@ byte ProgramTransmitter::invoke(MessageSender* messageSender, uint8_t index, con
   }
   return 0;
 }
-#endif
-#endif
+#endif//MULTIPLE_SENDERS_SUPPORTED
+#endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
 
 char* ProgramTransmitter::getTitle() {
   return _title;
