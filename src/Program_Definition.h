@@ -16,9 +16,8 @@ class ProgramTransmitter: public ProgramCapsule {
       uint64_t address,
       char* title);
     #else
-    ProgramTransmitter(MessageSender* messageSender,
+    ProgramTransmitter(MovingResolver* movingResolver,
       MessageRenderer* messageRenderer,
-      MovingResolver* movingResolver,
       RF24Tranceiver* tranceiver,
       uint64_t address,
       char* title);

@@ -16,16 +16,15 @@ int ProgramTransmitter::check(void* action) {
 }
 #else//__JOYSTICK_HANDLER_CHECK_ENABLED__
 
-ProgramTransmitter::ProgramTransmitter(MessageSender* messageSender,
+ProgramTransmitter::ProgramTransmitter(MovingResolver* movingResolver,
     MessageRenderer* messageRenderer,
-    MovingResolver* movingResolver,
     RF24Tranceiver* tranceiver, uint64_t address, char* title) {
   _title = title;
   if (address != 0) {
     _rf24Address = address;
   }
   _rf24Tranceiver = tranceiver;
-  _messageSender = messageSender;
+  _messageSender = tranceiver;
   _messageRenderer = messageRenderer;
   _movingResolver = movingResolver;
 }

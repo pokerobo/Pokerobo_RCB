@@ -35,9 +35,9 @@ void setup() {
   programSelector.add(new ProgramTransmitter(&joystickHandler, &rf24Tranceiver, 0LL,
       " Car RC TX:default"));
   #else//__JOYSTICK_HANDLER_CHECK_ENABLED__
-  programSelector.add(new ProgramTransmitter(&rf24Tranceiver, &displayHandler, &movingResolver,
+  programSelector.add(new ProgramTransmitter(&movingResolver, &displayHandler,
       &rf24Tranceiver, address, " Car RC Dashboard"));
-  programSelector.add(new ProgramTransmitter(&rf24Tranceiver, &displayHandler, &movingResolver,
+  programSelector.add(new ProgramTransmitter(&movingResolver, &displayHandler,
       &rf24Tranceiver, 0LL, " Car RC TX:default"));
   #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
   programSelector.add(new ProgramReceiver(&rf24Tranceiver, 0LL,
