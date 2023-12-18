@@ -287,19 +287,6 @@ int RF24Receiver::check() {
   JoystickAction message(buttons, jX, jY, count);
   message.setSource(RX_MSG);
 
-  MovingCommand movingCommandInstance;
-  MovingCommand* movingCommand = NULL;
-
-  #if RECALCULATING_MOVING_COMMAND
-  if (_movingResolver != NULL) {
-    movingCommand = &movingCommandInstance;
-    _movingResolver->resolve(movingCommand, &message);
-  }
-  #else
-  movingCommandInstance.deserialize(msg + strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize);
-  movingCommand = &movingCommandInstance;
-  #endif
-
   if (_counter.ordinalNumber == 0) {
     _counter.baselineNumber = count;
     _counter.packetLossTotal = 0;
@@ -313,6 +300,19 @@ int RF24Receiver::check() {
     }
   }
   _counter.ordinalNumber = count;
+
+  MovingCommand movingCommandInstance;
+  MovingCommand* movingCommand = NULL;
+
+  #if RECALCULATING_MOVING_COMMAND
+  if (_movingResolver != NULL) {
+    movingCommand = &movingCommandInstance;
+    _movingResolver->resolve(movingCommand, &message);
+  }
+  #else
+  movingCommandInstance.deserialize(msg + strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize);
+  movingCommand = &movingCommandInstance;
+  #endif
 
   if (_messageRenderer != NULL) {
     _messageRenderer->render(&message, movingCommand, &_counter);
