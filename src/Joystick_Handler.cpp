@@ -152,7 +152,7 @@ int JoystickHandler::check(JoystickAction* action) {
   }
 
   #if JOYSTICK_CHECKING_CHANGE
-  if (!isChanged(action)) {
+  if (!action->isChanged()) {
     return 1;
   }
   #endif
@@ -278,15 +278,6 @@ uint16_t adjustAxis(uint16_t z, uint16_t _middleZ, uint16_t _maxZ) {
   }
   return z;
 }
-
-#if JOYSTICK_CHECKING_CHANGE
-bool JoystickHandler::isChanged(JoystickAction* msg) {
-  int16_t x = msg->getX();
-  int16_t y = msg->getY();
-  uint32_t buttons = msg->getPressingFlags();
-  return !(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || buttons;
-}
-#endif
 
 #if MULTIPLE_SENDERS_SUPPORTED
 byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet) {

@@ -82,6 +82,15 @@ MessageInterface* JoystickAction::deserialize(uint8_t* buf) {
   return this;
 }
 
+#if JOYSTICK_CHECKING_CHANGE
+bool JoystickAction::isChanged() {
+  int16_t x = this->getX();
+  int16_t y = this->getY();
+  uint32_t buttons = this->getPressingFlags();
+  return !(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || buttons;
+}
+#endif
+
 char* buildJoystickActionLogStr(char* log, uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras) {
   #if __OPTIMIZING_DYNAMIC_MEMORY__
   char fmt[12] = { 0 };

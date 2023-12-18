@@ -31,22 +31,6 @@
 #define JOYSTICK_MAX_Y   900
 #endif//JOYSTICK_MAX_Y
 
-#ifndef MIN_BOUND_X
-#define MIN_BOUND_X      512 - 160
-#endif//MIN_BOUND_X
-
-#ifndef MAX_BOUND_X
-#define MAX_BOUND_X      512 + 160
-#endif//MAX_BOUND_X
-
-#ifndef MIN_BOUND_Y
-#define MIN_BOUND_Y      512 - 160
-#endif//MIN_BOUND_Y
-
-#ifndef MAX_BOUND_Y
-#define MAX_BOUND_Y      512 + 160
-#endif//MAX_BOUND_Y
-
 #ifndef JOYSTICK_PIN_X_AXIS
 #define JOYSTICK_PIN_X_AXIS   A0
 #endif//JOYSTICK_PIN_X_AXIS
@@ -54,10 +38,6 @@
 #ifndef JOYSTICK_PIN_Y_AXIS
 #define JOYSTICK_PIN_Y_AXIS   A1
 #endif//JOYSTICK_PIN_Y_AXIS
-
-#ifndef JOYSTICK_CHECKING_CHANGE
-#define JOYSTICK_CHECKING_CHANGE 0
-#endif
 
 #ifndef PIN_UP_BUTTON
 #define PIN_UP_BUTTON     2 // A
@@ -108,9 +88,6 @@ class JoystickHandler {
     uint16_t readButtonStates();
     uint16_t checkButtonClickingFlags(uint16_t pressed);
     #if __JOYSTICK_HANDLER_CHECK_ENABLED__
-    #if JOYSTICK_CHECKING_CHANGE
-    bool isChanged(JoystickAction* msg);
-    #endif//JOYSTICK_CHECKING_CHANGE
     #if MULTIPLE_SENDERS_SUPPORTED
     byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet=NULL);
     #endif//MULTIPLE_SENDERS_SUPPORTED

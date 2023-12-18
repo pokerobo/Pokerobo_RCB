@@ -64,6 +64,26 @@
 #endif//JOYSTICK_DISABLED_BUTTONS
 #endif//__JOYSTICK_FUNDUINO_SHIELD__
 
+#ifndef JOYSTICK_CHECKING_CHANGE
+#define JOYSTICK_CHECKING_CHANGE 0
+#endif
+
+#ifndef MIN_BOUND_X
+#define MIN_BOUND_X      512 - 160
+#endif//MIN_BOUND_X
+
+#ifndef MAX_BOUND_X
+#define MAX_BOUND_X      512 + 160
+#endif//MAX_BOUND_X
+
+#ifndef MIN_BOUND_Y
+#define MIN_BOUND_Y      512 - 160
+#endif//MIN_BOUND_Y
+
+#ifndef MAX_BOUND_Y
+#define MAX_BOUND_Y      512 + 160
+#endif//MAX_BOUND_Y
+
 typedef enum { TX_MSG = 0, RX_MSG } message_source_t;
 
 class JoystickAction: public MessageInterface {
@@ -85,6 +105,9 @@ class JoystickAction: public MessageInterface {
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
     MessageInterface* deserialize(uint8_t* buf);
+    #if JOYSTICK_CHECKING_CHANGE
+    bool isChanged();
+    #endif//JOYSTICK_CHECKING_CHANGE
   private:
     uint16_t _pressingFlags = 0;
     uint16_t _clickingTrail = 0;
