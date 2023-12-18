@@ -23,7 +23,7 @@ int ProgramSelector::check() {
 }
 
 int ProgramSelector::wait_(int state) {
-  delay(50);
+  delay(10);
   return state;
 }
 

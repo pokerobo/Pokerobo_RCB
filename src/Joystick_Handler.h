@@ -91,7 +91,9 @@ class JoystickHandler {
   #endif
   public:
     int begin();
+    #if __JOYSTICK_HANDLER_CHECK_ENABLED__
     int check(JoystickAction* action=NULL);
+    #endif
     void detect();
     JoystickAction input();
     JoystickAction* input(JoystickAction* packet);
@@ -105,14 +107,19 @@ class JoystickHandler {
   protected:
     uint16_t readButtonStates();
     uint16_t checkButtonClickingFlags(uint16_t pressed);
+    #if __JOYSTICK_HANDLER_CHECK_ENABLED__
     #if JOYSTICK_CHECKING_CHANGE
     bool isChanged(JoystickAction* msg);
-    #endif
+    #endif//JOYSTICK_CHECKING_CHANGE
     #if MULTIPLE_SENDERS_SUPPORTED
     byte invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet=NULL);
-    #endif
+    #endif//MULTIPLE_SENDERS_SUPPORTED
+    #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
   private:
+    #if __JOYSTICK_HANDLER_CHECK_ENABLED__
     TransmissionCounter _counter;
+    #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
+    uint32_t _ordinalNumber = 0;
     uint16_t _clickingTrail;
     int16_t _middleX = JOYSTICK_MID_X;
     int16_t _middleY = JOYSTICK_MID_Y;
@@ -120,6 +127,7 @@ class JoystickHandler {
     int16_t _maxY = JOYSTICK_MAX_Y;
     bool _arrowKeysToggleTrapped = true;
     uint8_t _arrowKeysToggleTrail = 0;
+    #if __JOYSTICK_HANDLER_CHECK_ENABLED__
     MessageRenderer* _messageRenderer = NULL;
     #if MULTIPLE_SENDERS_SUPPORTED
     MessageSender* _messageSenders[MESSAGE_EXCHANGE_MAX] = {};
@@ -127,6 +135,7 @@ class JoystickHandler {
     #endif
     MessageSender* _messageSender = NULL;
     MovingResolver* _movingResolver = NULL;
+    #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
 };
 
 #endif//__JOYSTICK_HANDLER_H__

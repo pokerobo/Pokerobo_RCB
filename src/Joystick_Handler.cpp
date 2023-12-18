@@ -80,6 +80,7 @@ void JoystickHandler::detect() {
   #endif
 }
 
+#if __JOYSTICK_HANDLER_CHECK_ENABLED__
 void JoystickHandler::set(MessageSender* messageSender) {
   _messageSender = messageSender;
 }
@@ -111,6 +112,7 @@ void JoystickHandler::set(MessageRenderer* messageRenderer) {
 void JoystickHandler::set(MovingResolver* movingResolver) {
   _movingResolver = movingResolver;
 }
+#endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
 
 int JoystickHandler::begin() {
   #if __STRICT_MODE__
@@ -131,6 +133,7 @@ int JoystickHandler::begin() {
   return 0;
 }
 
+#if __JOYSTICK_HANDLER_CHECK_ENABLED__
 inline void _adjustCounter(TransmissionCounter *counter);
 
 int JoystickHandler::check(JoystickAction* action) {
@@ -196,6 +199,7 @@ void _adjustCounter(TransmissionCounter *counter) {
     counter->packetLossTotal = 0;
   }
 }
+#endif
 
 JoystickAction JoystickHandler::input() {
   JoystickAction message;
@@ -208,8 +212,10 @@ inline uint16_t adjustAxis(uint16_t z, uint16_t _middleZ, uint16_t _maxZ);
 JoystickAction* JoystickHandler::input(JoystickAction* action) {
   if (action == NULL) return action;
 
+  _ordinalNumber += 1;
+
   #if __DEBUG_LOG_JOYSTICK_HANDLER__
-  if (_counter.ordinalNumber < 10) {
+  if (_ordinalNumber < 10) {
     Serial.print("Origin"), Serial.print(' '), Serial.print('X'), Serial.print(':'), Serial.print(' '), Serial.println(_middleX);
     Serial.print("Origin"), Serial.print(' '), Serial.print('Y'), Serial.print(':'), Serial.print(' '), Serial.println(_middleY);
   }
@@ -222,7 +228,7 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
 
   #if __DEBUG_LOG_JOYSTICK_HANDLER__
   char log[32] = { 0 };
-  buildJoystickActionLogStr(log, pressed, x, y, _counter.ordinalNumber);
+  buildJoystickActionLogStr(log, pressed, x, y, _ordinalNumber);
   Serial.print('M'), Serial.print('1'), Serial.print(':'), Serial.print(' '), Serial.println(log);
   #endif
 
@@ -254,11 +260,11 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
   #endif
 
   #if __DEBUG_LOG_JOYSTICK_HANDLER__
-  buildJoystickActionLogStr(log, pressed, x, y, _counter.ordinalNumber);
+  buildJoystickActionLogStr(log, pressed, x, y, _ordinalNumber);
   Serial.print('M'), Serial.print('2'), Serial.print(':'), Serial.print(' '), Serial.println(log);
   #endif
 
-  action->update(pressed, x, y, _counter.ordinalNumber);
+  action->update(pressed, x, y, _ordinalNumber);
   action->setClickingFlags(checkButtonClickingFlags(pressed));
 
   return action;
@@ -295,7 +301,7 @@ byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const 
     }
 
     #if __DEBUG_LOG_JOYSTICK_HANDLER__
-    Serial.print('#'), Serial.print(_counter.ordinalNumber), Serial.print("->"), Serial.print(index), Serial.print(": ");
+    Serial.print('#'), Serial.print(_ordinalNumber), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {
       Serial.println('v');
     } else {

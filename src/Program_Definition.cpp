@@ -1,5 +1,6 @@
 #include "Program_Definition.h"
 
+#if __JOYSTICK_HANDLER_CHECK_ENABLED__
 ProgramTransmitter::ProgramTransmitter(JoystickHandler* joystickHandler,
     RF24Tranceiver* tranceiver, uint64_t address, char* title) {
   _title = title;
@@ -10,16 +11,171 @@ ProgramTransmitter::ProgramTransmitter(JoystickHandler* joystickHandler,
   _joystickHandler = joystickHandler;
 }
 
+int ProgramTransmitter::check(void* action) {
+  return _joystickHandler->check((JoystickAction*) action);
+}
+#else//__JOYSTICK_HANDLER_CHECK_ENABLED__
+
+ProgramTransmitter::ProgramTransmitter(MessageSender* messageSender,
+    MessageRenderer* messageRenderer,
+    MovingResolver* movingResolver,
+    RF24Tranceiver* tranceiver, uint64_t address, char* title) {
+  _title = title;
+  if (address != 0) {
+    _rf24Address = address;
+  }
+  _rf24Tranceiver = tranceiver;
+  _messageSender = messageSender;
+  _messageRenderer = messageRenderer;
+  _movingResolver = movingResolver;
+}
+
+void ProgramTransmitter::set(MessageSender* messageSender) {
+  _messageSender = messageSender;
+}
+
+#if MULTIPLE_SENDERS_SUPPORTED
+bool ProgramTransmitter::add(MessageSender* messageSender) {
+  if (messageSender == NULL) {
+    return false;
+  }
+  if (_messageSendersTotal > MESSAGE_EXCHANGE_MAX) {
+    return false;
+  }
+  #if __STRICT_MODE__
+  for(int i=0; i<_messageSendersTotal; i++) {
+    if (_messageSenders[i] == messageSender) {
+      return false;
+    }
+  }
+  #endif
+  _messageSenders[_messageSendersTotal++] = messageSender;
+  return true;
+}
+#endif//MULTIPLE_SENDERS_SUPPORTED
+
+void ProgramTransmitter::set(MessageRenderer* messageRenderer) {
+  _messageRenderer = messageRenderer;
+}
+
+void ProgramTransmitter::set(MovingResolver* movingResolver) {
+  _movingResolver = movingResolver;
+}
+
+inline void _adjustCounter(TransmissionCounter *counter);
+
+int ProgramTransmitter::check(void* inputData) {
+  JoystickAction* action = (JoystickAction*) inputData;
+
+  _counter.ordinalNumber += 1;
+  _counter.packetLossTotal += 1;
+
+  if (action == NULL) {
+    return -1;
+  }
+
+  MovingCommand movingCommand;
+
+  if (_movingResolver != NULL) {
+    _movingResolver->resolve(&movingCommand, action, 3);
+  }
+
+  #if JOYSTICK_CHECKING_CHANGE
+  if (!isChanged(action)) {
+    return 1;
+  }
+  #endif
+
+  if (_messageSender != NULL) {
+    MessagePacket packet(action, &movingCommand);
+    bool ok = _messageSender->write(&packet);
+    if (ok) {
+      _counter.continualLossCount = 0;
+      _counter.packetLossTotal -= 1;
+    } else {
+      _counter.continualLossCount += 1;
+    }
+  }
+
+  #if MULTIPLE_SENDERS_SUPPORTED
+  MessagePacket packet2(action, &movingCommand);
+  int8_t countNulls = 0, sumFails = 0, sumOk = 0;
+  for(int i=0; i<_messageSendersTotal; i++) {
+    int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, &packet2);
+    if (status > 0) {
+      sumOk += status;
+    } else if (status < 0) {
+      sumFails += status;
+    } else {
+      countNulls++;
+    }
+  }
+  #endif
+
+  if (_messageRenderer != NULL) {
+    _messageRenderer->render(action, &movingCommand, &_counter);
+  }
+
+  _adjustCounter(&_counter);
+
+  return 0;
+}
+
+void _adjustCounter(TransmissionCounter *counter) {
+  if (counter->ordinalNumber >= 999999UL) {
+    counter->ordinalNumber = 0;
+    counter->continualLossCount = 0;
+    counter->packetLossTotal = 0;
+  }
+}
+
+#if JOYSTICK_CHECKING_CHANGE
+bool ProgramTransmitter::isChanged(JoystickAction* msg) {
+  int16_t x = msg->getX();
+  int16_t y = msg->getY();
+  uint32_t buttons = msg->getPressingFlags();
+  return !(MIN_BOUND_X < x && x < MAX_BOUND_X && MIN_BOUND_Y < y && y < MAX_BOUND_Y) || buttons;
+}
+#endif
+
+#if MULTIPLE_SENDERS_SUPPORTED
+byte ProgramTransmitter::invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet) {
+  if (messageSender != NULL) {
+    uint8_t code = 1 << index;
+
+    bool ok = false;
+    if (packet != NULL) {
+      ok = messageSender->write(packet);
+    } else {
+      ok = messageSender->write(buf, len);
+    }
+
+    #if __DEBUG_LOG_JOYSTICK_HANDLER__
+    Serial.print('#'), Serial.print(_counter.ordinalNumber), Serial.print("->"), Serial.print(index), Serial.print(": ");
+    if (ok) {
+      Serial.println('v');
+    } else {
+      Serial.println('x');
+    }
+    #endif
+
+    if (ok) {
+      return code;
+    } else {
+      return -code;
+    }
+  }
+  return 0;
+}
+#endif
+#endif
+
 char* ProgramTransmitter::getTitle() {
   return _title;
 }
 
 int ProgramTransmitter::begin() {
   return _rf24Tranceiver->begin(RF24_TX, _rf24Address);
-}
-
-int ProgramTransmitter::check(void* action) {
-  return _joystickHandler->check((JoystickAction*) action);
 }
 
 int ProgramTransmitter::close() {

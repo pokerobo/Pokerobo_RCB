@@ -119,4 +119,5 @@
 
 //-------------------------------------------------------------------------------------------------
 
-#define __DEVMODE_PROGRAM_SELECTOR__ 1
+#define __DEVMODE_PROGRAM_SELECTOR__            1
+#define __JOYSTICK_HANDLER_CHECK_ENABLED__      0
