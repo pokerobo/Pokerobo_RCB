@@ -4,6 +4,7 @@
 #include "Commons.h"
 #include "Joystick_Action.h"
 #include "Message_Exchange.h"
+#include "Message_Processor.h"
 #include "Message_Renderer.h"
 #include "Moving_Resolver.h"
 
@@ -31,6 +32,7 @@ class RF24Receiver {
   public:
     int begin(uint64_t address=RF24_DEFAULT_ADDRESS, void* radio = NULL);
     int check();
+    void set(MessageProcessor* messageProcessor);
     void set(MessageRenderer* messageRenderer);
     #if MULTIPLE_RENDERERS_SUPPORTED
     bool add(MessageRenderer* messageRenderer);
@@ -49,6 +51,7 @@ class RF24Receiver {
     void* _receiver = NULL;
     TransmissionCounter _counter;
     uint32_t _discontinuityCount = 0;
+    MessageProcessor* _messageProcessor = NULL;
     MessageRenderer* _messageRenderer = NULL;
     #if MULTIPLE_RENDERERS_SUPPORTED
     MessageRenderer* _messageRenderers[MESSAGE_RENDERERS_LIMIT] = {};

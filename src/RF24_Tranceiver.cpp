@@ -335,6 +335,10 @@ int RF24Receiver::check() {
   return 0;
 }
 
+void RF24Receiver::set(MessageProcessor* messageProcessor) {
+  _messageProcessor = messageProcessor;
+}
+
 void RF24Receiver::set(MessageRenderer* messageRenderer) {
   _messageRenderer = messageRenderer;
 }

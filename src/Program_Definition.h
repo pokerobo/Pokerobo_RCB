@@ -39,16 +39,16 @@ class ProgramTransmitter: public ProgramCapsule {
     RF24Tranceiver* _rf24Tranceiver;
     #if __JOYSTICK_HANDLER_CHECK_ENABLED__
     JoystickHandler* _joystickHandler;
-    #else
+    #else//__JOYSTICK_HANDLER_CHECK_ENABLED__
     TransmissionCounter _counter;
     MessageSender* _messageSender = NULL;
     #if MULTIPLE_SENDERS_SUPPORTED
     MessageSender* _messageSenders[MESSAGE_EXCHANGE_MAX] = {};
     uint8_t _messageSendersTotal = 0;
-    #endif
+    #endif//MULTIPLE_SENDERS_SUPPORTED
     MessageRenderer* _messageRenderer = NULL;
     MovingResolver* _movingResolver = NULL;
-    #endif
+    #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
 };
 
 class ProgramReceiver: public ProgramCapsule {

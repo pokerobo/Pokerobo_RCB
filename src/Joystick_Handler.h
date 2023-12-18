@@ -91,20 +91,20 @@ class JoystickHandler {
   #endif
   public:
     int begin();
-    #if __JOYSTICK_HANDLER_CHECK_ENABLED__
-    int check(JoystickAction* action=NULL);
-    #endif
-    void detect();
     JoystickAction input();
     JoystickAction* input(JoystickAction* packet);
+    uint8_t checkArrowKeysToggle(uint16_t x, uint16_t y);
+    #if __JOYSTICK_HANDLER_CHECK_ENABLED__
+    int check(JoystickAction* action=NULL);
     #if MULTIPLE_SENDERS_SUPPORTED
     bool add(MessageSender* messageSender);
-    #endif
+    #endif//MULTIPLE_SENDERS_SUPPORTED
     void set(MessageSender* messageSender);
     void set(MessageRenderer* messageRenderer);
     void set(MovingResolver* movingResolver);
-    uint8_t checkArrowKeysToggle(uint16_t x, uint16_t y);
+    #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
   protected:
+    void detect();
     uint16_t readButtonStates();
     uint16_t checkButtonClickingFlags(uint16_t pressed);
     #if __JOYSTICK_HANDLER_CHECK_ENABLED__
@@ -116,11 +116,8 @@ class JoystickHandler {
     #endif//MULTIPLE_SENDERS_SUPPORTED
     #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
   private:
-    #if __JOYSTICK_HANDLER_CHECK_ENABLED__
-    TransmissionCounter _counter;
-    #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
     uint32_t _ordinalNumber = 0;
-    uint16_t _clickingTrail;
+    uint16_t _clickingTrail = 0;
     int16_t _middleX = JOYSTICK_MID_X;
     int16_t _middleY = JOYSTICK_MID_Y;
     int16_t _maxX = JOYSTICK_MAX_X;
@@ -128,11 +125,12 @@ class JoystickHandler {
     bool _arrowKeysToggleTrapped = true;
     uint8_t _arrowKeysToggleTrail = 0;
     #if __JOYSTICK_HANDLER_CHECK_ENABLED__
+    TransmissionCounter _counter;
     MessageRenderer* _messageRenderer = NULL;
     #if MULTIPLE_SENDERS_SUPPORTED
     MessageSender* _messageSenders[MESSAGE_EXCHANGE_MAX] = {};
     uint8_t _messageSendersTotal = 0;
-    #endif
+    #endif//MULTIPLE_SENDERS_SUPPORTED
     MessageSender* _messageSender = NULL;
     MovingResolver* _movingResolver = NULL;
     #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
