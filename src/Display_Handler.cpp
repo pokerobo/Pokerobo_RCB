@@ -452,6 +452,13 @@ void renderJoystickPad_(uint8_t lx, uint8_t ty, uint8_t r, uint8_t ir, int x, in
 }
 
 void DisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MovingCommand* movingCommand) {
+  #if __DEBUG_LOG_DISPLAY_HANDLER__
+  Serial.print("DisplayHandler"), Serial.print("::"), Serial.print("renderCommandPacket_"), Serial.print("()"),
+      Serial.print(' '), Serial.println("should be overriden");
+  #endif
+}
+
+void MovingDisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MovingCommand* movingCommand) {
   if (movingCommand == NULL) return;
 
   int mX = lx + SPEED_METER_OX;
@@ -507,8 +514,4 @@ void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, 
 
   sprintf(line, format, counter->packetLossTotal);
   u8g2.drawStr(lx, ty + 1 + _maxCharHeight * 2, line);
-}
-
-void MovingDisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MovingCommand* movingCommand) {
-  DisplayHandler::renderCommandPacket_(lx, ty, movingCommand);
 }
