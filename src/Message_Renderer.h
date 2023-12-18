@@ -8,14 +8,14 @@ class MessageRenderer {
   public:
     virtual void clear();
     virtual void splash(char* title, byte align = 0);
-    virtual void render(JoystickAction* message, MovingCommand* movingCommand=NULL, TransmissionCounter* counter=NULL);
+    virtual void render(JoystickAction* message, MessageInterface* commandPacket=NULL, TransmissionCounter* counter=NULL);
 };
 
 class ConsoleMessageRenderer: public MessageRenderer {
   public:
     void clear();
     void splash(char* title, byte align = 0);
-    void render(JoystickAction* message, MovingCommand* movingCommand=NULL, TransmissionCounter* counter=NULL);
+    void render(JoystickAction* message, MessageInterface* commandPacket=NULL, TransmissionCounter* counter=NULL);
 };
 
 #endif

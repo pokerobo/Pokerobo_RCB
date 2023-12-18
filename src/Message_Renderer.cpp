@@ -4,7 +4,8 @@ void ConsoleMessageRenderer::clear() {}
 
 void ConsoleMessageRenderer::splash(char* title, byte align) {}
 
-void ConsoleMessageRenderer::render(JoystickAction* message, MovingCommand* movingCommand, TransmissionCounter* counter) {
+void ConsoleMessageRenderer::render(JoystickAction* message, MessageInterface* commandPacket, TransmissionCounter* counter) {
+  MovingCommand* movingCommand = (MovingCommand*) commandPacket;
   Serial.print('#'), Serial.print(message->getExtras()), Serial.print(' '), Serial.print('-'), Serial.print(' ');
   Serial.print("Pressing"), Serial.print("Flags"), Serial.print(':'), Serial.print(' '),
       Serial.print(message->getPressingFlags());

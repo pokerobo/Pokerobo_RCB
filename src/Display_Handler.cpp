@@ -149,7 +149,7 @@ void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t 
 void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
 void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, TransmissionCounter* counter);
 
-void DisplayHandler::render(JoystickAction* message, MovingCommand* movingCommand, TransmissionCounter* counter) {
+void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPacket, TransmissionCounter* counter) {
   if (message == NULL) return;
 
   int nX = -512 + message->getX();
@@ -231,7 +231,7 @@ void DisplayHandler::render(JoystickAction* message, MovingCommand* movingComman
   do {
     renderCoordinates_(_statsLx, 0, _maxCharHeight, _maxCharWidth, lines);
     renderJoystickPad_(_virtualPadLx, 0, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
-    renderCommandPacket_(_speedMeterLx, 0, movingCommand);
+    renderCommandPacket_(_speedMeterLx, 0, commandPacket);
     renderTransmissionCounter_(_statsLx, _counterTy, _maxCharHeight, _maxCharWidth, counter);
     renderTitle_(_maxCharHeight - 2, SCREEN_HEIGHT - 2, source, counter);
   } while (u8g2.nextPage());
@@ -451,15 +451,17 @@ void renderJoystickPad_(uint8_t lx, uint8_t ty, uint8_t r, uint8_t ir, int x, in
   return drawJoystickSquare2(lx + JOYSTICK_PAD_OX, ty + JOYSTICK_PAD_OY, r, ir, x, y);
 }
 
-void DisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MovingCommand* movingCommand) {
+void DisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MessageInterface* commandPacket) {
   #if __DEBUG_LOG_DISPLAY_HANDLER__
   Serial.print("DisplayHandler"), Serial.print("::"), Serial.print("renderCommandPacket_"), Serial.print("()"),
       Serial.print(' '), Serial.println("should be overriden");
   #endif
 }
 
-void MovingDisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MovingCommand* movingCommand) {
-  if (movingCommand == NULL) return;
+void MovingDisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MessageInterface* commandPacket) {
+  if (commandPacket == NULL) return;
+
+  MovingCommand* movingCommand = (MovingCommand*) commandPacket;
 
   int mX = lx + SPEED_METER_OX;
   int mY = ty + SPEED_METER_OY;
