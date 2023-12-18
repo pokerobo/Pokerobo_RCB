@@ -16,9 +16,9 @@ int ProgramTransmitter::check(void* action) {
 }
 #else//__JOYSTICK_HANDLER_CHECK_ENABLED__
 
-ProgramTransmitter::ProgramTransmitter(MovingResolver* movingResolver,
-    MessageRenderer* messageRenderer,
-    RF24Tranceiver* tranceiver, uint64_t address, char* title) {
+ProgramTransmitter::ProgramTransmitter(char* title,
+    MovingResolver* movingResolver, MessageRenderer* messageRenderer,
+    RF24Tranceiver* tranceiver, uint64_t address) {
   _title = title;
   if (address != 0) {
     _rf24Address = address;
@@ -173,7 +173,8 @@ int ProgramTransmitter::close() {
   return 0;
 }
 
-ProgramReceiver::ProgramReceiver(RF24Tranceiver* tranceiver, uint64_t address, char* title) {
+ProgramReceiver::ProgramReceiver(char* title,
+    RF24Tranceiver* tranceiver, uint64_t address) {
   _title = title;
   if (address != 0) {
     _rf24Address = address;

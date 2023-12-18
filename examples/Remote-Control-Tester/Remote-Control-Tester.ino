@@ -35,19 +35,19 @@ void setup() {
   programSelector.add(new ProgramTransmitter(&joystickHandler, &rf24Tranceiver, 0LL,
       " Car RC TX:default"));
   #else//__JOYSTICK_HANDLER_CHECK_ENABLED__
-  programSelector.add(new ProgramTransmitter(&movingResolver, &displayHandler,
-      &rf24Tranceiver, address, " Car RC Dashboard"));
-  programSelector.add(new ProgramTransmitter(&movingResolver, &displayHandler,
-      &rf24Tranceiver, 0LL, " Car RC TX:default"));
+  programSelector.add(new ProgramTransmitter(" Car RC Dashboard",
+      &movingResolver, &displayHandler, &rf24Tranceiver, address));
+  programSelector.add(new ProgramTransmitter(" Car RC TX:default",
+      &movingResolver, &displayHandler, &rf24Tranceiver, 0LL));
   #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
-  programSelector.add(new ProgramReceiver(&rf24Tranceiver, 0LL,
-      " Car RC RX:default"));
-  programSelector.add(new ProgramReceiver(&rf24Tranceiver, 0x18580831LL,
-      " Car RC RX:18580831"));
-  programSelector.add(new ProgramReceiver(&rf24Tranceiver, 0x18580902LL,
-      " Car RC RX:18580902"));
-  programSelector.add(new ProgramReceiver(&rf24Tranceiver, 0x18580903LL,
-      " Car RC RX:18580903"));
+  programSelector.add(new ProgramReceiver(" Car RC RX:default",
+      &rf24Tranceiver, 0LL));
+  programSelector.add(new ProgramReceiver(" Car RC RX:18580831",
+      &rf24Tranceiver, 0x18580831LL));
+  programSelector.add(new ProgramReceiver(" Car RC RX:18580902",
+      &rf24Tranceiver, 0x18580902LL));
+  programSelector.add(new ProgramReceiver(" Car RC RX:18580903",
+      &rf24Tranceiver, 0x18580903LL));
 
   programSelector.begin(PROGRAM_MODE_TESTER);
 }

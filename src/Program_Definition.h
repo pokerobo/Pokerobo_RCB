@@ -16,11 +16,9 @@ class ProgramTransmitter: public ProgramCapsule {
       uint64_t address,
       char* title);
     #else
-    ProgramTransmitter(MovingResolver* movingResolver,
-      MessageRenderer* messageRenderer,
-      RF24Tranceiver* tranceiver,
-      uint64_t address,
-      char* title);
+    ProgramTransmitter(char* title,
+      MovingResolver* movingResolver, MessageRenderer* messageRenderer,
+      RF24Tranceiver* tranceiver, uint64_t address);
     #if MULTIPLE_SENDERS_SUPPORTED
     bool add(MessageSender* messageSender);
     #endif
@@ -35,9 +33,9 @@ class ProgramTransmitter: public ProgramCapsule {
   private:
     char* _title;
     uint64_t _rf24Address = RF24_DEFAULT_ADDRESS;
-    RF24Tranceiver* _rf24Tranceiver;
+    RF24Tranceiver* _rf24Tranceiver = NULL;
     #if __JOYSTICK_HANDLER_CHECK_ENABLED__
-    JoystickHandler* _joystickHandler;
+    JoystickHandler* _joystickHandler = NULL;
     #else//__JOYSTICK_HANDLER_CHECK_ENABLED__
     TransmissionCounter _counter;
     MessageSender* _messageSender = NULL;
@@ -52,7 +50,8 @@ class ProgramTransmitter: public ProgramCapsule {
 
 class ProgramReceiver: public ProgramCapsule {
   public:
-    ProgramReceiver(RF24Tranceiver* tranceiver, uint64_t address, char* title);
+    ProgramReceiver(char* title,
+      RF24Tranceiver* tranceiver, uint64_t address);
     char* getTitle();
     int begin();
     int check(void* action);
