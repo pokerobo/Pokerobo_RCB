@@ -32,6 +32,7 @@ class RF24Receiver {
   public:
     int begin(uint64_t address=RF24_DEFAULT_ADDRESS, void* radio = NULL);
     int check();
+    void reset();
     void set(MessageProcessor* messageProcessor);
     void set(MessageRenderer* messageRenderer);
     #if MULTIPLE_RENDERERS_SUPPORTED
@@ -40,7 +41,6 @@ class RF24Receiver {
     #if RECALCULATING_MOVING_COMMAND
     void set(MovingResolver* movingResolver);
     #endif
-    void reset();
   protected:
     bool available();
     #if MULTIPLE_RENDERERS_SUPPORTED

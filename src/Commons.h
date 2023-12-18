@@ -75,8 +75,8 @@
 #endif
 
 #if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
-#define PIN_CE  4
-#define PIN_CSN 5
+#define RF24_PRIMARY_PIN_CE  4
+#define RF24_PRIMARY_PIN_CSN 5
 #endif
 
 #if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
@@ -111,8 +111,8 @@
 //-------------------------------------------------------------------------------------------------
 
 #if __PLATFORM_TYPE__ == __PLATFORM_MEGA2560__
-#define PIN_CE  48
-#define PIN_CSN 49
+#define RF24_PRIMARY_PIN_CE  48
+#define RF24_PRIMARY_PIN_CSN 49
 #endif//__PLATFORM_TYPE__
 
 #endif
