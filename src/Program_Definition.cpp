@@ -1,7 +1,7 @@
 #include "Program_Definition.h"
 
 ProgramTransmitter::ProgramTransmitter(char* title,
-    MovingResolver* movingResolver, MessageRenderer* messageRenderer,
+    MovingCommandResolver* commandResolver, MessageRenderer* messageRenderer,
     RF24Tranceiver* tranceiver, uint64_t address) {
   _title = title;
   if (address != 0) {
@@ -10,7 +10,7 @@ ProgramTransmitter::ProgramTransmitter(char* title,
   _rf24Tranceiver = tranceiver;
   _messageSender = tranceiver;
   _messageRenderer = messageRenderer;
-  _movingResolver = movingResolver;
+  _commandResolver = commandResolver;
 }
 
 void ProgramTransmitter::set(MessageSender* messageSender) {
@@ -41,8 +41,8 @@ void ProgramTransmitter::set(MessageRenderer* messageRenderer) {
   _messageRenderer = messageRenderer;
 }
 
-void ProgramTransmitter::set(MovingResolver* movingResolver) {
-  _movingResolver = movingResolver;
+void ProgramTransmitter::set(MovingCommandResolver* commandResolver) {
+  _commandResolver = commandResolver;
 }
 
 inline void _adjustCounter(TransmissionCounter *counter);
@@ -59,8 +59,8 @@ int ProgramTransmitter::check(void* inputData) {
 
   MovingCommand movingCommand;
 
-  if (_movingResolver != NULL) {
-    _movingResolver->resolve(&movingCommand, action, 3);
+  if (_commandResolver != NULL) {
+    _commandResolver->resolve(&movingCommand, action, 3);
   }
 
   #if JOYSTICK_CHECKING_CHANGE

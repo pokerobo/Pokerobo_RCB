@@ -11,7 +11,7 @@
 
 //-------------------------------------------------------------------------------------------------
 
-MovingCommand* MovingResolver::resolve(MovingCommand* command, JoystickAction* action, int coeff, bool rotatable) {
+MovingCommand* MovingCommandResolver::resolve(MovingCommand* command, JoystickAction* action, int coeff, bool rotatable) {
   if (command == NULL) {
     return command;
   }

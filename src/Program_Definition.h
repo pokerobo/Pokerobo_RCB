@@ -11,14 +11,14 @@
 class ProgramTransmitter: public ProgramCapsule {
   public:
     ProgramTransmitter(char* title,
-      MovingResolver* movingResolver, MessageRenderer* messageRenderer,
+      MovingCommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint64_t address);
     #if MULTIPLE_SENDERS_SUPPORTED
     bool add(MessageSender* messageSender);
     #endif
     void set(MessageSender* messageSender);
     void set(MessageRenderer* messageRenderer);
-    void set(MovingResolver* movingResolver);
+    void set(MovingCommandResolver* commandResolver);
     char* getTitle();
     int begin();
     int check(void* action);
@@ -34,7 +34,7 @@ class ProgramTransmitter: public ProgramCapsule {
     uint8_t _messageSendersTotal = 0;
     #endif//MULTIPLE_SENDERS_SUPPORTED
     MessageRenderer* _messageRenderer = NULL;
-    MovingResolver* _movingResolver = NULL;
+    MovingCommandResolver* _commandResolver = NULL;
 };
 
 class ProgramReceiver: public ProgramCapsule {

@@ -9,7 +9,7 @@
 #include "Message_Renderer.h"
 #include "Moving_Command.h"
 
-class MovingResolver {
+class MovingCommandResolver {
   public:
     MovingCommand* resolve(MovingCommand* command, JoystickAction* action, int coeff=1, bool rotatable=false);
 };
