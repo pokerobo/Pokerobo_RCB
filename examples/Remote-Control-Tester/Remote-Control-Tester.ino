@@ -2,7 +2,8 @@
 
 const uint64_t address = 0x18580901LL;
 
-DisplayHandler displayHandler;
+MovingDisplayHandler displayHandler;
+MovingMessageSerializer messageSerializer;
 RF24Tranceiver rf24Tranceiver;
 JoystickHandler joystickHandler;
 ProgramSelector programSelector;
@@ -14,6 +15,7 @@ void setup() {
   displayHandler.begin();
 
   rf24Tranceiver.set(&displayHandler);
+  rf24Tranceiver.set(&messageSerializer);
   #if RECALCULATING_MOVING_COMMAND
   rf24Tranceiver.set(&movingResolver);
   #endif

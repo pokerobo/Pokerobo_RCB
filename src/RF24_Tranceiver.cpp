@@ -257,35 +257,21 @@ int RF24Receiver::check() {
     return -1;
   }
 
-  RF24* _tranceiver = (RF24*)_receiver;
-
   if (!available()) {
     return 0;
   }
 
+  RF24* _tranceiver = (RF24*)_receiver;
   uint8_t msg[strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize + MovingCommand::messageSize] = {0};
   _tranceiver->read(&msg, sizeof(msg));
 
-  uint16_t buttons;
-  uint16_t jX, jY;
-  uint32_t count;
+  return _messageSerializer->decode(msg, this);
+}
 
-  bool ok = decodeMessage(msg, MESSAGE_SIGNATURE, &buttons, &jX, &jY, &count);
+int RF24Receiver::process(JoystickAction* action, MessageInterface* commandPacket) {
+  action->setSource(RX_MSG);
 
-  #if __DEBUG_LOG_RF24_TRANCEIVER__
-  char log[32] = { 0 };
-  buildJoystickActionLogStr(log, buttons, jX, jY, count);
-  Serial.print("decode"), Serial.print('('), Serial.print(log), Serial.print(')'),
-      Serial.print(' '), Serial.print('-'), Serial.print('>'), Serial.print(' '), Serial.print(ok);
-  Serial.println();
-  #endif
-
-  if (!ok) {
-    return -1;
-  }
-
-  JoystickAction message(buttons, jX, jY, count);
-  message.setSource(RX_MSG);
+  uint32_t count = action->getExtras();
 
   if (_counter.ordinalNumber == 0) {
     _counter.baselineNumber = count;
@@ -301,27 +287,14 @@ int RF24Receiver::check() {
   }
   _counter.ordinalNumber = count;
 
-  MovingCommand movingCommandInstance;
-  MovingCommand* movingCommand = NULL;
-
-  #if RECALCULATING_MOVING_COMMAND
-  if (_movingResolver != NULL) {
-    movingCommand = &movingCommandInstance;
-    _movingResolver->resolve(movingCommand, &message);
-  }
-  #else
-  movingCommandInstance.deserialize(msg + strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize);
-  movingCommand = &movingCommandInstance;
-  #endif
-
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(&message, movingCommand, &_counter);
+    _messageRenderer->render(action, commandPacket, &_counter);
   }
 
   #if MULTIPLE_RENDERERS_SUPPORTED
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageRenderersTotal; i++) {
-    int8_t status = invoke(_messageRenderers[i], i+1, &message, movingCommand, &_counter);
+    int8_t status = invoke(_messageRenderers[i], i+1, action, commandPacket, &_counter);
     if (status > 0) {
       sumOk += status;
     } else if (status < 0) {
@@ -331,12 +304,14 @@ int RF24Receiver::check() {
     }
   }
   #endif
-
-  return 0;
 }
 
 void RF24Receiver::set(MessageProcessor* messageProcessor) {
   _messageProcessor = messageProcessor;
+}
+
+void RF24Receiver::set(MessageSerializer* messageSerializer) {
+  _messageSerializer = messageSerializer;
 }
 
 void RF24Receiver::set(MessageRenderer* messageRenderer) {
@@ -365,10 +340,10 @@ bool RF24Receiver::add(MessageRenderer* messageRenderer) {
 
 #if MULTIPLE_RENDERERS_SUPPORTED
 byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message,
-      MovingCommand* movingCommand, TransmissionCounter* counter) {
+      MessageInterface* commandPacket, TransmissionCounter* counter) {
   if (messageRenderer != NULL) {
     uint8_t code = 1 << index;
-    bool ok = messageRenderer->render(message, movingCommand, counter);
+    bool ok = messageRenderer->render(message, commandPacket, counter);
     #if __DEBUG_LOG_RF24_TRANCEIVER__
     Serial.print('#'), Serial.print(message->getExtras()), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {

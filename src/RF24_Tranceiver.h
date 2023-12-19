@@ -5,6 +5,7 @@
 #include "Joystick_Action.h"
 #include "Message_Exchange.h"
 #include "Message_Processor.h"
+#include "Message_Serializer.h"
 #include "Message_Renderer.h"
 #include "Moving_Resolver.h"
 
@@ -28,12 +29,14 @@ class RF24Transmitter: public MessageSender {
     rf24_tx_status_t _status;
 };
 
-class RF24Receiver {
+class RF24Receiver: public MessageProcessor {
   public:
     int begin(uint64_t address=RF24_DEFAULT_ADDRESS, void* radio = NULL);
     int check();
+    int process(JoystickAction* action, MessageInterface* commandPacket);
     void reset();
     void set(MessageProcessor* messageProcessor);
+    void set(MessageSerializer* messageSerializer);
     void set(MessageRenderer* messageRenderer);
     #if MULTIPLE_RENDERERS_SUPPORTED
     bool add(MessageRenderer* messageRenderer);
@@ -45,13 +48,14 @@ class RF24Receiver {
     bool available();
     #if MULTIPLE_RENDERERS_SUPPORTED
     byte invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message,
-        MovingCommand* movingCommand, TransmissionCounter* counter);
+        MessageInterface* commandPacket, TransmissionCounter* counter);
     #endif
   private:
     void* _receiver = NULL;
     TransmissionCounter _counter;
     uint32_t _discontinuityCount = 0;
     MessageProcessor* _messageProcessor = NULL;
+    MessageSerializer* _messageSerializer = NULL;
     MessageRenderer* _messageRenderer = NULL;
     #if MULTIPLE_RENDERERS_SUPPORTED
     MessageRenderer* _messageRenderers[MESSAGE_RENDERERS_LIMIT] = {};
