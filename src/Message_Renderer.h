@@ -2,7 +2,6 @@
 #define __MESSAGE_RENDERER_H__
 
 #include "Joystick_Action.h"
-#include "Moving_Command.h"
 
 class MessageRenderer {
   public:

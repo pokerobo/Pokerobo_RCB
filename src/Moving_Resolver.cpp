@@ -9,6 +9,8 @@
 #define SPEED_METER_OY                  32
 #define SPEED_METER_MAX_HEIGHT          30
 
+//-------------------------------------------------------------------------------------------------
+
 MovingCommand* MovingResolver::resolve(MovingCommand* command, JoystickAction* action, int coeff, bool rotatable) {
   if (command == NULL) {
     return command;
@@ -148,11 +150,11 @@ void MovingDisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MessageI
 
 //-------------------------------------------------------------------------------------------------
 
-void ConsoleMessageRenderer::clear() {}
+void MovingSerialConsole::clear() {}
 
-void ConsoleMessageRenderer::splash(char* title, byte align) {}
+void MovingSerialConsole::splash(char* title, byte align) {}
 
-void ConsoleMessageRenderer::render(JoystickAction* message, MessageInterface* commandPacket, TransmissionCounter* counter) {
+void MovingSerialConsole::render(JoystickAction* message, MessageInterface* commandPacket, TransmissionCounter* counter) {
   MovingCommand* movingCommand = (MovingCommand*) commandPacket;
   Serial.print('#'), Serial.print(message->getExtras()), Serial.print(' '), Serial.print('-'), Serial.print(' ');
   Serial.print("Pressing"), Serial.print("Flags"), Serial.print(':'), Serial.print(' '),

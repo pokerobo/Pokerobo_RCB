@@ -27,7 +27,7 @@ class MovingDisplayHandler: public DisplayHandler {
     void renderCommandPacket_(uint8_t lx, uint8_t ty, MessageInterface* commandPacket);
 };
 
-class ConsoleMessageRenderer: public MessageRenderer {
+class MovingSerialConsole: public MessageRenderer {
   public:
     void clear();
     void splash(char* title, byte align = 0);
