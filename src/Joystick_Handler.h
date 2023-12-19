@@ -3,9 +3,6 @@
 
 #include "Commons.h"
 #include "Joystick_Action.h"
-#include "Message_Exchange.h"
-#include "Message_Renderer.h"
-#include "Moving_Resolver.h"
 
 #ifndef __JOYSTICK_READ_BUTTONS_DEBUG__
 #define __JOYSTICK_READ_BUTTONS_DEBUG__   0

@@ -7,7 +7,6 @@
 #include "Message_Processor.h"
 #include "Message_Serializer.h"
 #include "Message_Renderer.h"
-#include "Moving_Resolver.h"
 
 #define RF24_DEFAULT_ADDRESS 0x123456789ABCDEF0LL
 
@@ -41,9 +40,6 @@ class RF24Receiver: public MessageProcessor {
     #if MULTIPLE_RENDERERS_SUPPORTED
     bool add(MessageRenderer* messageRenderer);
     #endif
-    #if RECALCULATING_MOVING_COMMAND
-    void set(MovingResolver* movingResolver);
-    #endif
   protected:
     bool available();
     #if MULTIPLE_RENDERERS_SUPPORTED
@@ -60,9 +56,6 @@ class RF24Receiver: public MessageProcessor {
     #if MULTIPLE_RENDERERS_SUPPORTED
     MessageRenderer* _messageRenderers[MESSAGE_RENDERERS_LIMIT] = {};
     uint8_t _messageRenderersTotal = 0;
-    #endif
-    #if RECALCULATING_MOVING_COMMAND
-    MovingResolver* _movingResolver = NULL;
     #endif
 };
 

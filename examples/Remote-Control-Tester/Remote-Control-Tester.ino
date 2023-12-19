@@ -16,9 +16,6 @@ void setup() {
 
   rf24Tranceiver.set(&displayHandler);
   rf24Tranceiver.set(&messageSerializer);
-  #if RECALCULATING_MOVING_COMMAND
-  rf24Tranceiver.set(&movingResolver);
-  #endif
   rf24Tranceiver.begin(RF24_TX, address);
 
   joystickHandler.begin();
