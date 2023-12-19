@@ -262,7 +262,7 @@ int RF24Receiver::check() {
   }
 
   RF24* _tranceiver = (RF24*)_receiver;
-  uint8_t msg[strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize + MovingCommand::messageSize] = {0};
+  uint8_t msg[_messageSerializer->getSize()] = {0};
   _tranceiver->read(&msg, sizeof(msg));
 
   return _messageSerializer->decode(msg, this);

@@ -2,6 +2,14 @@
 #include "Message_Serializer.h"
 #include "Moving_Command.h"
 
+const uint8_t MovingMessageSerializer::messageSize = strlen(MESSAGE_SIGNATURE) +
+    JoystickAction::messageSize +
+    MovingCommand::messageSize;
+
+uint8_t MovingMessageSerializer::getSize() {
+  return messageSize;
+}
+
 int MovingMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
   uint16_t buttons;
   uint16_t jX, jY;
