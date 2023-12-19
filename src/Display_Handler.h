@@ -8,6 +8,7 @@
 
 class DisplayHandler: public MessageRenderer {
   public:
+    DisplayHandler();
     int begin();
     void clear();
     void splash(char* title, byte align = 0);
@@ -15,14 +16,10 @@ class DisplayHandler: public MessageRenderer {
     void render(ProgramCollection* programCollection=NULL);
   protected:
     virtual void renderCommandPacket_(uint8_t lx, uint8_t ty, MessageInterface* commandPacket);
+    void* _u8g2Ref = NULL;
   private:
     uint8_t _maxCharHeight = 8;
     uint8_t _maxCharWidth = 5;
-};
-
-class MovingDisplayHandler: public DisplayHandler {
-  protected:
-    void renderCommandPacket_(uint8_t lx, uint8_t ty, MessageInterface* commandPacket);
 };
 
 #endif

@@ -11,11 +11,4 @@ class MessageRenderer {
     virtual void render(JoystickAction* message, MessageInterface* commandPacket=NULL, TransmissionCounter* counter=NULL);
 };
 
-class ConsoleMessageRenderer: public MessageRenderer {
-  public:
-    void clear();
-    void splash(char* title, byte align = 0);
-    void render(JoystickAction* message, MessageInterface* commandPacket=NULL, TransmissionCounter* counter=NULL);
-};
-
 #endif

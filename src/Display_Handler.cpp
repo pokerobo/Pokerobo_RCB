@@ -42,11 +42,6 @@
 
 #define JOYSTICK_PAD_STYLE_ACTIVE       JOYSTICK_PAD_STYLE_SQUARE2
 
-#define SPEED_METER_WIDTH               7
-#define SPEED_METER_OX                  3 + SPEED_METER_WIDTH
-#define SPEED_METER_OY                  32
-#define SPEED_METER_MAX_HEIGHT          30
-
 #define idleButtonIcon(offs, buttons, mask, icon) ((offs & mask) ? '-' : (buttons & mask) ? '*' : icon)
 
 char idleButtonIcon_(uint16_t offs, uint16_t buttons, uint16_t mask, char icon) {
@@ -54,6 +49,10 @@ char idleButtonIcon_(uint16_t offs, uint16_t buttons, uint16_t mask, char icon) 
 }
 
 U8G2_ST7567_ENH_DG128064I_1_HW_I2C u8g2(U8G2_R2, LCD_PIN_SCL, LCD_PIN_SDA, U8X8_PIN_NONE);
+
+DisplayHandler::DisplayHandler() {
+  _u8g2Ref = &u8g2;
+}
 
 int DisplayHandler::begin() {
   Wire.begin();
@@ -456,40 +455,6 @@ void DisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MessageInterfa
   Serial.print("DisplayHandler"), Serial.print("::"), Serial.print("renderCommandPacket_"), Serial.print("()"),
       Serial.print(' '), Serial.println("should be overriden");
   #endif
-}
-
-void MovingDisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MessageInterface* commandPacket) {
-  if (commandPacket == NULL) return;
-
-  MovingCommand* movingCommand = (MovingCommand*) commandPacket;
-
-  int mX = lx + SPEED_METER_OX;
-  int mY = ty + SPEED_METER_OY;
-
-  int lw = map(movingCommand->getLeftSpeed(), 0, MOVING_COMMAND_WEIGHT_MAX, 0, SPEED_METER_MAX_HEIGHT);
-  uint8_t ld = movingCommand->getLeftDirection();
-  int rw = map(movingCommand->getRightSpeed(), 0, MOVING_COMMAND_WEIGHT_MAX, 0, SPEED_METER_MAX_HEIGHT);
-  uint8_t rd = movingCommand->getRightDirection();
-
-  u8g2.drawLine(mX - 2 - SPEED_METER_WIDTH, mY, mX + 1 + SPEED_METER_WIDTH, mY);
-
-  switch(ld) {
-    case 1:
-      u8g2.drawBox(mX - 1 - SPEED_METER_WIDTH, mY - lw, SPEED_METER_WIDTH, lw);
-      break;
-    case 2:
-      u8g2.drawBox(mX - 1 - SPEED_METER_WIDTH, mY + 1, SPEED_METER_WIDTH, lw);
-      break;
-  }
-
-  switch(rd) {
-    case 1:
-      u8g2.drawBox(mX + 1, mY - rw, SPEED_METER_WIDTH, rw);
-      break;
-    case 2:
-      u8g2.drawBox(mX + 1, mY + 1, SPEED_METER_WIDTH, rw);
-      break;
-  }
 }
 
 void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, TransmissionCounter* counter) {

@@ -10,12 +10,4 @@ class MessageSerializer {
     virtual int decode(uint8_t* msg, MessageProcessor *processor);
 };
 
-class MovingMessageSerializer: public MessageSerializer {
-  public:
-    uint8_t getSize();
-    int decode(uint8_t* msg, MessageProcessor *processor);
-  private:
-    static const uint8_t messageSize;
-};
-
 #endif
