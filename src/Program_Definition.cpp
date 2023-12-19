@@ -1,21 +1,5 @@
 #include "Program_Definition.h"
 
-#if __JOYSTICK_HANDLER_CHECK_ENABLED__
-ProgramTransmitter::ProgramTransmitter(JoystickHandler* joystickHandler,
-    RF24Tranceiver* tranceiver, uint64_t address, char* title) {
-  _title = title;
-  if (address != 0) {
-    _rf24Address = address;
-  }
-  _rf24Tranceiver = tranceiver;
-  _joystickHandler = joystickHandler;
-}
-
-int ProgramTransmitter::check(void* action) {
-  return _joystickHandler->check((JoystickAction*) action);
-}
-#else//__JOYSTICK_HANDLER_CHECK_ENABLED__
-
 ProgramTransmitter::ProgramTransmitter(char* title,
     MovingResolver* movingResolver, MessageRenderer* messageRenderer,
     RF24Tranceiver* tranceiver, uint64_t address) {
@@ -158,7 +142,6 @@ byte ProgramTransmitter::invoke(MessageSender* messageSender, uint8_t index, con
   return 0;
 }
 #endif//MULTIPLE_SENDERS_SUPPORTED
-#endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
 
 char* ProgramTransmitter::getTitle() {
   return _title;

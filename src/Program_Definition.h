@@ -10,12 +10,6 @@
 
 class ProgramTransmitter: public ProgramCapsule {
   public:
-    #if __JOYSTICK_HANDLER_CHECK_ENABLED__
-    ProgramTransmitter(JoystickHandler* joystickHandler,
-      RF24Tranceiver* tranceiver,
-      uint64_t address,
-      char* title);
-    #else
     ProgramTransmitter(char* title,
       MovingResolver* movingResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint64_t address);
@@ -25,7 +19,6 @@ class ProgramTransmitter: public ProgramCapsule {
     void set(MessageSender* messageSender);
     void set(MessageRenderer* messageRenderer);
     void set(MovingResolver* movingResolver);
-    #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
     char* getTitle();
     int begin();
     int check(void* action);
@@ -34,9 +27,6 @@ class ProgramTransmitter: public ProgramCapsule {
     char* _title;
     uint64_t _rf24Address = RF24_DEFAULT_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver = NULL;
-    #if __JOYSTICK_HANDLER_CHECK_ENABLED__
-    JoystickHandler* _joystickHandler = NULL;
-    #else//__JOYSTICK_HANDLER_CHECK_ENABLED__
     TransmissionCounter _counter;
     MessageSender* _messageSender = NULL;
     #if MULTIPLE_SENDERS_SUPPORTED
@@ -45,7 +35,6 @@ class ProgramTransmitter: public ProgramCapsule {
     #endif//MULTIPLE_SENDERS_SUPPORTED
     MessageRenderer* _messageRenderer = NULL;
     MovingResolver* _movingResolver = NULL;
-    #endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
 };
 
 class ProgramReceiver: public ProgramCapsule {

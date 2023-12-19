@@ -80,40 +80,6 @@ void JoystickHandler::detect() {
   #endif
 }
 
-#if __JOYSTICK_HANDLER_CHECK_ENABLED__
-void JoystickHandler::set(MessageSender* messageSender) {
-  _messageSender = messageSender;
-}
-
-#if MULTIPLE_SENDERS_SUPPORTED
-bool JoystickHandler::add(MessageSender* messageSender) {
-  if (messageSender == NULL) {
-    return false;
-  }
-  if (_messageSendersTotal > MESSAGE_EXCHANGE_MAX) {
-    return false;
-  }
-  #if __STRICT_MODE__
-  for(int i=0; i<_messageSendersTotal; i++) {
-    if (_messageSenders[i] == messageSender) {
-      return false;
-    }
-  }
-  #endif
-  _messageSenders[_messageSendersTotal++] = messageSender;
-  return true;
-}
-#endif//MULTIPLE_SENDERS_SUPPORTED
-
-void JoystickHandler::set(MessageRenderer* messageRenderer) {
-  _messageRenderer = messageRenderer;
-}
-
-void JoystickHandler::set(MovingResolver* movingResolver) {
-  _movingResolver = movingResolver;
-}
-#endif//__JOYSTICK_HANDLER_CHECK_ENABLED__
-
 int JoystickHandler::begin() {
   #if __STRICT_MODE__
   verify();
@@ -132,74 +98,6 @@ int JoystickHandler::begin() {
   detect();
   return 0;
 }
-
-#if __JOYSTICK_HANDLER_CHECK_ENABLED__
-inline void _adjustCounter(TransmissionCounter *counter);
-
-int JoystickHandler::check(JoystickAction* action) {
-    _counter.ordinalNumber += 1;
-    _counter.packetLossTotal += 1;
-
-  if (action == NULL) {
-    JoystickAction message = input();
-    action = &message;
-  }
-
-  MovingCommand movingCommand;
-
-  if (_movingResolver != NULL) {
-    _movingResolver->resolve(&movingCommand, action, 3);
-  }
-
-  #if JOYSTICK_CHECKING_CHANGE
-  if (!action->isChanged()) {
-    return 1;
-  }
-  #endif
-
-  if (_messageSender != NULL) {
-    MessagePacket packet(action, &movingCommand);
-    bool ok = _messageSender->write(&packet);
-    if (ok) {
-      _counter.continualLossCount = 0;
-      _counter.packetLossTotal -= 1;
-    } else {
-      _counter.continualLossCount += 1;
-    }
-  }
-
-  #if MULTIPLE_SENDERS_SUPPORTED
-  MessagePacket packet2(action, &movingCommand);
-  int8_t countNulls = 0, sumFails = 0, sumOk = 0;
-  for(int i=0; i<_messageSendersTotal; i++) {
-    int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, &packet2);
-    if (status > 0) {
-      sumOk += status;
-    } else if (status < 0) {
-      sumFails += status;
-    } else {
-      countNulls++;
-    }
-  }
-  #endif
-
-  if (_messageRenderer != NULL) {
-    _messageRenderer->render(action, &movingCommand, &_counter);
-  }
-
-  _adjustCounter(&_counter);
-
-  return 2;
-}
-
-void _adjustCounter(TransmissionCounter *counter) {
-  if (counter->ordinalNumber >= 999999UL) {
-    counter->ordinalNumber = 0;
-    counter->continualLossCount = 0;
-    counter->packetLossTotal = 0;
-  }
-}
-#endif
 
 JoystickAction JoystickHandler::input() {
   JoystickAction message;
