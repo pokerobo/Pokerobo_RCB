@@ -29,7 +29,6 @@
 #define COORD_LINE_RAW_X                3
 #define COORD_LINE_RAW_Y                4
 
-#define JOYSTICK_INFO_COLUMNS           8 // 7 chars and '\0'
 #define JOYSTICK_PAD_OX                 32
 #define JOYSTICK_PAD_OY                 32
 #define JOYSTICK_PAD_OR                 30
@@ -141,13 +140,6 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
   } while (u8g2.nextPage());
 }
 
-void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source, TransmissionCounter* counter);
-void renderTitle_(uint8_t lx, uint8_t ty, char* title);
-void renderDirectionState_(char *title, message_source_t source, uint8_t &_directionState, uint8_t &_directionTotal);
-void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, char lines[][JOYSTICK_INFO_COLUMNS]);
-void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
-void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, TransmissionCounter* counter);
-
 void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPacket, TransmissionCounter* counter) {
   if (message == NULL) return;
 
@@ -236,10 +228,7 @@ void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPa
   } while (u8g2.nextPage());
 }
 
-uint8_t _directionState = 0;
-uint8_t _directionTotal = 0;
-
-void renderDirectionState_(char *title, message_source_t source, TransmissionCounter* counter,
+void DisplayHandler::renderDirectionState_(char *title, message_source_t source, TransmissionCounter* counter,
     uint8_t &_directionState, uint8_t &_directionTotal) {
   _directionTotal += 1;
   if (_directionTotal >= 10) {
@@ -324,9 +313,9 @@ void renderDirectionState_(char *title, message_source_t source, TransmissionCou
   }
 }
 
-#if __SPACE_SAVING_MODE__
-#if __OPTIMIZING_DYNAMIC_MEMORY__
-void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source, TransmissionCounter* counter) {
+void DisplayHandler::renderTitle_(uint8_t lx, uint8_t ty, message_source_t source, TransmissionCounter* counter) {
+  #if __SPACE_SAVING_MODE__
+  #if __OPTIMIZING_DYNAMIC_MEMORY__
   char title[13] = { 0 };
   if (source == TX_MSG) {
     title[ 0] = '>';
@@ -358,9 +347,7 @@ void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source, TransmissionC
   }
   renderDirectionState_(title, source, counter, _directionState, _directionTotal);
   renderTitle_(lx, ty, title);
-}
-#else//__OPTIMIZING_DYNAMIC_MEMORY__
-void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source, TransmissionCounter* counter) {
+  #else//__OPTIMIZING_DYNAMIC_MEMORY__
   char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
   if (source == RX_MSG) {
     title[ 0] = '<';
@@ -377,10 +364,8 @@ void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source, TransmissionC
     title[11] = '<';
   }
   renderTitle_(lx, ty, title);
-}
-#endif//__OPTIMIZING_DYNAMIC_MEMORY__
-#else//__SPACE_SAVING_MODE__
-void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source, TransmissionCounter* counter) {
+  #endif//__OPTIMIZING_DYNAMIC_MEMORY__
+  #else//__SPACE_SAVING_MODE__
   if (source == RX_MSG) {
     char title[13] = { '<', '<', ' ', 'T', 'E', 'S', 'T', 'E', 'R', ' ', '<', '<', '\0' };
     renderTitle_(lx, ty, title);
@@ -388,17 +373,17 @@ void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source, TransmissionC
   }
   char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
   renderTitle_(lx, ty, title);
+  #endif//__SPACE_SAVING_MODE__
 }
-#endif//__SPACE_SAVING_MODE__
 
-void renderTitle_(uint8_t lx, uint8_t ty, char* title) {
+void DisplayHandler::renderTitle_(uint8_t lx, uint8_t ty, char* title) {
   if (title == NULL) return;
   u8g2.setFontDirection(3);
   u8g2.drawStr(lx, ty, title);
   u8g2.setFontDirection(0);
 }
 
-void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, char lines[][JOYSTICK_INFO_COLUMNS]) {
+void DisplayHandler::renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, char lines[][JOYSTICK_INFO_COLUMNS]) {
   for (uint8_t i=0; i<COORD_LINES_TOTAL; i++) {
     u8g2.drawStr(lx, ty + _maxCharHeight + JOYSTICK_PAD_PADDING_TOP + _maxCharHeight * i, lines[i]);
   }
@@ -440,7 +425,7 @@ void drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, i
   u8g2.drawFrame(Ox + x - 1, Oy + (-y) - 1, 3, 3);
 }
 
-void renderJoystickPad_(uint8_t lx, uint8_t ty, uint8_t r, uint8_t ir, int x, int y) {
+void DisplayHandler::renderJoystickPad_(uint8_t lx, uint8_t ty, uint8_t r, uint8_t ir, int x, int y) {
   #if JOYSTICK_PAD_STYLE_ACTIVE == JOYSTICK_PAD_STYLE_CIRCLE
   return drawJoystickCircle(lx + JOYSTICK_PAD_OX, ty + JOYSTICK_PAD_OY, r, ir, x, y);
   #endif
@@ -457,7 +442,7 @@ void DisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MessageInterfa
   #endif
 }
 
-void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, TransmissionCounter* counter) {
+void DisplayHandler::renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, TransmissionCounter* counter) {
   if (counter == NULL) return;
 
   u8g2.drawLine(lx, ty, lx - 1 + (JOYSTICK_INFO_COLUMNS - 1) * _maxCharWidth, ty);
