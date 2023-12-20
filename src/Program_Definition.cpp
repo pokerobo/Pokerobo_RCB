@@ -45,8 +45,6 @@ void ProgramTransmitter::set(MovingCommandResolver* commandResolver) {
   _commandResolver = commandResolver;
 }
 
-inline void _adjustCounter(TransmissionCounter *counter);
-
 int ProgramTransmitter::check(void* inputData) {
   JoystickAction* action = (JoystickAction*) inputData;
 
@@ -99,17 +97,9 @@ int ProgramTransmitter::check(void* inputData) {
     _messageRenderer->render(action, &movingCommand, &_counter);
   }
 
-  _adjustCounter(&_counter);
+  _counter.adjust();
 
   return 0;
-}
-
-void _adjustCounter(TransmissionCounter *counter) {
-  if (counter->ordinalNumber >= 999999UL) {
-    counter->ordinalNumber = 0;
-    counter->continualLossCount = 0;
-    counter->packetLossTotal = 0;
-  }
 }
 
 #if MULTIPLE_SENDERS_SUPPORTED
