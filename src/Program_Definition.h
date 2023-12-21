@@ -14,6 +14,10 @@ class ProgramTransmitter: public ProgramCapsule {
   public:
     ProgramTransmitter(char* title,
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
+      RF24Tranceiver* tranceiver, uint64_t address): ProgramTransmitter(title, NULL,
+        commandResolver, messageRenderer, tranceiver, address) {};
+    ProgramTransmitter(char* title,
+      CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint64_t address);
     #if MULTIPLE_SENDERS_SUPPORTED
     bool add(MessageSender* messageSender);

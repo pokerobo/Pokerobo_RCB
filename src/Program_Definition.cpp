@@ -1,7 +1,7 @@
 #include "Program_Definition.h"
 
 ProgramTransmitter::ProgramTransmitter(char* title,
-    CommandResolver* commandResolver, MessageRenderer* messageRenderer,
+    CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
     RF24Tranceiver* tranceiver, uint64_t address) {
   _title = title;
   if (address != 0) {
@@ -11,6 +11,7 @@ ProgramTransmitter::ProgramTransmitter(char* title,
   _messageSender = tranceiver;
   _messageRenderer = messageRenderer;
   _commandResolver = commandResolver;
+  _commandBuffer = commandBuffer;
 }
 
 void ProgramTransmitter::set(MessageSender* messageSender) {
