@@ -59,7 +59,6 @@
 #endif
 
 #define MESSAGE_EXCHANGE_MAX  7
-#define MULTIPLE_SENDERS_SUPPORTED false
 
 class JoystickHandler {
   static const int pinOfButtons[];

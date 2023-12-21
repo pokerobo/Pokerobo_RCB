@@ -89,7 +89,7 @@ int MovingMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
     return -1;
   }
 
-  #if __DEBUG_LOG_RF24_TRANCEIVER__
+  #if __DEBUG_LOG_MESSAGE_SERIALIZER__
   char log[32] = { 0 };
   buildJoystickActionLogStr(log, buttons, jX, jY, count);
   Serial.print("decode"), Serial.print('('), Serial.print(log), Serial.print(')'),

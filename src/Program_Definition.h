@@ -8,6 +8,8 @@
 #include "Message_Renderer.h"
 #include "Moving_Resolver.h"
 
+#define MULTIPLE_SENDERS_SUPPORTED false
+
 class ProgramTransmitter: public ProgramCapsule {
   public:
     ProgramTransmitter(char* title,

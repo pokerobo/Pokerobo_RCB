@@ -55,10 +55,11 @@ int ProgramTransmitter::check(void* inputData) {
     return -1;
   }
 
-  MovingCommand movingCommand;
-
+  MovingCommand* movingCommand = NULL;
+  MovingCommand movingCommandInstance;
   if (_commandResolver != NULL) {
-    _commandResolver->resolve(&movingCommand, action, 3);
+    movingCommand = &movingCommandInstance;
+    _commandResolver->resolve(movingCommand, action, 3);
   }
 
   #if JOYSTICK_CHECKING_CHANGE
@@ -68,7 +69,7 @@ int ProgramTransmitter::check(void* inputData) {
   #endif
 
   if (_messageSender != NULL) {
-    MessagePacket packet(action, &movingCommand);
+    MessagePacket packet(action, movingCommand);
     bool ok = _messageSender->write(&packet);
     if (ok) {
       _counter.continualLossCount = 0;
@@ -94,7 +95,7 @@ int ProgramTransmitter::check(void* inputData) {
   #endif
 
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(action, &movingCommand, &_counter);
+    _messageRenderer->render(action, movingCommand, &_counter);
   }
 
   _counter.adjust();

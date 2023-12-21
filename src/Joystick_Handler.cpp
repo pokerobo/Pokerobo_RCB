@@ -177,37 +177,6 @@ uint16_t adjustAxis(uint16_t z, uint16_t _middleZ, uint16_t _maxZ) {
   return z;
 }
 
-#if MULTIPLE_SENDERS_SUPPORTED
-byte JoystickHandler::invoke(MessageSender* messageSender, uint8_t index, const void* buf, uint8_t len, MessagePacket* packet) {
-  if (messageSender != NULL) {
-    uint8_t code = 1 << index;
-
-    bool ok = false;
-    if (packet != NULL) {
-      ok = messageSender->write(packet);
-    } else {
-      ok = messageSender->write(buf, len);
-    }
-
-    #if __DEBUG_LOG_JOYSTICK_HANDLER__
-    Serial.print('#'), Serial.print(_ordinalNumber), Serial.print("->"), Serial.print(index), Serial.print(": ");
-    if (ok) {
-      Serial.println('v');
-    } else {
-      Serial.println('x');
-    }
-    #endif
-
-    if (ok) {
-      return code;
-    } else {
-      return -code;
-    }
-  }
-  return 0;
-}
-#endif
-
 uint8_t JoystickHandler::checkArrowKeysToggle(uint16_t x, uint16_t y) {
   uint8_t pressed = 0;
   if (x < _middleX - 255) {
