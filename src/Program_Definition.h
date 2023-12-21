@@ -6,21 +6,21 @@
 #include "RF24_Tranceiver.h"
 #include "Message_Exchange.h"
 #include "Message_Renderer.h"
-#include "Moving_Resolver.h"
+#include "Message_Resolver.h"
 
 #define MULTIPLE_SENDERS_SUPPORTED false
 
 class ProgramTransmitter: public ProgramCapsule {
   public:
     ProgramTransmitter(char* title,
-      MovingCommandResolver* commandResolver, MessageRenderer* messageRenderer,
+      CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint64_t address);
     #if MULTIPLE_SENDERS_SUPPORTED
     bool add(MessageSender* messageSender);
     #endif
     void set(MessageSender* messageSender);
     void set(MessageRenderer* messageRenderer);
-    void set(MovingCommandResolver* commandResolver);
+    void set(CommandResolver* commandResolver);
     char* getTitle();
     int begin();
     int check(void* action);
@@ -36,7 +36,7 @@ class ProgramTransmitter: public ProgramCapsule {
     uint8_t _messageSendersTotal = 0;
     #endif//MULTIPLE_SENDERS_SUPPORTED
     MessageRenderer* _messageRenderer = NULL;
-    MovingCommandResolver* _commandResolver = NULL;
+    CommandResolver* _commandResolver = NULL;
 };
 
 class ProgramReceiver: public ProgramCapsule {

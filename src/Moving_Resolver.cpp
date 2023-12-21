@@ -70,7 +70,7 @@ uint8_t* MovingCommand::serialize(uint8_t* buf, uint8_t len) {
   return buf;
 }
 
-MessageInterface* MovingCommand::deserialize(uint8_t* buf) {
+CommandPacket* MovingCommand::deserialize(uint8_t* buf) {
   if (buf == NULL) {
     return NULL;
   }
@@ -100,7 +100,9 @@ MessageInterface* MovingCommand::deserialize(uint8_t* buf) {
 #define BOUND_X    40
 #define BOUND_Y    40
 
-MovingCommand* MovingCommandResolver::resolve(MovingCommand* command, JoystickAction* action, int coeff, bool rotatable) {
+CommandPacket* MovingCommandResolver::resolve(CommandPacket* commandPacket, JoystickAction* action, int coeff, bool rotatable) {
+  MovingCommand* command = (MovingCommand*) commandPacket;
+
   if (command == NULL) {
     return command;
   }

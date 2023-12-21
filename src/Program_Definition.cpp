@@ -1,7 +1,8 @@
 #include "Program_Definition.h"
+#include "Moving_Resolver.h"
 
 ProgramTransmitter::ProgramTransmitter(char* title,
-    MovingCommandResolver* commandResolver, MessageRenderer* messageRenderer,
+    CommandResolver* commandResolver, MessageRenderer* messageRenderer,
     RF24Tranceiver* tranceiver, uint64_t address) {
   _title = title;
   if (address != 0) {
@@ -41,7 +42,7 @@ void ProgramTransmitter::set(MessageRenderer* messageRenderer) {
   _messageRenderer = messageRenderer;
 }
 
-void ProgramTransmitter::set(MovingCommandResolver* commandResolver) {
+void ProgramTransmitter::set(CommandResolver* commandResolver) {
   _commandResolver = commandResolver;
 }
 
@@ -55,11 +56,11 @@ int ProgramTransmitter::check(void* inputData) {
     return -1;
   }
 
-  MovingCommand* movingCommand = NULL;
+  CommandPacket* commandPacket = NULL;
   MovingCommand movingCommandInstance;
   if (_commandResolver != NULL) {
-    movingCommand = &movingCommandInstance;
-    _commandResolver->resolve(movingCommand, action, 3);
+    commandPacket = &movingCommandInstance;
+    _commandResolver->resolve(commandPacket, action, 3);
   }
 
   #if JOYSTICK_CHECKING_CHANGE
@@ -69,7 +70,7 @@ int ProgramTransmitter::check(void* inputData) {
   #endif
 
   if (_messageSender != NULL) {
-    MessagePacket packet(action, movingCommand);
+    MessagePacket packet(action, commandPacket);
     bool ok = _messageSender->write(&packet);
     if (ok) {
       _counter.continualLossCount = 0;
@@ -80,7 +81,7 @@ int ProgramTransmitter::check(void* inputData) {
   }
 
   #if MULTIPLE_SENDERS_SUPPORTED
-  MessagePacket packet2(action, &movingCommand);
+  MessagePacket packet2(action, commandPacket);
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageSendersTotal; i++) {
     int8_t status = invoke(_messageSenders[i], i+1, NULL, 0, &packet2);
@@ -95,7 +96,7 @@ int ProgramTransmitter::check(void* inputData) {
   #endif
 
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(action, movingCommand, &_counter);
+    _messageRenderer->render(action, commandPacket, &_counter);
   }
 
   _counter.adjust();

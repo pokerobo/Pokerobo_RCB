@@ -7,10 +7,11 @@
 #include "Message_Exchange.h"
 #include "Message_Serializer.h"
 #include "Message_Renderer.h"
+#include "Message_Resolver.h"
 
 #define MOVING_COMMAND_WEIGHT_MAX             255
 
-class MovingCommand: public MessageInterface {
+class MovingCommand: public CommandPacket {
   public:
     static const uint8_t messageSize;
     MovingCommand(int leftSpeed=0, byte leftDirection=0, int rightSpeed=0, byte rightDirection=0);
@@ -21,7 +22,7 @@ class MovingCommand: public MessageInterface {
     byte getRightDirection();
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
-    MessageInterface* deserialize(uint8_t* buf);
+    CommandPacket* deserialize(uint8_t* buf);
   private:
     int _LeftSpeed;
     byte _LeftDirection;
@@ -29,9 +30,9 @@ class MovingCommand: public MessageInterface {
     byte _RightDirection;
 };
 
-class MovingCommandResolver {
+class MovingCommandResolver: public CommandResolver {
   public:
-    MovingCommand* resolve(MovingCommand* command, JoystickAction* action, int coeff=1, bool rotatable=false);
+    CommandPacket* resolve(CommandPacket* command, JoystickAction* action, int coeff=1, bool rotatable=false);
 };
 
 class MovingMessageSerializer: public MessageSerializer {
