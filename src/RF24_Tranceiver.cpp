@@ -287,6 +287,10 @@ int RF24Receiver::process(JoystickAction* action, MessageInterface* commandPacke
   }
   _counter.ordinalNumber = count;
 
+  if (_messageProcessor != NULL) {
+    _messageProcessor->process(action, commandPacket);
+  }
+
   if (_messageRenderer != NULL) {
     _messageRenderer->render(action, commandPacket, &_counter);
   }

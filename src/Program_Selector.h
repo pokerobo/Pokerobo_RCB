@@ -4,7 +4,6 @@
 #include "Display_Handler.h"
 #include "Joystick_Handler.h"
 #include "Program_Collection.h"
-#include "Program_Definition.h"
 
 #define PROGRAM_MODE_CLIENT                 2
 #define PROGRAM_MODE_PLAYER                 5

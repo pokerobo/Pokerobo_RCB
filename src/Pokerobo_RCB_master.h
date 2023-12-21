@@ -5,6 +5,7 @@
 #include "Display_Handler.h"
 #include "Joystick_Handler.h"
 #include "RF24_Tranceiver.h"
+#include "Program_Definition.h"
 #include "Program_Selector.h"
 
 #endif
