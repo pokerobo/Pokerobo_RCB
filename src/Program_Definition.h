@@ -21,6 +21,8 @@ class ProgramTransmitter: public ProgramCapsule {
     void set(MessageSender* messageSender);
     void set(MessageRenderer* messageRenderer);
     void set(CommandResolver* commandResolver);
+    void set(CommandPacket* commandBuffer);
+    bool hasCommandBuffer();
     char* getTitle();
     int begin();
     int check(void* action);
@@ -37,6 +39,7 @@ class ProgramTransmitter: public ProgramCapsule {
     #endif//MULTIPLE_SENDERS_SUPPORTED
     MessageRenderer* _messageRenderer = NULL;
     CommandResolver* _commandResolver = NULL;
+    CommandPacket* _commandBuffer = NULL;
 };
 
 class ProgramReceiver: public ProgramCapsule {

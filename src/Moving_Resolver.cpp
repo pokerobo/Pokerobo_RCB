@@ -100,6 +100,10 @@ CommandPacket* MovingCommand::deserialize(uint8_t* buf) {
 #define BOUND_X    40
 #define BOUND_Y    40
 
+CommandPacket* MovingCommandResolver::create() {
+  return new MovingCommand();
+}
+
 CommandPacket* MovingCommandResolver::resolve(CommandPacket* commandPacket, JoystickAction* action, int coeff, bool rotatable) {
   MovingCommand* command = (MovingCommand*) commandPacket;
 
@@ -157,6 +161,12 @@ CommandPacket* MovingCommandResolver::resolve(CommandPacket* commandPacket, Joys
   command->update(enaVal, ld, enbVal, rd);
 
   return command;
+}
+
+void MovingCommandResolver::release(CommandPacket* command) {
+  if (command == NULL) return;
+  MovingCommand* movingCommand = (MovingCommand*) command;
+  delete movingCommand;
 }
 
 //-------------------------------------------------------------------------------------------------

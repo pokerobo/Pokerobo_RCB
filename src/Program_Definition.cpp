@@ -1,5 +1,4 @@
 #include "Program_Definition.h"
-#include "Moving_Resolver.h"
 
 ProgramTransmitter::ProgramTransmitter(char* title,
     CommandResolver* commandResolver, MessageRenderer* messageRenderer,
@@ -46,6 +45,14 @@ void ProgramTransmitter::set(CommandResolver* commandResolver) {
   _commandResolver = commandResolver;
 }
 
+void ProgramTransmitter::set(CommandPacket* commandBuffer) {
+  _commandBuffer = commandBuffer;
+}
+
+bool ProgramTransmitter::hasCommandBuffer() {
+  return _commandBuffer != NULL;
+}
+
 int ProgramTransmitter::check(void* inputData) {
   JoystickAction* action = (JoystickAction*) inputData;
 
@@ -57,9 +64,12 @@ int ProgramTransmitter::check(void* inputData) {
   }
 
   CommandPacket* commandPacket = NULL;
-  MovingCommand movingCommandInstance;
   if (_commandResolver != NULL) {
-    commandPacket = &movingCommandInstance;
+    if (!hasCommandBuffer()) {
+      commandPacket = _commandResolver->create();
+    } else {
+      commandPacket = _commandBuffer;
+    }
     _commandResolver->resolve(commandPacket, action, 3);
   }
 
@@ -100,6 +110,12 @@ int ProgramTransmitter::check(void* inputData) {
   }
 
   _counter.adjust();
+
+  if (_commandResolver != NULL) {
+    if (!hasCommandBuffer()) {
+      _commandResolver->release(commandPacket);
+    }
+  }
 
   return 0;
 }

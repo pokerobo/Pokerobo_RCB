@@ -32,7 +32,9 @@ class MovingCommand: public CommandPacket {
 
 class MovingCommandResolver: public CommandResolver {
   public:
+    CommandPacket* create();
     CommandPacket* resolve(CommandPacket* command, JoystickAction* action, int coeff=1, bool rotatable=false);
+    void release(CommandPacket* command);
 };
 
 class MovingMessageSerializer: public MessageSerializer {
