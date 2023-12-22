@@ -21,8 +21,12 @@
 #endif//RF24_TWO_WAY_ENABLED
 
 #ifndef RF24_TRANCEIVER_DELAY_AFTER_STOP_LISTENING
-#define RF24_TRANCEIVER_DELAY_AFTER_STOP_LISTENING 1
+#define RF24_TRANCEIVER_DELAY_AFTER_STOP_LISTENING    1
 #endif//RF24_TRANCEIVER_DELAY_AFTER_STOP_LISTENING
+
+#ifndef RF24_TRANCEIVER_DELAY_BEFORE_START_LISTENING
+#define RF24_TRANCEIVER_DELAY_BEFORE_START_LISTENING  0
+#endif//RF24_TRANCEIVER_DELAY_BEFORE_START_LISTENING
 
 #ifndef RF24_RECEIVER_DISCONTINUITY_MAX
 #define RF24_RECEIVER_DISCONTINUITY_MAX  5000
@@ -105,9 +109,11 @@ int RF24Transmitter::begin(uint64_t address, void* radio) {
   RF24* _tranceiver = (RF24*)_transmitter;
   _tranceiver->begin();
   _tranceiver->openWritingPipe(address);
-  _tranceiver->openReadingPipe(1, 0xFFFFFFFFLL ^ address);
   #if RF24_TWO_WAY_ENABLED
+  _tranceiver->openReadingPipe(1, 0xFFFFFFFFLL ^ address);
   _tranceiver->startListening();
+  #else
+  _tranceiver->stopListening();
   #endif
   return 0;
 }
@@ -192,8 +198,12 @@ int RF24Receiver::begin(uint64_t address, void* radio) {
   _receiver = radio;
   RF24* _tranceiver = (RF24*)_receiver;
   _tranceiver->begin();
+  #if RF24_TWO_WAY_ENABLED
   _tranceiver->openWritingPipe(0xFFFFFFFFLL ^ address);
   _tranceiver->openReadingPipe(1, address);
+  #else
+  _tranceiver->openReadingPipe(0, address);
+  #endif
   _tranceiver->startListening();
   return 0;
 }

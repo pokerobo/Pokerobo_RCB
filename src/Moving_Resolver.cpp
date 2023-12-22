@@ -3,42 +3,42 @@
 
 //-------------------------------------------------------------------------------------------------
 
-MovingCommand::MovingCommand(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
+MovingCommandPacket::MovingCommandPacket(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
   update(leftSpeed, leftDirection, rightSpeed, rightDirection);
 }
 
-void MovingCommand::update(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
+void MovingCommandPacket::update(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection) {
   _LeftSpeed = leftSpeed;
   _LeftDirection = leftDirection;
   _RightSpeed = rightSpeed;
   _RightDirection = rightDirection;
 }
 
-int MovingCommand::getLeftSpeed() {
+int MovingCommandPacket::getLeftSpeed() {
   return _LeftSpeed;
 }
 
-byte MovingCommand::getLeftDirection() {
+byte MovingCommandPacket::getLeftDirection() {
   return _LeftDirection;
 }
 
-int MovingCommand::getRightSpeed() {
+int MovingCommandPacket::getRightSpeed() {
   return _RightSpeed;
 }
 
-byte MovingCommand::getRightDirection() {
+byte MovingCommandPacket::getRightDirection() {
   return _RightDirection;
 }
 
-const uint8_t MovingCommand::messageSize = sizeof(uint8_t) +
+const uint8_t MovingCommandPacket::messageSize = sizeof(uint8_t) +
     sizeof(uint8_t) +
     sizeof(uint8_t);
 
-uint8_t MovingCommand::length() {
+uint8_t MovingCommandPacket::length() {
   return messageSize;
 }
 
-uint8_t* MovingCommand::serialize(uint8_t* buf, uint8_t len) {
+uint8_t* MovingCommandPacket::serialize(uint8_t* buf, uint8_t len) {
   if (len < messageSize) {
     return NULL;
   }
@@ -70,7 +70,7 @@ uint8_t* MovingCommand::serialize(uint8_t* buf, uint8_t len) {
   return buf;
 }
 
-CommandPacket* MovingCommand::deserialize(uint8_t* buf) {
+CommandPacket* MovingCommandPacket::deserialize(uint8_t* buf) {
   if (buf == NULL) {
     return NULL;
   }
@@ -101,11 +101,11 @@ CommandPacket* MovingCommand::deserialize(uint8_t* buf) {
 #define BOUND_Y    40
 
 CommandPacket* MovingCommandResolver::create() {
-  return new MovingCommand();
+  return new MovingCommandPacket();
 }
 
 CommandPacket* MovingCommandResolver::resolve(CommandPacket* commandPacket, JoystickAction* action, int coeff, bool rotatable) {
-  MovingCommand* command = (MovingCommand*) commandPacket;
+  MovingCommandPacket* command = (MovingCommandPacket*) commandPacket;
 
   if (command == NULL) {
     return command;
@@ -165,7 +165,7 @@ CommandPacket* MovingCommandResolver::resolve(CommandPacket* commandPacket, Joys
 
 void MovingCommandResolver::release(CommandPacket* command) {
   if (command == NULL) return;
-  MovingCommand* movingCommand = (MovingCommand*) command;
+  MovingCommandPacket* movingCommand = (MovingCommandPacket*) command;
   delete movingCommand;
 }
 
@@ -173,7 +173,7 @@ void MovingCommandResolver::release(CommandPacket* command) {
 
 const uint8_t MovingMessageSerializer::messageSize = strlen(MESSAGE_SIGNATURE) +
     JoystickAction::messageSize +
-    MovingCommand::messageSize;
+    MovingCommandPacket::messageSize;
 
 uint8_t MovingMessageSerializer::getSize() {
   return messageSize;
@@ -200,7 +200,7 @@ int MovingMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
 
   JoystickAction message(buttons, jX, jY, count);
 
-  MovingCommand movingCommandInstance;
+  MovingCommandPacket movingCommandInstance;
   MessageInterface* commandPacket = movingCommandInstance.deserialize(
       msg + strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize);
 
@@ -221,7 +221,7 @@ int MovingMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
 void MovingDisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MessageInterface* commandPacket) {
   if (commandPacket == NULL) return;
 
-  MovingCommand* movingCommand = (MovingCommand*) commandPacket;
+  MovingCommandPacket* movingCommand = (MovingCommandPacket*) commandPacket;
 
   U8G2* u8g2 = (U8G2*) _u8g2Ref;
 
@@ -261,7 +261,7 @@ void MovingSerialConsole::clear() {}
 void MovingSerialConsole::splash(char* title, byte align) {}
 
 void MovingSerialConsole::render(JoystickAction* message, MessageInterface* commandPacket, TransmissionCounter* counter) {
-  MovingCommand* movingCommand = (MovingCommand*) commandPacket;
+  MovingCommandPacket* movingCommand = (MovingCommandPacket*) commandPacket;
   Serial.print('#'), Serial.print(message->getExtras()), Serial.print(' '), Serial.print('-'), Serial.print(' ');
   Serial.print("Pressing"), Serial.print("Flags"), Serial.print(':'), Serial.print(' '),
       Serial.print(message->getPressingFlags());

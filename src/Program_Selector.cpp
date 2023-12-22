@@ -27,7 +27,6 @@ int ProgramSelector::wait_(int state) {
   return state;
 }
 
-#if __DEVMODE_PROGRAM_SELECTOR__
 int ProgramSelector::move_() {
   JoystickAction message;
   _joystickHandler->input(&message);
@@ -97,35 +96,6 @@ int ProgramSelector::executeProgram_(JoystickAction* action) {
 int ProgramSelector::leaveProgram_(JoystickAction* action) {
   return 0;
 }
-#else
-int ProgramSelector::move_() {
-  JoystickAction message;
-  _joystickHandler->input(&message);
-
-  uint16_t clickingFlags = message.getClickingFlags();
-  if (!(clickingFlags & PROGRAM_MENU_TOGGLE_BUTTON)) {
-    return _programCollection->getCurrentItem()->check(&message);
-  }
-
-  if (_programCollection->getTotal() < 2) {
-    return -1;
-  }
-
-  uint8_t programNextIndex = _programCollection->getCurrentIndex() + 1;
-  if (programNextIndex >= _programCollection->getTotal()) {
-    programNextIndex = 0;
-  }
-  ProgramCapsule* programNext = _programCollection->getItem(programNextIndex);
-  ProgramCapsule* program = _programCollection->getCurrentItem();
-
-  program->close();
-  programNext->begin();
-
-  _programCollection->setCurrentIndex(programNextIndex);
-
-  return 0;
-}
-#endif
 
 void ProgramSelector::changeFlow_(uint8_t flow) {
   if (flow == _flow) return;
