@@ -5,7 +5,7 @@ const uint64_t address = 0x18580901LL;
 MovingDisplayHandler displayHandler;
 MovingMessageSerializer messageSerializer;
 MovingCommandResolver commandResolver;
-MovingCommandPacket commandBuffer;
+MovingCommand commandBuffer;
 
 RF24Tranceiver rf24Tranceiver;
 JoystickHandler joystickHandler;

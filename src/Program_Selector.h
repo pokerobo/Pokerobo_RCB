@@ -15,7 +15,7 @@
 #define PROGRAM_MENU_TOGGLE_BUTTON          MASK_ANALOG_BUTTON
 
 #ifndef __DEVMODE_PROGRAM_SELECTOR__
-#define __DEVMODE_PROGRAM_SELECTOR__ 0
+#define __DEVMODE_PROGRAM_SELECTOR__        0
 #endif//__DEVMODE_PROGRAM_SELECTOR__
 
 class ProgramSelector {
@@ -38,6 +38,7 @@ class ProgramSelector {
     int enterProgram_(JoystickAction* action);
     int executeProgram_(JoystickAction* action);
     int leaveProgram_(JoystickAction* action);
+    void changeFlow_(uint8_t flow);
   private:
     uint8_t _mode = PROGRAM_MODE_PLAYER;
     uint8_t _flow = DASHBOARD_FLOW_EXECUTION;

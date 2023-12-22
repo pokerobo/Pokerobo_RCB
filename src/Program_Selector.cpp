@@ -37,11 +37,11 @@ int ProgramSelector::move_() {
     switch(_flow) {
       case DASHBOARD_FLOW_EXECUTION:
         leaveProgram_(&message);
-        _flow = DASHBOARD_FLOW_CONFIGURATION;
+        changeFlow_(DASHBOARD_FLOW_CONFIGURATION);
         return enterDashboard_(&message);
       case DASHBOARD_FLOW_CONFIGURATION:
         leaveDashboard_(&message);
-        _flow = DASHBOARD_FLOW_EXECUTION;
+        changeFlow_(DASHBOARD_FLOW_EXECUTION);
         return enterProgram_(&message);
     }
   }
@@ -64,7 +64,7 @@ int ProgramSelector::enterDashboard_(JoystickAction* action) {
 int ProgramSelector::processDashboard_(JoystickAction* action) {
   uint8_t toggle = _joystickHandler->checkArrowKeysToggle(action->getX(), action->getY());
   if (toggle & 0b0001) { // LEFT -> BACK
-    _flow = DASHBOARD_FLOW_EXECUTION;
+    changeFlow_(DASHBOARD_FLOW_EXECUTION);
   } else
   if (toggle & 0b0010) { // UP -> PREV
     _programCollection->moveFocusUp();
@@ -126,6 +126,12 @@ int ProgramSelector::move_() {
   return 0;
 }
 #endif
+
+void ProgramSelector::changeFlow_(uint8_t flow) {
+  if (flow == _flow) return;
+  _flow = flow;
+  _displayHandler->clear();
+}
 
 bool ProgramSelector::add(ProgramCapsule* programCapsule) {
   return _programCollection->add(programCapsule);
