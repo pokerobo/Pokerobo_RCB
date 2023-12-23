@@ -165,6 +165,8 @@ int ProgramTransmitter::close() {
   return 0;
 }
 
+//-------------------------------------------------------------------------------------------------
+
 ProgramReceiver::ProgramReceiver(char* title,
     RF24Tranceiver* tranceiver, uint64_t address) {
   _title = title;

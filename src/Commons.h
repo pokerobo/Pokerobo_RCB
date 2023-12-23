@@ -120,4 +120,4 @@
 //-------------------------------------------------------------------------------------------------
 
 #define __DEVMODE_PROGRAM_SELECTOR__            1
-#define RF24_TWO_WAY_ENABLED                    0
+#define RF24_TWO_WAY_ENABLED                    1
