@@ -158,6 +158,13 @@ CommandPacket* MovingCommandResolver::resolve(CommandPacket* commandPacket, Joys
   enaVal = map(enaVal, 0, 512, 0, MOVING_COMMAND_WEIGHT_MAX);
   enbVal = map(enbVal, 0, 512, 0, MOVING_COMMAND_WEIGHT_MAX);
 
+  #if __DEBUG_LOG_COMMAND_RESOLVER__
+  Serial.print("enA"), Serial.print(':'), Serial.print(' '), Serial.print(enaVal);
+  Serial.print(' '), Serial.print('-'), Serial.print(' ');
+  Serial.print("enB"), Serial.print(':'), Serial.print(' '), Serial.print(enbVal);
+  Serial.println();
+  #endif
+
   command->update(enaVal, ld, enbVal, rd);
 
   return command;
@@ -267,7 +274,7 @@ void MovingSerialConsole::render(JoystickAction* message, MessageInterface* comm
       Serial.print(message->getPressingFlags());
   Serial.print(';'), Serial.print(' ');
   Serial.print("Clicking"), Serial.print("Flags"), Serial.print(':'), Serial.print(' '),
-      Serial.print(message->getClickingFlags());
+      Serial.print(message->getTogglingFlags());
   Serial.print(';'), Serial.print(' '), Serial.print('X'), Serial.print(':'), Serial.print(' '), Serial.print(message->getX());
   Serial.print(';'), Serial.print(' '), Serial.print('Y'), Serial.print(':'), Serial.print(' '), Serial.print(message->getY());
   Serial.println();

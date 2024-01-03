@@ -199,7 +199,7 @@ void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPa
   lines[COORD_LINE_FLAGS][POS_SELECT_BUTTON] = idleButtonIcon(buttonOffs, pressingFlags, MASK_SELECT_BUTTON, 'O');
   lines[COORD_LINE_FLAGS][POS_ANALOG_BUTTON] = idleButtonIcon(buttonOffs, pressingFlags, MASK_ANALOG_BUTTON, 'A');
 
-  uint16_t clickingFlags = message->getClickingFlags();
+  uint16_t clickingFlags = message->getTogglingFlags();
   if (clickingFlags & MASK_START_BUTTON) {
     lines[COORD_LINE_FLAGS][POS_START_BUTTON] = '+';
   }

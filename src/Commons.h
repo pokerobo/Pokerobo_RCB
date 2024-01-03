@@ -26,13 +26,14 @@
 #define JOYSTICK_DISABLED_BUTTONS 0b0101111
 
 #ifndef __RUNNING_LOG_ENABLED__
-#define __RUNNING_LOG_ENABLED__           0
+#define __RUNNING_LOG_ENABLED__           1
 #endif
 
 #undef  __DEBUG_LOG_DISPLAY_HANDLER__     1
 #undef  __DEBUG_LOG_JOYSTICK_HANDLER__    1
 #undef  __DEBUG_LOG_RF24_TRANCEIVER__     1
 #undef  __DEBUG_LOG_PROGRAM_SELECTOR__    1
+#define __DEBUG_LOG_COMMAND_RESOLVER__    1
 
 #ifndef __STRICT_MODE__
 #define __STRICT_MODE__                   0
@@ -61,6 +62,13 @@
 #define JOYSTICK_MAX_X   723
 #define JOYSTICK_MAX_Y   723
 #endif
+
+#define CONTROL_PACKET_V1                 1
+#define CONTROL_PACKET_V2                 2
+
+#ifndef __JOYSTICK_MESSAGE_STRUCTURE__
+#define __JOYSTICK_MESSAGE_STRUCTURE__    CONTROL_PACKET_V1
+#endif//__JOYSTICK_MESSAGE_STRUCTURE__
 
 //-------------------------------------------------------------------------------------------------
 

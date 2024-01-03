@@ -44,7 +44,18 @@ class MessageSender {
     virtual bool write(MessagePacket* packet);
 };
 
-uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t pressed, uint16_t x, uint16_t y, uint32_t extras);
-bool decodeMessage(uint8_t* buf, char* cmd, uint16_t* pressed, uint16_t* x, uint16_t* y, uint32_t* extras);
+uint8_t* encodeMessage(uint8_t* buf, char* cmd, uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
+uint8_t* encodeMessage(uint8_t* msg, char* cmd,
+    uint16_t x, uint16_t y,
+    uint16_t pressingFlags,
+    uint16_t togglingFlags,
+    uint32_t extras);
+
+bool decodeMessage(uint8_t* buf, char* cmd, uint16_t* buttons, uint16_t* x, uint16_t* y, uint32_t* extras);
+bool decodeMessage(uint8_t* msg, char* cmd,
+    uint16_t* x, uint16_t* y,
+    uint16_t* pressingFlags,
+    uint16_t* togglingFlags,
+    uint32_t* extras);
 
 #endif

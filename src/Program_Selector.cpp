@@ -31,8 +31,8 @@ int ProgramSelector::move_() {
   JoystickAction message;
   _joystickHandler->input(&message);
 
-  uint16_t clickingFlags = message.getClickingFlags();
-  if ((clickingFlags & PROGRAM_MENU_TOGGLE_BUTTON)) {
+  uint16_t togglingFlags = message.getTogglingFlags();
+  if ((togglingFlags & PROGRAM_MENU_TOGGLE_BUTTON)) {
     switch(_flow) {
       case DASHBOARD_FLOW_EXECUTION:
         leaveProgram_(&message);

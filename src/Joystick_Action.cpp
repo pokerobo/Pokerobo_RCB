@@ -1,9 +1,19 @@
 #include "Joystick_Action.h"
 
-const uint8_t JoystickAction::messageSize = sizeof(uint16_t)
-    + sizeof(uint16_t)
-    + sizeof(uint16_t)
+#if __JOYSTICK_MESSAGE_STRUCTURE__ == CONTROL_PACKET_V1
+const uint8_t JoystickAction::messageSize = sizeof(uint16_t) // SIGNATURE
+    + sizeof(uint16_t) // pressingFlags
+    + sizeof(uint16_t) // Joystick-X
+    + sizeof(uint16_t) // Joystick-Y
     + sizeof(uint32_t);
+#else
+const uint8_t JoystickAction::messageSize = sizeof(uint16_t) // SIGNATURE
+    + sizeof(uint16_t) // pressingFlags
+    + sizeof(uint16_t) // togglingFlags
+    + sizeof(uint16_t) // Joystick-X
+    + sizeof(uint16_t) // Joystick-Y
+    + sizeof(uint32_t);
+#endif
 
 JoystickAction::JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras) {
   update(buttons, x, y, extras);
@@ -16,13 +26,21 @@ void JoystickAction::update(uint16_t buttons, uint16_t x, uint16_t y, uint32_t e
   _extras = extras;
 }
 
+JoystickAction::JoystickAction(uint16_t x, uint16_t y, uint16_t pressingFlags, uint16_t togglingFlags, uint32_t extras) {
+  update(x, y, pressingFlags, togglingFlags, extras);
+}
+
+void JoystickAction::update(uint16_t x, uint16_t y, uint16_t pressingFlags, uint16_t togglingFlags, uint32_t extras) {
+  _x = x;
+  _y = y;
+  _pressingFlags = pressingFlags;
+  _togglingFlags = togglingFlags;
+  _extras = extras;
+}
+
 void JoystickAction::setOrigin(uint16_t x, uint16_t y) {
   _originX = x;
   _originY = y;
-}
-
-void JoystickAction::setClickingFlags(uint16_t clickingFlags) {
-  _clickingTrail = clickingFlags;
 }
 
 void JoystickAction::setSource(message_source_t source) {
@@ -37,8 +55,8 @@ uint16_t JoystickAction::getPressingFlags() {
   return _pressingFlags;
 }
 
-uint16_t JoystickAction::getClickingFlags() {
-  return _clickingTrail;
+uint16_t JoystickAction::getTogglingFlags() {
+  return _togglingFlags;
 }
 
 uint16_t JoystickAction::getX() {
@@ -69,15 +87,22 @@ uint8_t* JoystickAction::serialize(uint8_t* buf, uint8_t len) {
   if (len < messageSize) {
     return NULL;
   }
+  #if __JOYSTICK_MESSAGE_STRUCTURE__ == CONTROL_PACKET_V1
   return encodeMessage(buf, NULL, _pressingFlags, _x, _y, _extras);
+  #else
+  return encodeMessage(buf, NULL, _x, _y, _pressingFlags, _togglingFlags, _extras);
+  #endif
 }
 
 MessageInterface* JoystickAction::deserialize(uint8_t* buf) {
   if (buf == NULL) {
     return NULL;
   }
-
+  #if __JOYSTICK_MESSAGE_STRUCTURE__ == CONTROL_PACKET_V1
   decodeMessage(buf, NULL, &(_pressingFlags), &(_x), &(_y), &(_extras));
+  #else
+  decodeMessage(buf, NULL, &(_x), &(_y), &(_pressingFlags), &(_togglingFlags), &(_extras));
+  #endif
 
   return this;
 }

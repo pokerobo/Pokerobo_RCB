@@ -119,14 +119,14 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
   }
   #endif
 
-  uint16_t pressed = readButtonStates();
+  uint16_t pressingFlags = readButtonStates();
 
   uint16_t x = analogRead(JOYSTICK_PIN_X_AXIS);
   uint16_t y = analogRead(JOYSTICK_PIN_Y_AXIS);
 
   #if __DEBUG_LOG_JOYSTICK_HANDLER__
   char log[32] = { 0 };
-  buildJoystickActionLogStr(log, pressed, x, y, _ordinalNumber);
+  buildJoystickActionLogStr(log, pressingFlags, x, y, _ordinalNumber);
   Serial.print('M'), Serial.print('1'), Serial.print(':'), Serial.print(' '), Serial.println(log);
   #endif
 
@@ -158,12 +158,11 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
   #endif
 
   #if __DEBUG_LOG_JOYSTICK_HANDLER__
-  buildJoystickActionLogStr(log, pressed, x, y, _ordinalNumber);
+  buildJoystickActionLogStr(log, pressingFlags, x, y, _ordinalNumber);
   Serial.print('M'), Serial.print('2'), Serial.print(':'), Serial.print(' '), Serial.println(log);
   #endif
 
-  action->update(pressed, x, y, _ordinalNumber);
-  action->setClickingFlags(checkButtonClickingFlags(pressed));
+  action->update(x, y, pressingFlags, checkButtonClickingFlags(pressingFlags), _ordinalNumber);
 
   return action;
 }

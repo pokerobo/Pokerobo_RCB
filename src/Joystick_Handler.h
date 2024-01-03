@@ -73,7 +73,7 @@ class JoystickHandler {
   protected:
     void detect();
     uint16_t readButtonStates();
-    uint16_t checkButtonClickingFlags(uint16_t pressed);
+    uint16_t checkButtonClickingFlags(uint16_t pressingFlags);
   private:
     uint32_t _ordinalNumber = 0;
     uint16_t _clickingTrail = 0;

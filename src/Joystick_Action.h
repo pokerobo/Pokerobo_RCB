@@ -89,14 +89,15 @@ typedef enum { TX_MSG = 0, RX_MSG } message_source_t;
 class JoystickAction: public MessageInterface {
   public:
     static const uint8_t messageSize;
-    JoystickAction(uint16_t buttons=0, uint16_t x=0, uint16_t y=0, uint32_t extras=0);
+    JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
     void update(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
+    JoystickAction(uint16_t x=0, uint16_t y=0, uint16_t pressingFlags=0, uint16_t togglingFlags=0, uint32_t extras=0);
+    void update(uint16_t x, uint16_t y, uint16_t pressingFlags, uint16_t togglingFlags, uint32_t extras);
     void setOrigin(uint16_t x, uint16_t y);
-    void setClickingFlags(uint16_t clickingFlags);
     void setSource(message_source_t source);
     message_source_t getSource();
     uint16_t getPressingFlags();
-    uint16_t getClickingFlags();
+    uint16_t getTogglingFlags();
     uint16_t getX();
     uint16_t getY();
     uint16_t getOriginX();
@@ -110,7 +111,7 @@ class JoystickAction: public MessageInterface {
     #endif//JOYSTICK_CHECKING_CHANGE
   private:
     uint16_t _pressingFlags = 0;
-    uint16_t _clickingTrail = 0;
+    uint16_t _togglingFlags = 0;
     uint16_t _x = 0;
     uint16_t _y = 0;
     uint16_t _originX = 0;
