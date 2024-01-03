@@ -1,13 +1,13 @@
 #include "Joystick_Action.h"
 
 #if __JOYSTICK_MESSAGE_STRUCTURE__ == CONTROL_PACKET_V1
-const uint8_t JoystickAction::messageSize = sizeof(uint16_t) // SIGNATURE
+const uint8_t JoystickAction::messageSize = 0 // SIGNATURE
     + sizeof(uint16_t) // pressingFlags
     + sizeof(uint16_t) // Joystick-X
     + sizeof(uint16_t) // Joystick-Y
     + sizeof(uint32_t);
 #else
-const uint8_t JoystickAction::messageSize = sizeof(uint16_t) // SIGNATURE
+const uint8_t JoystickAction::messageSize = 0 // SIGNATURE
     + sizeof(uint16_t) // pressingFlags
     + sizeof(uint16_t) // togglingFlags
     + sizeof(uint16_t) // Joystick-X
