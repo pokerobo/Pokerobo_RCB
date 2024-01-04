@@ -187,32 +187,26 @@ uint8_t MovingMessageSerializer::getSize() {
 }
 
 int MovingMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
-  uint16_t buttons;
-  uint16_t jX, jY;
-  uint32_t count;
-
-  bool ok = decodeMessage(msg, MESSAGE_SIGNATURE, &buttons, &jX, &jY, &count);
-
-  if (!ok) {
+  JoystickAction controlAction;
+  if (controlAction.deserialize(msg + strlen(MESSAGE_SIGNATURE)) == NULL) {
     return -1;
   }
+  JoystickAction* action = &controlAction;
 
   #if __DEBUG_LOG_MESSAGE_SERIALIZER__
   char log[32] = { 0 };
-  buildJoystickActionLogStr(log, buttons, jX, jY, count);
+  buildJoystickActionLogStr(log, action->getPressingFlags(), action->getX(), action->getY(), action->getExtras());
   Serial.print("decode"), Serial.print('('), Serial.print(log), Serial.print(')'),
       Serial.print(' '), Serial.print('-'), Serial.print('>'), Serial.print(' '), Serial.print(ok);
   Serial.println();
   #endif
-
-  JoystickAction message(buttons, jX, jY, count);
 
   MovingCommandPacket movingCommandInstance;
   MessageInterface* commandPacket = movingCommandInstance.deserialize(
       msg + strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize);
 
   if (processor != NULL) {
-    return processor->process(&message, commandPacket);
+    return processor->process(action, commandPacket);
   }
 
   return 0;
