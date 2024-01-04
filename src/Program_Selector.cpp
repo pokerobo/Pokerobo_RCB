@@ -61,7 +61,7 @@ int ProgramSelector::enterDashboard_(JoystickAction* action) {
 }
 
 int ProgramSelector::processDashboard_(JoystickAction* action) {
-  uint8_t toggle = _joystickHandler->checkArrowKeysToggle(action->getX(), action->getY());
+  uint8_t toggle = action->getTogglingFlags() >> 12;
   if (toggle & 0b0001) { // LEFT -> BACK
     changeFlow_(DASHBOARD_FLOW_EXECUTION);
   } else

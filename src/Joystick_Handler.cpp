@@ -24,6 +24,10 @@
 
 #define CLICK_STYLE_BUTTONS       MASK_START_BUTTON | MASK_SELECT_BUTTON | MASK_ANALOG_BUTTON
 
+#ifndef JOYSTICK_TOGGLE_BOUND
+#define JOYSTICK_TOGGLE_BOUND     255
+#endif//JOYSTICK_TOGGLE_BOUND
+
 const int JoystickHandler::pinOfButtons[] = {
   PIN_UP_BUTTON,
   PIN_RIGHT_BUTTON,
@@ -157,12 +161,17 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
   y = adjustAxis(y, _middleY, _maxY);
   #endif
 
+  uint16_t togglingFlags = checkButtonClickingFlags(pressingFlags);
+
+  uint16_t joystickTogglingFlags = checkArrowKeysToggle(x, y);
+  togglingFlags |= (joystickTogglingFlags << 12);
+
   #if __DEBUG_LOG_JOYSTICK_HANDLER__
   buildJoystickActionLogStr(log, pressingFlags, x, y, _ordinalNumber);
   Serial.print('M'), Serial.print('2'), Serial.print(':'), Serial.print(' '), Serial.println(log);
   #endif
 
-  action->update(x, y, pressingFlags, checkButtonClickingFlags(pressingFlags), _ordinalNumber);
+  action->update(x, y, pressingFlags, togglingFlags, _ordinalNumber);
 
   return action;
 }
@@ -178,14 +187,14 @@ uint16_t adjustAxis(uint16_t z, uint16_t _middleZ, uint16_t _maxZ) {
 
 uint8_t JoystickHandler::checkArrowKeysToggle(uint16_t x, uint16_t y) {
   uint8_t pressed = 0;
-  if (x < _middleX - 255) {
+  if (x < _middleX - JOYSTICK_TOGGLE_BOUND) {
     pressed |= 0b0001; // LEFT
-  } else if (x > _middleX + 255) {
+  } else if (x > _middleX + JOYSTICK_TOGGLE_BOUND) {
     pressed |= 0b1000; // RIGHT
   }
-  if (y < _middleY - 255) {
+  if (y < _middleY - JOYSTICK_TOGGLE_BOUND) {
     pressed |= 0b0100; // DOWN
-  } else if (y > _middleX + 255) {
+  } else if (y > _middleX + JOYSTICK_TOGGLE_BOUND) {
     pressed |= 0b0010; // UP
   }
 

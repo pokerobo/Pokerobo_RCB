@@ -26,7 +26,7 @@
 #define JOYSTICK_DISABLED_BUTTONS 0b0101111
 
 #ifndef __RUNNING_LOG_ENABLED__
-#define __RUNNING_LOG_ENABLED__           1
+#define __RUNNING_LOG_ENABLED__           0
 #endif
 
 #undef  __DEBUG_LOG_DISPLAY_HANDLER__     1

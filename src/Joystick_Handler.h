@@ -69,11 +69,11 @@ class JoystickHandler {
     int begin();
     JoystickAction input();
     JoystickAction* input(JoystickAction* packet);
-    uint8_t checkArrowKeysToggle(uint16_t x, uint16_t y);
   protected:
     void detect();
     uint16_t readButtonStates();
     uint16_t checkButtonClickingFlags(uint16_t pressingFlags);
+    uint8_t checkArrowKeysToggle(uint16_t x, uint16_t y);
   private:
     uint32_t _ordinalNumber = 0;
     uint16_t _clickingTrail = 0;
