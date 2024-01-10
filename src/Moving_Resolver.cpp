@@ -187,10 +187,45 @@ uint8_t MovingMessageSerializer::getSize() {
 }
 
 int MovingMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
-  JoystickAction controlAction;
-  if (controlAction.deserialize(msg + strlen(MESSAGE_SIGNATURE)) == NULL) {
+  if (msg[0] == 'J' && msg[1] == 'S') {
+    JoystickAction controlAction;
+    if (controlAction.deserialize(msg + strlen(MESSAGE_SIGNATURE)) == NULL) {
+      return -1;
+    }
+    JoystickAction* action = &controlAction;
+
+    #if __DEBUG_LOG_MESSAGE_SERIALIZER__
+    char log[32] = { 0 };
+    buildJoystickActionLogStr(log, action->getPressingFlags(), action->getX(), action->getY(), action->getExtras());
+    Serial.print("decode"), Serial.print('('), Serial.print(log), Serial.print(')'),
+        Serial.print(' '), Serial.print('-'), Serial.print('>'), Serial.print(' '), Serial.print(ok);
+    Serial.println();
+    #endif
+
+    MovingCommandPacket movingCommandInstance;
+    MessageInterface* commandPacket = movingCommandInstance.deserialize(
+        msg + strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize);
+
+    if (processor != NULL) {
+      return processor->process(NULL, action, commandPacket);
+    }
+
+    return 0;
+  }
+  uint8_t offset = 0;
+
+  MasterContext contextPacket;
+  if (contextPacket.deserialize(msg + offset) == NULL) {
     return -1;
   }
+  offset += contextPacket.length();
+  MasterContext* context = &contextPacket;
+
+  JoystickAction controlAction;
+  if (controlAction.deserialize(msg + offset) == NULL) {
+    return -1;
+  }
+  offset += controlAction.length();
   JoystickAction* action = &controlAction;
 
   #if __DEBUG_LOG_MESSAGE_SERIALIZER__
@@ -201,12 +236,11 @@ int MovingMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
   Serial.println();
   #endif
 
-  MovingCommandPacket movingCommandInstance;
-  MessageInterface* commandPacket = movingCommandInstance.deserialize(
-      msg + strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize);
+  MovingCommandPacket commandPacket;
+  MessageInterface* command = commandPacket.deserialize(msg + offset);
 
   if (processor != NULL) {
-    return processor->process(action, commandPacket);
+    return processor->process(context, action, command);
   }
 
   return 0;
@@ -267,7 +301,7 @@ void MovingSerialConsole::render(JoystickAction* message, MessageInterface* comm
   Serial.print("Pressing"), Serial.print("Flags"), Serial.print(':'), Serial.print(' '),
       Serial.print(message->getPressingFlags());
   Serial.print(';'), Serial.print(' ');
-  Serial.print("Clicking"), Serial.print("Flags"), Serial.print(':'), Serial.print(' '),
+  Serial.print("Toggling"), Serial.print("Flags"), Serial.print(':'), Serial.print(' '),
       Serial.print(message->getTogglingFlags());
   Serial.print(';'), Serial.print(' '), Serial.print('X'), Serial.print(':'), Serial.print(' '), Serial.print(message->getX());
   Serial.print(';'), Serial.print(' '), Serial.print('Y'), Serial.print(':'), Serial.print(' '), Serial.print(message->getY());

@@ -322,7 +322,7 @@ int RF24Receiver::check() {
   return _messageSerializer->decode(msg, this);
 }
 
-int RF24Receiver::process(JoystickAction* action, MessageInterface* commandPacket) {
+int RF24Receiver::process(MasterContext* context, JoystickAction* action, MessageInterface* commandPacket) {
   action->setSource(RX_MSG);
 
   uint32_t count = action->getExtras();
@@ -342,7 +342,7 @@ int RF24Receiver::process(JoystickAction* action, MessageInterface* commandPacke
   _counter.ordinalNumber = count;
 
   if (_messageProcessor != NULL) {
-    _messageProcessor->process(action, commandPacket);
+    _messageProcessor->process(context, action, commandPacket);
   }
 
   if (_messageRenderer != NULL) {

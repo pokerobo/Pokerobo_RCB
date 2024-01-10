@@ -2,13 +2,83 @@
 
 //-------------------------------------------------------------------------------------------------
 
-MessagePacket::MessagePacket(MessageInterface* action, MessageInterface* command) {
-  _action = action;
+MasterContext::MasterContext() {}
+
+MasterContext::MasterContext(uint8_t applicationId, bool programCheckBit) {
+  _applicationId = applicationId;
+  _programCheckBit = programCheckBit;
+
+  uint8_t checkBit = 0;
+  for(uint8_t i=0; i<6; i++) {
+    checkBit ^= (_applicationId >> i) & 0b1;
+  }
+  checkBit ^= _programCheckBit & 0b1;
+
+  _contextCheckBit = checkBit;
+}
+
+MasterContext::MasterContext(uint8_t* buf) {
+  deserialize(buf);
+}
+
+uint8_t MasterContext::getApplicationId() {
+  return _applicationId;
+}
+
+bool MasterContext::getContextCheckBit() {
+  return _contextCheckBit;
+}
+
+bool MasterContext::getProgramCheckBit() {
+  return _programCheckBit;
+}
+
+const uint8_t MasterContext::messageSize = sizeof(uint16_t);
+
+uint8_t MasterContext::length() {
+  return messageSize;
+}
+
+uint8_t* MasterContext::serialize(uint8_t* buf, uint8_t len) {
+  if (len < messageSize) {
+    return NULL;
+  }
+
+  uint8_t data = 0;
+  data |= (_applicationId & ((1U << 6) - 1));
+  data |= _contextCheckBit << 7;
+  data |= _programCheckBit << 6;
+  buf[0] = data;
+
+  buf[1] = 0; // reserved
+
+  return buf;
+}
+
+MessageInterface* MasterContext::deserialize(uint8_t* buf) {
+  if (buf == NULL) {
+    return NULL;
+  }
+
+  _contextCheckBit = (buf[0] >> 7) & 0b1;
+  _programCheckBit = (buf[0] >> 6) & 0b1;
+  _applicationId = buf[0] & ((1U << 6) - 1);
+}
+
+//-------------------------------------------------------------------------------------------------
+
+MessagePacket::MessagePacket(MessageInterface* context,
+    MessageInterface* control, MessageInterface* command) {
+  _context = context;
+  _action = control;
   _command = command;
 }
 
 uint8_t MessagePacket::length() {
   uint8_t len = strlen(MESSAGE_SIGNATURE); // 2 bytes header
+  if (_context != NULL) {
+    len = _context->length();
+  }
   if (_action != NULL) {
     len += _action->length();
   }
@@ -19,6 +89,25 @@ uint8_t MessagePacket::length() {
 }
 
 uint8_t* MessagePacket::serialize(uint8_t* buf, uint8_t len) {
+  if (_context != NULL) {
+    uint8_t offset = 0;
+
+    _context->serialize(buf + offset, _context->length());
+    offset += _context->length();
+
+    if (_action != NULL) {
+      _action->serialize(buf + offset, _action->length());
+      offset += _action->length();
+    }
+
+    if (_command != NULL) {
+      _command->serialize(buf + offset, _command->length());
+      offset += _command->length();
+    }
+
+    return buf;
+  }
+
   if (len < length()) {
     return NULL;
   }

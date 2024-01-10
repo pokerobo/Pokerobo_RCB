@@ -32,7 +32,7 @@ class RF24Receiver: public MessageProcessor {
   public:
     int begin(uint64_t address=RF24_DEFAULT_ADDRESS, void* radio = NULL);
     int check();
-    int process(JoystickAction* action, MessageInterface* commandPacket);
+    int process(MasterContext* context, JoystickAction* action, MessageInterface* command);
     void reset();
     void set(MessageProcessor* messageProcessor);
     void set(MessageSerializer* messageSerializer);

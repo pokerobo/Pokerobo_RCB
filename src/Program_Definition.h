@@ -27,11 +27,13 @@ class ProgramTransmitter: public ProgramCapsule {
     void set(CommandResolver* commandResolver);
     void set(CommandPacket* commandBuffer);
     bool hasCommandBuffer();
+    uint8_t getId();
     char* getTitle();
     int begin();
     int check(void* action);
     int close();
   private:
+    static const uint8_t _applicationId = 1;
     char* _title;
     uint64_t _rf24Address = RF24_DEFAULT_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver = NULL;
@@ -50,11 +52,13 @@ class ProgramReceiver: public ProgramCapsule {
   public:
     ProgramReceiver(char* title,
       RF24Tranceiver* tranceiver, uint64_t address);
+    uint8_t getId();
     char* getTitle();
     int begin();
     int check(void* action);
     int close();
   private:
+    static const uint8_t _applicationId = 2;
     char* _title;
     uint64_t _rf24Address = RF24_DEFAULT_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver;

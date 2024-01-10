@@ -7,7 +7,7 @@
 
 class MessageProcessor {
   public:
-    virtual int process(JoystickAction* action, MessageInterface* commandPacket);
+    virtual int process(MasterContext* context, JoystickAction* control, MessageInterface* command);
 };
 
 #endif

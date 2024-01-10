@@ -81,7 +81,12 @@ int ProgramTransmitter::check(void* inputData) {
   #endif
 
   if (_messageSender != NULL) {
-    MessagePacket packet(action, commandPacket);
+    MasterContext* context = NULL;
+    #if __JOYSTICK_MESSAGE_STRUCTURE__ == CONTROL_PACKET_V2
+    MasterContext contextPacket(_applicationId, false);
+    context = &contextPacket;
+    #endif
+    MessagePacket packet(context, action, commandPacket);
     bool ok = _messageSender->write(&packet);
     if (ok) {
       _counter.continualLossCount = 0;
@@ -152,6 +157,10 @@ byte ProgramTransmitter::invoke(MessageSender* messageSender, uint8_t index, con
 }
 #endif//MULTIPLE_SENDERS_SUPPORTED
 
+uint8_t ProgramTransmitter::getId() {
+  return _applicationId;
+}
+
 char* ProgramTransmitter::getTitle() {
   return _title;
 }
@@ -174,6 +183,10 @@ ProgramReceiver::ProgramReceiver(char* title,
     _rf24Address = address;
   }
   _rf24Tranceiver = tranceiver;
+}
+
+uint8_t ProgramReceiver::getId() {
+  return _applicationId;
 }
 
 char* ProgramReceiver::getTitle() {
