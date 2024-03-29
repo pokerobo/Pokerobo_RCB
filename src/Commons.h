@@ -10,10 +10,10 @@
 #define __PLATFORM_ESP32__                8
 
 #ifndef __PLATFORM_TYPE__
-#define __PLATFORM_TYPE__                 __PLATFORM_NANO__
+#define __PLATFORM_TYPE__                 __PLATFORM_UNO__
 #endif
 
-#define __JOYSTICK_FUNDUINO_SHIELD__      0
+#define __JOYSTICK_FUNDUINO_SHIELD__      1
 #define __JOYSTICK_READ_BUTTONS_DEBUG__   0
 
 /* Attention: MASK_XXX_BUTTON(s) have not defined yet
@@ -22,8 +22,8 @@
                                   MASK_DOWN_BUTTON | \
                                   MASK_LEFT_BUTTON | \
                                   MASK_START_BUTTON
-*/
 #define JOYSTICK_DISABLED_BUTTONS 0b0101111
+*/
 
 #ifndef __RUNNING_LOG_ENABLED__
 #define __RUNNING_LOG_ENABLED__           0
@@ -33,7 +33,7 @@
 #undef  __DEBUG_LOG_JOYSTICK_HANDLER__    1
 #undef  __DEBUG_LOG_RF24_TRANCEIVER__     1
 #undef  __DEBUG_LOG_PROGRAM_SELECTOR__    1
-#define __DEBUG_LOG_COMMAND_RESOLVER__    1
+#define __DEBUG_LOG_COMMAND_RESOLVER__    0
 
 #ifndef __STRICT_MODE__
 #define __STRICT_MODE__                   0
@@ -59,8 +59,8 @@
 #if __JOYSTICK_FUNDUINO_SHIELD__
 #define JOYSTICK_MID_X   333
 #define JOYSTICK_MID_Y   333
-#define JOYSTICK_MAX_X   723
-#define JOYSTICK_MAX_Y   723
+#define JOYSTICK_MAX_X   666
+#define JOYSTICK_MAX_Y   666
 #endif
 
 #define CONTROL_PACKET_V1                 1

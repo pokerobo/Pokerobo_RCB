@@ -47,7 +47,7 @@ char idleButtonIcon_(uint16_t offs, uint16_t buttons, uint16_t mask, char icon) 
   return ((offs & mask) ? '-' : (buttons & mask) ? '*' : icon);
 }
 
-U8G2_ST7567_ENH_DG128064I_1_HW_I2C u8g2(U8G2_R2, LCD_PIN_SCL, LCD_PIN_SDA, U8X8_PIN_NONE);
+U8G2_ST7567_ENH_DG128064I_1_HW_I2C u8g2(U8G2_R0, LCD_PIN_SCL, LCD_PIN_SDA, U8X8_PIN_NONE);
 
 DisplayHandler::DisplayHandler() {
   _u8g2Ref = &u8g2;
