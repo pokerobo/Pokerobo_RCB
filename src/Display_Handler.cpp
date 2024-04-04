@@ -54,8 +54,26 @@ DisplayHandler::DisplayHandler() {
   _u8g2Ref = &u8g2;
 }
 #else
-DisplayHandler::DisplayHandler() {
-  _u8g2Ref = new U8G2_ST7567_ENH_DG128064I_1_HW_I2C(U8G2_R2, LCD_PIN_SCL, LCD_PIN_SDA, U8X8_PIN_NONE);
+DisplayHandler::DisplayHandler(lcd_pins_position_t pos) {
+  u8g2_cb_t *rotation = U8G2_R2;
+  switch(pos) {
+    case LCD_PINS_ON_TOP:
+      rotation = U8G2_R0;
+      break;
+    case LCD_PINS_ON_BOTTOM:
+      rotation = U8G2_R2;
+      break;
+    case LCD_PINS_ON_RIGHT:
+      rotation = U8G2_R1;
+      break;
+    case LCD_PINS_ON_LEFT:
+      rotation = U8G2_R3;
+      break;
+  }
+  _u8g2Ref = new U8G2_ST7567_ENH_DG128064I_1_HW_I2C(rotation,
+      LCD_PIN_SCL,
+      LCD_PIN_SDA,
+      U8X8_PIN_NONE);
 }
 #endif
 

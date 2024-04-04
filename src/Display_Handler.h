@@ -8,9 +8,16 @@
 
 #define JOYSTICK_INFO_COLUMNS           8 // 7 chars and '\0'
 
+typedef enum {
+  LCD_PINS_ON_TOP = 0,
+  LCD_PINS_ON_RIGHT,
+  LCD_PINS_ON_BOTTOM,
+  LCD_PINS_ON_LEFT
+} lcd_pins_position_t;
+
 class DisplayHandler: public MessageRenderer {
   public:
-    DisplayHandler();
+    DisplayHandler(lcd_pins_position_t pos=LCD_PINS_ON_BOTTOM);
     int begin();
     void clear();
     void splash(char* title, byte align = 0);
