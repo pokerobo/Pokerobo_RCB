@@ -26,6 +26,9 @@ class DisplayHandler: public MessageRenderer {
     virtual void renderCommandPacket_(uint8_t lx, uint8_t ty, MessageInterface* commandPacket);
     void* _u8g2Ref = NULL;
   private:
+    void drawJoystickCircle(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
+    void drawJoystickSquare1(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
+    void drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
     uint8_t _maxCharHeight = 8;
     uint8_t _maxCharWidth = 5;
     uint8_t _directionState = 0;
