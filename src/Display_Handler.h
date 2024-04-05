@@ -33,6 +33,8 @@ class DisplayHandler: public MessageRenderer {
     void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
     void renderJoystickPoint_(uint8_t Ox, uint8_t Oy, int x, int y);
     virtual void renderCommandPacket_(uint8_t lx, uint8_t ty, MessageInterface* commandPacket);
+    void firstPage();
+    uint8_t nextPage();
     void* _u8g2Ref = NULL;
   private:
     void drawJoystickCircle(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
