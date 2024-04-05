@@ -428,7 +428,7 @@ void DisplayHandler::drawJoystickCircle(uint8_t Ox, uint8_t Oy, uint8_t r, uint8
   _u8g2->drawLine(Ox, Oy + ir, Ox, Oy + r + 2);
   _u8g2->drawLine(Ox - ir, Oy, Ox - r - 2, Oy);
 
-  _u8g2->drawFrame(Ox + x - 1, Oy + (-y) - 1, 3, 3);
+  renderJoystickPoint_(Ox, Oy, x, y);
 }
 
 void DisplayHandler::drawJoystickSquare1(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y) {
@@ -441,7 +441,7 @@ void DisplayHandler::drawJoystickSquare1(uint8_t Ox, uint8_t Oy, uint8_t r, uint
   _u8g2->drawLine(Ox, Oy + ir, Ox, Oy + r + 2);
   _u8g2->drawLine(Ox - ir, Oy, Ox - r - 2, Oy);
 
-  _u8g2->drawFrame(Ox + x - 1, Oy + (-y) - 1, 3, 3);
+  renderJoystickPoint_(Ox, Oy, x, y);
 }
 
 void DisplayHandler::drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y) {
@@ -454,6 +454,11 @@ void DisplayHandler::drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint
   _u8g2->drawLine(Ox - ir - 1, Oy - r - 2, Ox - ir - 1, Oy + r + 2);
   _u8g2->drawLine(Ox + ir - 1, Oy - r - 2, Ox + ir - 1, Oy + r + 2);
 
+  renderJoystickPoint_(Ox, Oy, x, y);
+}
+
+void DisplayHandler::renderJoystickPoint_(uint8_t Ox, uint8_t Oy, int x, int y) {
+  U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
   _u8g2->drawFrame(Ox + x - 1, Oy + (-y) - 1, 3, 3);
 }
 
