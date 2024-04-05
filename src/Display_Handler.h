@@ -15,8 +15,17 @@ typedef enum {
   LCD_PINS_ON_LEFT
 } lcd_pins_position_t;
 
+class DisplayOptions {
+  public:
+    DisplayOptions(lcd_pins_position_t pos=LCD_PINS_ON_BOTTOM);
+    lcd_pins_position_t getLcdRotation();
+  private:
+    lcd_pins_position_t _lcdRotation;
+};
+
 class DisplayHandler: public MessageRenderer {
   public:
+    DisplayHandler(DisplayOptions* options);
     DisplayHandler(lcd_pins_position_t pos=LCD_PINS_ON_BOTTOM);
     int begin();
     void clear();
@@ -24,6 +33,7 @@ class DisplayHandler: public MessageRenderer {
     void render(JoystickAction* message, MessageInterface* commandPacket=NULL, TransmissionCounter* counter=NULL);
     void render(ProgramCollection* programCollection=NULL);
   protected:
+    void initialize(DisplayOptions* options);
     void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source, TransmissionCounter* counter);
     void renderDirectionState_(char *title, message_source_t source, TransmissionCounter* counter, uint8_t &_directionState, uint8_t &_directionTotal);
     void renderTitle_(uint8_t lx, uint8_t ty, char* title);
