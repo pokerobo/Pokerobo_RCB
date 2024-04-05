@@ -172,8 +172,8 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
 void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPacket, TransmissionCounter* counter) {
   if (message == NULL) return;
 
-  int nX = -512 + message->getX();
-  int nY = -512 + message->getY();
+  int nX = message->getCenterBasedX();
+  int nY = message->getCenterBasedY();
 
   message_source_t source = message->getSource();
 
@@ -239,9 +239,6 @@ void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPa
     lines[COORD_LINE_FLAGS][POS_ANALOG_BUTTON] = '+';
   }
 
-  int rX = map(nX, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
-  int rY = map(nY, -512, 512, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
-
   uint8_t _statsLx = _maxCharHeight + 1;
   uint8_t _virtualPadLx = _statsLx + (JOYSTICK_INFO_COLUMNS - 1) * _maxCharWidth + 1;
   uint8_t _speedMeterLx = _virtualPadLx + 64;
@@ -251,7 +248,7 @@ void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPa
   _u8g2->firstPage();
   do {
     renderCoordinates_(_statsLx, 0, _maxCharHeight, _maxCharWidth, lines);
-    renderJoystickPad_(_virtualPadLx, 0, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, rX, rY);
+    renderJoystickAction_(_virtualPadLx, 0, message);
     renderCommandPacket_(_speedMeterLx, 0, commandPacket);
     renderTransmissionCounter_(_statsLx, _counterTy, _maxCharHeight, _maxCharWidth, counter);
     renderTitle_(_maxCharHeight - 2, SCREEN_HEIGHT - 2, source, counter);
@@ -458,6 +455,16 @@ void DisplayHandler::drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint
   _u8g2->drawLine(Ox + ir - 1, Oy - r - 2, Ox + ir - 1, Oy + r + 2);
 
   _u8g2->drawFrame(Ox + x - 1, Oy + (-y) - 1, 3, 3);
+}
+
+void DisplayHandler::renderJoystickAction_(uint8_t lx, uint8_t ty, JoystickAction* action) {
+  int x = action->getCenterBasedX();
+  int y = action->getCenterBasedY();
+  int rX = action->getRadiusOfX();
+  int rY = action->getRadiusOfY();
+  int pX = map(x, -rX, rX, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
+  int pY = map(y, -rY, rY, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
+  this->renderJoystickPad_(lx, ty, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, pX, pY);
 }
 
 void DisplayHandler::renderJoystickPad_(uint8_t lx, uint8_t ty, uint8_t r, uint8_t ir, int x, int y) {

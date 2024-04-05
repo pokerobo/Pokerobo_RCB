@@ -15,6 +15,14 @@ const uint8_t JoystickAction::messageSize = 0 // SIGNATURE
     + sizeof(uint32_t);
 #endif
 
+int16_t JoystickAction::getRadiusOfX() {
+  return 512;
+}
+
+int16_t JoystickAction::getRadiusOfY() {
+  return 512;
+}
+
 JoystickAction::JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras) {
   update(buttons, x, y, extras);
 }
@@ -73,6 +81,14 @@ uint16_t JoystickAction::getOriginX() {
 
 uint16_t JoystickAction::getOriginY() {
   return _originY;
+}
+
+int16_t JoystickAction::getCenterBasedX() {
+  return -getRadiusOfX() + _x;
+}
+
+int16_t JoystickAction::getCenterBasedY() {
+  return -getRadiusOfY() + _y;
 }
 
 uint32_t JoystickAction::getExtras() {

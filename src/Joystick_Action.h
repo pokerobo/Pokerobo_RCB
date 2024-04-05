@@ -89,6 +89,8 @@ typedef enum { TX_MSG = 0, RX_MSG } message_source_t;
 class JoystickAction: public MessageInterface {
   public:
     static const uint8_t messageSize;
+    static int16_t getRadiusOfX();
+    static int16_t getRadiusOfY();
     JoystickAction(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
     void update(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
     JoystickAction(uint16_t x=0, uint16_t y=0, uint16_t pressingFlags=0, uint16_t togglingFlags=0, uint32_t extras=0);
@@ -102,6 +104,8 @@ class JoystickAction: public MessageInterface {
     uint16_t getY();
     uint16_t getOriginX();
     uint16_t getOriginY();
+    int16_t getCenterBasedX();
+    int16_t getCenterBasedY();
     uint32_t getExtras();
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
