@@ -19,9 +19,6 @@
 #define LCD_PIN_SDA                     SDA
 #endif//LCD_PIN_SDA
 
-#define SCREEN_HEIGHT                   64
-#define SCREEN_WIDTH                   128
-
 #define COORD_LINES_TOTAL               5
 #define COORD_LINE_X                    0
 #define COORD_LINE_Y                    1
@@ -126,23 +123,26 @@ void DisplayHandler::clear() {
 void DisplayHandler::splash(char* title, byte align) {
   if (title == NULL) return;
 
+  U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
+
   uint8_t left = 0;
   #if !__SPACE_SAVING_MODE__
-  uint8_t len = strlen(title);
-  uint8_t pixel = len * _maxCharWidth;
-  if (pixel < SCREEN_WIDTH) {
-    if (align == 0) {
-      left = (SCREEN_WIDTH - pixel) / 2;
+  if (align == 0) {
+    uint8_t pixel = strlen(title) * _maxCharWidth;
+    uint16_t displayWidth = _u8g2->getDisplayWidth();
+    if (pixel < displayWidth) {
+      left = (displayWidth - pixel) / 2;
     }
   }
   #else
   left = align * _maxCharWidth;
   #endif
 
-  U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
+  uint8_t top = _u8g2->getDisplayHeight() / 2 + _maxCharHeight / 2;
+
   _u8g2->firstPage();
   do {
-    _u8g2->drawStr(left, SCREEN_HEIGHT / 2 + _maxCharHeight / 2, title);
+    _u8g2->drawStr(left, top, title);
   } while (_u8g2->nextPage());
 }
 
@@ -257,13 +257,14 @@ void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPa
   uint8_t _counterTy = JOYSTICK_PAD_PADDING_TOP + _maxCharHeight * COORD_LINES_TOTAL + 2;
 
   U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
+  uint16_t displayHeight = _u8g2->getDisplayHeight();
   _u8g2->firstPage();
   do {
     renderCoordinates_(_statsLx, 0, _maxCharHeight, _maxCharWidth, lines);
     renderJoystickAction_(_virtualPadLx, 0, message);
     renderCommandPacket_(_speedMeterLx, 0, commandPacket);
     renderTransmissionCounter_(_statsLx, _counterTy, _maxCharHeight, _maxCharWidth, counter);
-    renderTitle_(_maxCharHeight - 2, SCREEN_HEIGHT - 2, source, counter);
+    renderTitle_(_maxCharHeight - 2, displayHeight - 2, source, counter);
   } while (_u8g2->nextPage());
 }
 
@@ -471,7 +472,15 @@ void DisplayHandler::drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint
 
 void DisplayHandler::renderJoystickPoint_(uint8_t Ox, uint8_t Oy, int x, int y) {
   U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
-  _u8g2->drawFrame(Ox + x - 1, Oy + (-y) - 1, 3, 3);
+  switch (getJoystickPointType()) {
+    case LCD_JOYSTICK_POINT_PLUS:
+      _u8g2->drawLine(x+Ox-1, -y+Oy, x+Ox+1, -y+Oy);
+      _u8g2->drawLine(x+Ox, -y+Oy-1, x+Ox, -y+Oy+1);
+      break;
+    case LCD_JOYSTICK_POINT_SQUARE:
+      _u8g2->drawFrame(Ox + x - 1, Oy + (-y) - 1, 3, 3);
+      break;
+  }
 }
 
 void DisplayHandler::renderJoystickAction_(uint8_t lx, uint8_t ty, JoystickAction* action) {
@@ -536,4 +545,8 @@ void DisplayHandler::firstPage() {
 uint8_t DisplayHandler::nextPage() {
   U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
   return _u8g2->nextPage();
+}
+
+lcd_joystick_point_t DisplayHandler::getJoystickPointType() {
+  return _joystickPointType;
 }

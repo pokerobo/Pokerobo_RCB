@@ -15,6 +15,11 @@ typedef enum {
   LCD_PINS_ON_LEFT
 } lcd_pins_position_t;
 
+typedef enum {
+  LCD_JOYSTICK_POINT_PLUS,
+  LCD_JOYSTICK_POINT_SQUARE
+} lcd_joystick_point_t;
+
 class DisplayOptions {
   public:
     DisplayOptions(lcd_pins_position_t pos=LCD_PINS_ON_BOTTOM);
@@ -46,6 +51,7 @@ class DisplayHandler: public MessageRenderer {
     void firstPage();
     uint8_t nextPage();
     void* _u8g2Ref = NULL;
+    virtual lcd_joystick_point_t getJoystickPointType();
   private:
     void drawJoystickCircle(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
     void drawJoystickSquare1(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
@@ -54,6 +60,7 @@ class DisplayHandler: public MessageRenderer {
     uint8_t _maxCharWidth = 5;
     uint8_t _directionState = 0;
     uint8_t _directionTotal = 0;
+    lcd_joystick_point_t _joystickPointType = LCD_JOYSTICK_POINT_SQUARE;
 };
 
 #endif
