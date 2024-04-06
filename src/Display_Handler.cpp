@@ -39,6 +39,7 @@
 #define JOYSTICK_PAD_STYLE_ACTIVE       JOYSTICK_PAD_STYLE_SQUARE2
 
 #define idleButtonIcon(offs, buttons, mask, icon) ((offs & mask) ? '-' : (buttons & mask) ? '*' : icon)
+#define gte0(x) ((x >= 0) ? x : 0)
 
 char idleButtonIcon_(uint16_t offs, uint16_t buttons, uint16_t mask, char icon) {
   return ((offs & mask) ? '-' : (buttons & mask) ? '*' : icon);
@@ -474,8 +475,8 @@ void DisplayHandler::renderJoystickPoint_(uint8_t Ox, uint8_t Oy, int x, int y) 
   U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
   switch (getJoystickPointType()) {
     case LCD_JOYSTICK_POINT_PLUS:
-      _u8g2->drawLine(x+Ox-1, -y+Oy, x+Ox+1, -y+Oy);
-      _u8g2->drawLine(x+Ox, -y+Oy-1, x+Ox, -y+Oy+1);
+      _u8g2->drawLine(gte0(x+Ox-1), gte0(-y+Oy), gte0(x+Ox+1), gte0(-y+Oy));
+      _u8g2->drawLine(gte0(x+Ox), gte0(-y+Oy-1), gte0(x+Ox), gte0(-y+Oy+1));
       break;
     case LCD_JOYSTICK_POINT_SQUARE:
       _u8g2->drawFrame(Ox + x - 1, Oy + (-y) - 1, 3, 3);
