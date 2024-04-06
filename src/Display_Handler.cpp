@@ -441,7 +441,7 @@ void DisplayHandler::drawJoystickCircle(uint8_t Ox, uint8_t Oy, uint8_t r, uint8
   _u8g2->drawLine(Ox, Oy + ir, Ox, Oy + r + 2);
   _u8g2->drawLine(Ox - ir, Oy, Ox - r - 2, Oy);
 
-  renderJoystickPoint_(Ox, Oy, x, y);
+  renderJoystickPoint_(Ox, Oy, x, y+1);
 }
 
 void DisplayHandler::drawJoystickSquare1(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y) {
@@ -454,7 +454,7 @@ void DisplayHandler::drawJoystickSquare1(uint8_t Ox, uint8_t Oy, uint8_t r, uint
   _u8g2->drawLine(Ox, Oy + ir, Ox, Oy + r + 2);
   _u8g2->drawLine(Ox - ir, Oy, Ox - r - 2, Oy);
 
-  renderJoystickPoint_(Ox, Oy, x, y);
+  renderJoystickPoint_(Ox, Oy, x, y+1);
 }
 
 void DisplayHandler::drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y) {
@@ -467,7 +467,7 @@ void DisplayHandler::drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint
   _u8g2->drawLine(Ox - ir - 1, Oy - r - 2, Ox - ir - 1, Oy + r + 2);
   _u8g2->drawLine(Ox + ir - 1, Oy - r - 2, Ox + ir - 1, Oy + r + 2);
 
-  renderJoystickPoint_(Ox, Oy, x, y);
+  renderJoystickPoint_(Ox, Oy, x, y+1);
 }
 
 void DisplayHandler::renderJoystickPoint_(uint8_t Ox, uint8_t Oy, int x, int y) {
@@ -488,8 +488,8 @@ void DisplayHandler::renderJoystickAction_(uint8_t lx, uint8_t ty, JoystickActio
   int y = action->getCenterBasedY();
   int rX = action->getRadiusOfX();
   int rY = action->getRadiusOfY();
-  int pX = map(x, -rX, rX, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
-  int pY = map(y, -rY, rY, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR);
+  int pX = map(x, -rX, rX, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR+1);
+  int pY = map(y, -rY, rY, -JOYSTICK_PAD_OR, JOYSTICK_PAD_OR+1);
   this->renderJoystickPad_(lx, ty, JOYSTICK_PAD_OR, JOYSTICK_PAD_IR, pX, pY);
 }
 
