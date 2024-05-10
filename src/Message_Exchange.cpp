@@ -70,7 +70,7 @@ MessageInterface* MasterContext::deserialize(uint8_t* buf) {
 MessagePacket::MessagePacket(MessageInterface* context,
     MessageInterface* control, MessageInterface* command) {
   _context = context;
-  _action = control;
+  _control = control;
   _command = command;
 }
 
@@ -79,8 +79,8 @@ uint8_t MessagePacket::length() {
   if (_context != NULL) {
     len = _context->length();
   }
-  if (_action != NULL) {
-    len += _action->length();
+  if (_control != NULL) {
+    len += _control->length();
   }
   if (_command != NULL) {
     len += _command->length();
@@ -95,9 +95,9 @@ uint8_t* MessagePacket::serialize(uint8_t* buf, uint8_t len) {
     _context->serialize(buf + offset, _context->length());
     offset += _context->length();
 
-    if (_action != NULL) {
-      _action->serialize(buf + offset, _action->length());
-      offset += _action->length();
+    if (_control != NULL) {
+      _control->serialize(buf + offset, _control->length());
+      offset += _control->length();
     }
 
     if (_command != NULL) {
@@ -112,17 +112,17 @@ uint8_t* MessagePacket::serialize(uint8_t* buf, uint8_t len) {
     return NULL;
   }
 
-  if (_action == NULL) {
+  if (_control == NULL) {
     return NULL;
   }
 
   buf[0] = _signature[0];
   buf[1] = _signature[1];
 
-  _action->serialize(buf + strlen(MESSAGE_SIGNATURE), _action->length());
+  _control->serialize(buf + strlen(MESSAGE_SIGNATURE), _control->length());
 
   if (_command != NULL) {
-    _command->serialize(buf + strlen(MESSAGE_SIGNATURE) + _action->length(), _command->length());
+    _command->serialize(buf + strlen(MESSAGE_SIGNATURE) + _control->length(), _command->length());
   }
 
   return buf;

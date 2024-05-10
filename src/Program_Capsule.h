@@ -2,7 +2,6 @@
 #define __PROGRAM_CAPSULE_H__
 
 #include "Commons.h"
-#include "Joystick_Action.h"
 
 class ProgramCapsule {
   public:

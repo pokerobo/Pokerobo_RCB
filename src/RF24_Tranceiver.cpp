@@ -311,6 +311,10 @@ int RF24Receiver::check() {
     return -1;
   }
 
+  if (_messageSerializer == NULL) {
+    return -1;
+  }
+
   if (!available()) {
     return 0;
   }

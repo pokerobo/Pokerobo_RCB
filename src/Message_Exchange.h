@@ -56,7 +56,7 @@ class MessagePacket: public MessageInterface {
   private:
     uint8_t* _signature = (uint8_t*)MESSAGE_SIGNATURE;
     MessageInterface* _context = NULL;
-    MessageInterface* _action = NULL;
+    MessageInterface* _control = NULL;
     MessageInterface* _command = NULL;
 };
 
