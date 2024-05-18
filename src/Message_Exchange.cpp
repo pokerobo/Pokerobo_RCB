@@ -1,5 +1,13 @@
 #include "Message_Exchange.h"
 
+uint8_t* MessageInterface::serialize(uint8_t* buf, uint8_t len) {
+  return NULL;
+}
+
+void* MessageInterface::deserialize(uint8_t* buf) {
+  return NULL;
+}
+
 //-------------------------------------------------------------------------------------------------
 
 MasterContext::MasterContext() {}

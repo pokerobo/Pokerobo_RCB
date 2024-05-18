@@ -1,5 +1,5 @@
-#ifndef __MESSAGE_RENDERER_H__
-#define __MESSAGE_RENDERER_H__
+#ifndef __POKEROBO_RCB_MESSAGE_RENDERER_H__
+#define __POKEROBO_RCB_MESSAGE_RENDERER_H__
 
 #include "Message_Exchange.h"
 #include "Joystick_Action.h"

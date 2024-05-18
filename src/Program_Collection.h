@@ -1,5 +1,5 @@
-#ifndef __PROGRAM_COLLECTION_H__
-#define __PROGRAM_COLLECTION_H__
+#ifndef __POKEROBO_RCB_PROGRAM_COLLECTION_H__
+#define __POKEROBO_RCB_PROGRAM_COLLECTION_H__
 
 #include "Program_Capsule.h"
 

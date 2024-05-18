@@ -1,5 +1,5 @@
-#ifndef __MESSAGE_EXCHANGE_H__
-#define __MESSAGE_EXCHANGE_H__
+#ifndef __POKEROBO_RCB_MESSAGE_EXCHANGE_H__
+#define __POKEROBO_RCB_MESSAGE_EXCHANGE_H__
 
 #include "Commons.h"
 
@@ -25,6 +25,7 @@ class MessageInterface {
   public:
     virtual uint8_t length();
     virtual uint8_t* serialize(uint8_t* buf, uint8_t len);
+    virtual void* deserialize(uint8_t* buf);
 };
 
 class MasterContext: public MessageInterface {

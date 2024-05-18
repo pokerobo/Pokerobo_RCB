@@ -1,5 +1,5 @@
-#ifndef __COMMONS_H__
-#define __COMMONS_H__
+#ifndef __POKEROBO_RCB_COMMONS_H__
+#define __POKEROBO_RCB_COMMONS_H__
 
 #include <Arduino.h>
 
@@ -8,6 +8,7 @@
 #define __PLATFORM_xNO__                  3
 #define __PLATFORM_MEGA2560__             4
 #define __PLATFORM_ESP32__                8
+#define __PLATFORM_WEMOS_D1_R32__        16
 
 #ifndef __PLATFORM_TYPE__
 #define __PLATFORM_TYPE__                 __PLATFORM_UNO__
@@ -118,6 +119,33 @@
 
 //-------------------------------------------------------------------------------------------------
 
+#if __PLATFORM_TYPE__ != __PLATFORM_WEMOS_D1_R32__
+#define WIRE_HAS_TIMEOUT                  1
+#endif
+
+#if __PLATFORM_TYPE__ == __PLATFORM_WEMOS_D1_R32__
+#define RF24_PRIMARY_PIN_CE  13
+#define RF24_PRIMARY_PIN_CSN 05
+#endif//__PLATFORM_TYPE__
+
+#if __PLATFORM_TYPE__ == __PLATFORM_WEMOS_D1_R32__
+#define JOYSTICK_PIN_X_AXIS   02
+#define JOYSTICK_PIN_Y_AXIS   04
+#define PIN_UP_BUTTON     26 // A
+#define PIN_RIGHT_BUTTON  25 // B
+#define PIN_DOWN_BUTTON   17 // C
+#define PIN_LEFT_BUTTON   16 // D
+#define PIN_START_BUTTON  27 // F
+#define PIN_SELECT_BUTTON 14 // E
+#define PIN_ANALOG_BUTTON 12 // JOYSTICK
+#endif
+
+#if __PLATFORM_TYPE__ == __PLATFORM_WEMOS_D1_R32__
+#define RF24_RECEIVER_DISCONTINUITY_MAX  5000
+#endif
+
+//-------------------------------------------------------------------------------------------------
+
 #if __PLATFORM_TYPE__ == __PLATFORM_MEGA2560__
 #define RF24_PRIMARY_PIN_CE  48
 #define RF24_PRIMARY_PIN_CSN 49
@@ -128,4 +156,4 @@
 //-------------------------------------------------------------------------------------------------
 
 #define __DEVMODE_PROGRAM_SELECTOR__            1
-#define RF24_TWO_WAY_ENABLED                    1
+#define RF24_TWO_WAY_ENABLED                    0

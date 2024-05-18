@@ -1,5 +1,5 @@
-#ifndef __MESSAGE_SERIALIZER_H__
-#define __MESSAGE_SERIALIZER_H__
+#ifndef __POKEROBO_RCB_MESSAGE_SERIALIZER_H__
+#define __POKEROBO_RCB_MESSAGE_SERIALIZER_H__
 
 #include "Commons.h"
 #include "Message_Processor.h"

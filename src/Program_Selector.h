@@ -1,5 +1,5 @@
-#ifndef __PROGRAM_SELECTOR_H__
-#define __PROGRAM_SELECTOR_H__
+#ifndef __POKEROBO_RCB_PROGRAM_SELECTOR_H__
+#define __POKEROBO_RCB_PROGRAM_SELECTOR_H__
 
 #include "Display_Handler.h"
 #include "Joystick_Handler.h"

@@ -1,5 +1,5 @@
-#ifndef __JOYSTICK_HANDLER_H__
-#define __JOYSTICK_HANDLER_H__
+#ifndef __POKEROBO_RCB_JOYSTICK_HANDLER_H__
+#define __POKEROBO_RCB_JOYSTICK_HANDLER_H__
 
 #include "Commons.h"
 #include "Joystick_Action.h"

@@ -60,25 +60,25 @@
 #define RF24_SECONDARY_PIN_CSN          A2
 #endif//RF24_SECONDARY_PIN_CSN
 
-RF24 radio(RF24_PRIMARY_PIN_CE, RF24_PRIMARY_PIN_CSN);
-
-RF24* getPrimaryRadio() {
-  return &radio;
-}
-
-#if RF24_SECONDARY_RADIO_ENABLED
-RF24 radio2(RF24_SECONDARY_PIN_CE, RF24_SECONDARY_PIN_CSN);
-
-RF24* getSecondaryRadio() {
-  return &radio2;
-}
-#else
-RF24* getSecondaryRadio() {
-  return &radio;
-}
-#endif
-
 //-------------------------------------------------------------------------------------------------
+
+void* RF24Tranceiver::getPrimaryRadio() {
+  if (_radio == NULL) {
+    _radio = new RF24(RF24_PRIMARY_PIN_CE, RF24_PRIMARY_PIN_CSN);
+  }
+  return _radio;
+}
+
+void* RF24Tranceiver::getSecondaryRadio() {
+  if (_radio2nd == NULL) {
+    #if RF24_SECONDARY_RADIO_ENABLED
+    _radio2nd = new RF24(RF24_SECONDARY_PIN_CE, RF24_SECONDARY_PIN_CSN);
+    #else
+    _radio2nd = getPrimaryRadio();
+    #endif
+  }
+  return _radio2nd;
+}
 
 int RF24Tranceiver::begin(tranceiver_t mode, uint64_t address) {
   if (mode == RF24_TX) {

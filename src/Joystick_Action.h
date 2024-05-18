@@ -1,5 +1,5 @@
-#ifndef __JOYSTICK_ACTION_H__
-#define __JOYSTICK_ACTION_H__
+#ifndef __POKEROBO_RCB_JOYSTICK_ACTION_H__
+#define __POKEROBO_RCB_JOYSTICK_ACTION_H__
 
 #include "Message_Exchange.h"
 

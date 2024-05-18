@@ -1,5 +1,5 @@
-#ifndef __PROGRAM_DEFINITION_H__
-#define __PROGRAM_DEFINITION_H__
+#ifndef __POKEROBO_RCB_PROGRAM_ENTRYPOINT_H__
+#define __POKEROBO_RCB_PROGRAM_ENTRYPOINT_H__
 
 #include "Program_Capsule.h"
 #include "Joystick_Handler.h"
@@ -30,7 +30,7 @@ class ProgramTransmitter: public ProgramCapsule {
     uint8_t getId();
     char* getTitle();
     int begin();
-    int check(void* action);
+    int check(void* action, void* command=NULL);
     int close();
   private:
     static const uint8_t _applicationId = 1;
@@ -55,7 +55,7 @@ class ProgramReceiver: public ProgramCapsule {
     uint8_t getId();
     char* getTitle();
     int begin();
-    int check(void* action);
+    int check(void* action, void* command=NULL);
     int close();
   private:
     static const uint8_t _applicationId = 2;

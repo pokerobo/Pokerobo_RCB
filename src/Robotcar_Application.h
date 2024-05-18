@@ -1,5 +1,5 @@
-#ifndef __SPEED_RESOLVER_H__
-#define __SPEED_RESOLVER_H__
+#ifndef __POKEROBO_RCB_ROBOTCAR_APPLICATION_H__
+#define __POKEROBO_RCB_ROBOTCAR_APPLICATION_H__
 
 #include "Commons.h"
 #include "Display_Handler.h"

@@ -1,5 +1,5 @@
-#ifndef __RF24_TRANSMITTER_H__
-#define __RF24_TRANSMITTER_H__
+#ifndef __POKEROBO_RCB_RF24_TRANCEIVER_H__
+#define __POKEROBO_RCB_RF24_TRANCEIVER_H__
 
 #include "Commons.h"
 #include "Joystick_Action.h"
@@ -63,6 +63,12 @@ class RF24Tranceiver: public RF24Transmitter, public RF24Receiver {
   public:
     int begin(tranceiver_t mode=RF24_TX, uint64_t address=RF24_DEFAULT_ADDRESS);
     void reset(tranceiver_t mode=RF24_TX);
+  protected:
+    void* getPrimaryRadio();
+    void* getSecondaryRadio();
+  private:
+    void* _radio = NULL;
+    void* _radio2nd = NULL;
 };
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef __DISPLAY_HANDLER_H__
-#define __DISPLAY_HANDLER_H__
+#ifndef __POKEROBO_RCB_DISPLAY_HANDLER_H__
+#define __POKEROBO_RCB_DISPLAY_HANDLER_H__
 
 #include "Commons.h"
 #include "Message_Exchange.h"

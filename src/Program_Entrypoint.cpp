@@ -54,7 +54,7 @@ bool ProgramTransmitter::hasCommandBuffer() {
   return _commandBuffer != NULL;
 }
 
-int ProgramTransmitter::check(void* inputData) {
+int ProgramTransmitter::check(void* inputData, void* command) {
   JoystickAction* action = (JoystickAction*) inputData;
 
   _counter.ordinalNumber += 1;
@@ -197,7 +197,7 @@ int ProgramReceiver::begin() {
   return _rf24Tranceiver->begin(RF24_RX, _rf24Address);
 }
 
-int ProgramReceiver::check(void* action) {
+int ProgramReceiver::check(void* action, void* command) {
   return _rf24Tranceiver->check();
 }
 

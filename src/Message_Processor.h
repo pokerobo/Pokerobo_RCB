@@ -1,5 +1,5 @@
-#ifndef __MESSAGE_PROCESSOR_H__
-#define __MESSAGE_PROCESSOR_H__
+#ifndef __POKEROBO_RCB_MESSAGE_PROCESSOR_H__
+#define __POKEROBO_RCB_MESSAGE_PROCESSOR_H__
 
 #include "Commons.h"
 #include "Message_Exchange.h"
