@@ -55,12 +55,13 @@ lcd_pins_position_t DisplayOptions::getLcdRotation() {
 }
 
 DisplayHandler::DisplayHandler(lcd_pins_position_t pos) {
-  DisplayOptions options(pos);
-  initialize(&options);
+  _options = new DisplayOptions(pos);
+  initialize(_options);
 }
 
 DisplayHandler::DisplayHandler(DisplayOptions* opts) {
-  initialize(opts);
+  _options = opts;
+  initialize(_options);
 }
 
 void DisplayHandler::initialize(DisplayOptions* options) {
@@ -87,12 +88,15 @@ void DisplayHandler::initialize(DisplayOptions* options) {
       U8X8_PIN_NONE);
 }
 
+DisplayOptions* DisplayHandler::getOptions() {
+  return _options;
+}
+
 int DisplayHandler::begin() {
   U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
   Wire.begin();
   #if defined(WIRE_HAS_TIMEOUT)
-  // Wire.setWireTimeout(timeout, reset_on_timeout)
-  Wire.setWireTimeout(3000, true);
+  Wire.setWireTimeout(3000, true); // Wire.setWireTimeout(timeout, reset_on_timeout)
   #endif
   _u8g2->setI2CAddress(0x3F * 2);
   // _u8g2->setBusClock(200000);

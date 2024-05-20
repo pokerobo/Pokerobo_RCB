@@ -32,6 +32,7 @@ class DisplayHandler: public MessageRenderer {
   public:
     DisplayHandler(DisplayOptions* options);
     DisplayHandler(lcd_pins_position_t pos=LCD_PINS_ON_BOTTOM);
+    DisplayOptions* getOptions();
     int begin();
     void clear();
     void splash(char* title, byte align = 0);
@@ -56,6 +57,7 @@ class DisplayHandler: public MessageRenderer {
     void drawJoystickCircle(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
     void drawJoystickSquare1(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
     void drawJoystickSquare2(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
+    DisplayOptions* _options;
     uint8_t _maxCharHeight = 8;
     uint8_t _maxCharWidth = 5;
     uint8_t _directionState = 0;
