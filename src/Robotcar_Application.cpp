@@ -104,7 +104,7 @@ CommandPacket* MovingCommandResolver::create() {
   return new MovingCommandPacket();
 }
 
-CommandPacket* MovingCommandResolver::resolve(CommandPacket* commandPacket, JoystickAction* action, int coeff, bool rotatable) {
+CommandPacket* MovingCommandResolver::resolve(CommandPacket* commandPacket, JoystickAction* action) {
   MovingCommandPacket* command = (MovingCommandPacket*) commandPacket;
 
   if (command == NULL) {

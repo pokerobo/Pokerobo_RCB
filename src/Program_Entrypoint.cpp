@@ -71,7 +71,7 @@ int ProgramTransmitter::check(void* inputData, void* command) {
     } else {
       commandPacket = _commandBuffer;
     }
-    _commandResolver->resolve(commandPacket, action, 3);
+    _commandResolver->resolve(commandPacket, action);
   }
 
   #if JOYSTICK_CHECKING_CHANGE

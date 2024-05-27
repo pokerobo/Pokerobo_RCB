@@ -14,7 +14,7 @@ class CommandPacket: public MessageInterface {
 class CommandResolver {
   public:
     virtual CommandPacket* create();
-    virtual CommandPacket* resolve(CommandPacket* command, JoystickAction* action, int coeff=1, bool rotatable=false);
+    virtual CommandPacket* resolve(CommandPacket* command, JoystickAction* action);
     virtual void release(CommandPacket* command);
 };
 
