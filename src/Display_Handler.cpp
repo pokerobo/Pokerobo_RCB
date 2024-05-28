@@ -64,24 +64,27 @@ DisplayHandler::DisplayHandler(DisplayOptions* opts) {
   initialize(_options);
 }
 
-void DisplayHandler::initialize(DisplayOptions* options) {
+u8g2_cb_t* convertDisplayRotation(lcd_pins_position_t pos) {
   u8g2_cb_t *rotation = U8G2_R2;
-  if (options != NULL) {
-      switch(options->getLcdRotation()) {
-      case LCD_PINS_ON_TOP:
-        rotation = U8G2_R0;
-        break;
-      case LCD_PINS_ON_BOTTOM:
-        rotation = U8G2_R2;
-        break;
-      case LCD_PINS_ON_RIGHT:
-        rotation = U8G2_R1;
-        break;
-      case LCD_PINS_ON_LEFT:
-        rotation = U8G2_R3;
-        break;
-    }
+  switch(pos) {
+    case LCD_PINS_ON_TOP:
+      rotation = U8G2_R0;
+      break;
+    case LCD_PINS_ON_BOTTOM:
+      rotation = U8G2_R2;
+      break;
+    case LCD_PINS_ON_RIGHT:
+      rotation = U8G2_R1;
+      break;
+    case LCD_PINS_ON_LEFT:
+      rotation = U8G2_R3;
+      break;
   }
+  return rotation;
+}
+
+void DisplayHandler::initialize(DisplayOptions* options) {
+  u8g2_cb_t *rotation = convertDisplayRotation(options->getLcdRotation());
   _u8g2Ref = new U8G2_ST7567_ENH_DG128064I_1_HW_I2C(rotation,
       LCD_PIN_SCL,
       LCD_PIN_SDA,
@@ -550,6 +553,50 @@ void DisplayHandler::firstPage() {
 uint8_t DisplayHandler::nextPage() {
   U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
   return _u8g2->nextPage();
+}
+
+void DisplayHandler::setDisplayRotation(lcd_pins_position_t pos) {
+  if (_options != NULL) {
+    if (_options->getLcdRotation() != pos) {
+      _options->_lcdRotation = pos;
+      U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
+      _u8g2->setDisplayRotation(convertDisplayRotation(pos));
+    }
+  }
+}
+
+lcd_pins_position_t DisplayHandler::getDisplayRotation() {
+  return (_options != NULL) ? _options->getLcdRotation() : LCD_PINS_ON_TOP;
+}
+
+lcd_pins_position_t DisplayHandler::nextDisplayRotation(lcd_pins_position_t pos) {
+  switch(pos) {
+    case LCD_PINS_ON_TOP:
+      return LCD_PINS_ON_RIGHT;
+    case LCD_PINS_ON_RIGHT:
+      return LCD_PINS_ON_BOTTOM;
+    case LCD_PINS_ON_BOTTOM:
+      return LCD_PINS_ON_LEFT;
+    case LCD_PINS_ON_LEFT:
+      return LCD_PINS_ON_TOP;
+    default:
+      return pos;
+  }
+}
+
+lcd_pins_position_t DisplayHandler::prevDisplayRotation(lcd_pins_position_t pos) {
+  switch(pos) {
+    case LCD_PINS_ON_TOP:
+      return LCD_PINS_ON_LEFT;
+    case LCD_PINS_ON_LEFT:
+      return LCD_PINS_ON_BOTTOM;
+    case LCD_PINS_ON_BOTTOM:
+      return LCD_PINS_ON_RIGHT;
+    case LCD_PINS_ON_RIGHT:
+      return LCD_PINS_ON_TOP;
+    default:
+      return pos;
+  }
 }
 
 lcd_joystick_point_t DisplayHandler::getJoystickPointType() {

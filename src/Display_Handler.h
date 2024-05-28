@@ -21,6 +21,7 @@ typedef enum {
 } lcd_joystick_point_t;
 
 class DisplayOptions {
+  friend class DisplayHandler;
   public:
     DisplayOptions(lcd_pins_position_t pos=LCD_PINS_ON_BOTTOM);
     lcd_pins_position_t getLcdRotation();
@@ -52,6 +53,10 @@ class DisplayHandler: public MessageRenderer {
     void firstPage();
     uint8_t nextPage();
     void* _u8g2Ref = NULL;
+    void setDisplayRotation(lcd_pins_position_t pos);
+    lcd_pins_position_t getDisplayRotation();
+    lcd_pins_position_t nextDisplayRotation(lcd_pins_position_t pos);
+    lcd_pins_position_t prevDisplayRotation(lcd_pins_position_t pos);
     virtual lcd_joystick_point_t getJoystickPointType();
   private:
     void drawJoystickCircle(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
