@@ -545,6 +545,10 @@ void DisplayHandler::renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t 
   _u8g2->drawStr(lx, ty + 1 + _maxCharHeight * 2, line);
 }
 
+void* DisplayHandler::getU8g2Ref() {
+  return _u8g2Ref;
+}
+
 void DisplayHandler::firstPage() {
   U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
   _u8g2->firstPage();

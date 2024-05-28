@@ -258,7 +258,7 @@ void MovingDisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MessageI
 
   MovingCommandPacket* movingCommand = (MovingCommandPacket*) commandPacket;
 
-  U8G2* u8g2 = (U8G2*) _u8g2Ref;
+  U8G2* u8g2 = (U8G2*)getU8g2Ref();
 
   int mX = lx + SPEED_METER_OX;
   int mY = ty + SPEED_METER_OY;
