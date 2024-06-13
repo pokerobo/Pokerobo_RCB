@@ -14,6 +14,11 @@ void MovingCommandPacket::update(int leftSpeed, byte leftDirection, int rightSpe
   _RightDirection = rightDirection;
 }
 
+void MovingCommandPacket::update(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection, bool reversed) {
+  update(leftSpeed, leftDirection, rightSpeed, rightDirection);
+  _reversed = reversed;
+}
+
 int MovingCommandPacket::getLeftSpeed() {
   return _LeftSpeed;
 }
@@ -28,6 +33,10 @@ int MovingCommandPacket::getRightSpeed() {
 
 byte MovingCommandPacket::getRightDirection() {
   return _RightDirection;
+}
+
+bool MovingCommandPacket::isReversed() {
+  return _reversed;
 }
 
 const uint8_t MovingCommandPacket::messageSize = sizeof(uint8_t) +
@@ -63,6 +72,10 @@ uint8_t* MovingCommandPacket::serialize(uint8_t* buf, uint8_t len) {
       break;
   }
 
+  if (_reversed) {
+    directionFlags |= 0b10000000;
+  }
+
   buf[0] = directionFlags;
   buf[1] = _LeftSpeed;
   buf[2] = _RightSpeed;
@@ -88,6 +101,9 @@ CommandPacket* MovingCommandPacket::deserialize(uint8_t* buf) {
   if (directionFlags & 0b1000) {
     _RightDirection = 2;
   }
+  if (directionFlags & 0b10000000) {
+    _reversed = true;
+  }
 
   _LeftSpeed = buf[1];
   _RightSpeed = buf[2];
@@ -99,6 +115,10 @@ CommandPacket* MovingCommandPacket::deserialize(uint8_t* buf) {
 
 #define BOUND_X    40
 #define BOUND_Y    40
+
+MovingCommandResolver::MovingCommandResolver(bool reversed) {
+  _reversed = reversed;
+}
 
 CommandPacket* MovingCommandResolver::create() {
   return new MovingCommandPacket();
@@ -122,14 +142,14 @@ CommandPacket* MovingCommandResolver::resolve(CommandPacket* commandPacket, Joys
     ld = rd = 1;
     if (x < -BOUND_X) {
       int r = int_min(int_abs(x), int_abs(y));
-      int dx = r * coeff / 10;
+      int dx = r * _coeff / 10;
       enaVal = int_abs(y) - (r - dx);
       enbVal = int_abs(y) - dx;
     } else if (x >= -BOUND_X && x <= BOUND_X) {
       enaVal = enbVal = int_abs(y);
     } else {
       int r = int_min(int_abs(x), int_abs(y));
-      int dx = r * coeff / 10;
+      int dx = r * _coeff / 10;
       enaVal = int_abs(y) - dx;
       enbVal = int_abs(y) - (r - dx);
     }
@@ -139,14 +159,14 @@ CommandPacket* MovingCommandResolver::resolve(CommandPacket* commandPacket, Joys
     ld = rd = 2;
     if (x < -BOUND_X) {
       int r = int_min(int_abs(x), int_abs(y));
-      int dx = r * coeff / 10;
+      int dx = r * _coeff / 10;
       enaVal = int_abs(y) - (r - dx);
       enbVal = int_abs(y) - dx;
     } else if (x >= -BOUND_X && x <= BOUND_X) {
       enaVal = enbVal = int_abs(y);
     } else {
       int r = int_min(int_abs(x), int_abs(y));
-      int dx = r * coeff / 10;
+      int dx = r * _coeff / 10;
       enaVal = int_abs(y) - dx;
       enbVal = int_abs(y) - (r - dx);
     }
@@ -165,7 +185,7 @@ CommandPacket* MovingCommandResolver::resolve(CommandPacket* commandPacket, Joys
   Serial.println();
   #endif
 
-  command->update(enaVal, ld, enbVal, rd);
+  command->update(enaVal, ld, enbVal, rd, _reversed);
 
   return command;
 }

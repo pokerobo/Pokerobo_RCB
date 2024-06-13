@@ -4,7 +4,7 @@ const uint64_t address = 0x18580901LL;
 
 MovingDisplayHandler displayHandler;
 MovingMessageSerializer messageSerializer;
-MovingCommandResolver commandResolver;
+MovingCommandResolver commandResolver(true);
 MovingCommandPacket commandBuffer;
 
 RF24Tranceiver rf24Tranceiver;
@@ -29,16 +29,23 @@ void setup() {
       &commandResolver, &displayHandler, &rf24Tranceiver, address));
   programSelector.add(new ProgramTransmitter(" Car RC TX:default",
       &commandBuffer, &commandResolver, &displayHandler, &rf24Tranceiver, 0LL));
+  programSelector.add(new ProgramTransmitter(" Car RC TX:18580907",
+      &commandBuffer, &commandResolver, &displayHandler, &rf24Tranceiver, 0x18580907LL));
+  programSelector.add(new ProgramTransmitter(" Car RC TX:18580908",
+      &commandBuffer, &commandResolver, &displayHandler, &rf24Tranceiver, 0x18580908LL));
+
   programSelector.add(new ProgramReceiver(" Car RC RX:default",
       &rf24Tranceiver, 0LL));
   programSelector.add(new ProgramReceiver(" Car RC RX:18580901",
       &rf24Tranceiver, 0x18580901LL));
-  programSelector.add(new ProgramReceiver(" Car RC RX:18580902",
-      &rf24Tranceiver, 0x18580902LL));
-  programSelector.add(new ProgramReceiver(" Car RC RX:18580903",
-      &rf24Tranceiver, 0x18580903LL));
   programSelector.add(new ProgramReceiver(" Car RC RX:18580904",
       &rf24Tranceiver, 0x18580904LL));
+  programSelector.add(new ProgramReceiver(" Car RC RX:18580907",
+      &rf24Tranceiver, 0x18580907LL));
+  programSelector.add(new ProgramReceiver(" Car RC RX:18580908",
+      &rf24Tranceiver, 0x18580908LL));
+  programSelector.add(new ProgramReceiver(" Car RC RX:18580910",
+      &rf24Tranceiver, 0x18580910LL));
 
   programSelector.begin(PROGRAM_MODE_TESTER);
 }

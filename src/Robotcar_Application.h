@@ -16,10 +16,12 @@ class MovingCommandPacket: public CommandPacket {
     static const uint8_t messageSize;
     MovingCommandPacket(int leftSpeed=0, byte leftDirection=0, int rightSpeed=0, byte rightDirection=0);
     void update(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection);
+    void update(int leftSpeed, byte leftDirection, int rightSpeed, byte rightDirection, bool reversed);
     int getLeftSpeed();
     byte getLeftDirection();
     int getRightSpeed();
     byte getRightDirection();
+    bool isReversed();
     uint8_t length();
     uint8_t* serialize(uint8_t* buf, uint8_t len);
     CommandPacket* deserialize(uint8_t* buf);
@@ -28,16 +30,19 @@ class MovingCommandPacket: public CommandPacket {
     byte _LeftDirection;
     int _RightSpeed;
     byte _RightDirection;
+    bool _reversed = false;
 };
 
 class MovingCommandResolver: public CommandResolver {
   public:
+    MovingCommandResolver(bool reversed=false);
     CommandPacket* create();
     CommandPacket* resolve(CommandPacket* command, JoystickAction* action);
     void release(CommandPacket* command);
   private:
-    int coeff = 3;
-    bool rotatable = false;
+    int _coeff = 3;
+    bool _rotatable = false;
+    bool _reversed = false;
 };
 
 class MovingMessageSerializer: public MessageSerializer {

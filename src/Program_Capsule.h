@@ -12,4 +12,9 @@ class ProgramCapsule {
     virtual int close();
 };
 
+class ProgramWrapper: ProgramCapsule {
+  public:
+    virtual char* getTitle();
+};
+
 #endif
