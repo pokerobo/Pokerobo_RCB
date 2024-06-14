@@ -8,8 +8,9 @@
 #include "Message_Serializer.h"
 #include "Message_Renderer.h"
 
-#define RF24_BASE_ADDRESS             0x18580901LL
+#define RF24_BASE_ADDRESS             0x18580900LL
 #define RF24_DEFAULT_ADDRESS          0x123456789ABCDEF0LL
+#define DEFAULT_OFFSET_ADDRESS        0
 
 #define MESSAGE_RENDERERS_LIMIT       7
 #define MULTIPLE_RENDERERS_SUPPORTED  false

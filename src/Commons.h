@@ -41,7 +41,7 @@
 #endif
 
 #define __SPACE_SAVING_MODE__             1
-#define __OPTIMIZING_DYNAMIC_MEMORY__     1
+#define __OPTIMIZING_DYNAMIC_MEMORY__     0
 
 #ifndef int_abs
 #define int_abs(x) ((x)>0?(x):-(x))

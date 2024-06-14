@@ -2,21 +2,21 @@
 
 ProgramTransmitter::ProgramTransmitter(char* title,
     CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
-    RF24Tranceiver* tranceiver, uint64_t address): ProgramSticker(title) {
-  initialize(commandBuffer, commandResolver, messageRenderer, tranceiver, address);
+    RF24Tranceiver* tranceiver, uint8_t offsetAddress): ProgramSticker(title) {
+  initialize(commandBuffer, commandResolver, messageRenderer, tranceiver, offsetAddress);
 }
 
-ProgramTransmitter::ProgramTransmitter(const char* titles[],
+ProgramTransmitter::ProgramTransmitter(char* titles[],
     CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
-    RF24Tranceiver* tranceiver, uint64_t address): ProgramSticker(titles) {
-  initialize(commandBuffer, commandResolver, messageRenderer, tranceiver, address);
+    RF24Tranceiver* tranceiver, uint8_t offsetAddress): ProgramSticker(titles) {
+  initialize(commandBuffer, commandResolver, messageRenderer, tranceiver, offsetAddress);
 }
 
 void ProgramTransmitter::initialize(CommandPacket* commandBuffer,
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
-      RF24Tranceiver* tranceiver, uint64_t address) {
-  if (address != 0) {
-    _rf24Address = address;
+      RF24Tranceiver* tranceiver, uint8_t offsetAddress) {
+  if (offsetAddress != 0) {
+    _rf24Address = offsetAddress;
   }
   _rf24Tranceiver = tranceiver;
   _messageSender = tranceiver;
@@ -173,7 +173,8 @@ uint8_t ProgramTransmitter::getId() {
 }
 
 int ProgramTransmitter::begin() {
-  return _rf24Tranceiver->begin(RF24_TX, _rf24Address);
+  return _rf24Tranceiver->begin(RF24_TX,
+      (_rf24Address == DEFAULT_OFFSET_ADDRESS) ? RF24_DEFAULT_ADDRESS : RF24_BASE_ADDRESS + _rf24Address);
 }
 
 int ProgramTransmitter::close() {
@@ -184,18 +185,18 @@ int ProgramTransmitter::close() {
 //-------------------------------------------------------------------------------------------------
 
 ProgramReceiver::ProgramReceiver(char* title,
-    RF24Tranceiver* tranceiver, uint64_t address): ProgramSticker(title) {
-  initialize(tranceiver, address);
+    RF24Tranceiver* tranceiver, uint8_t offsetAddress): ProgramSticker(title) {
+  initialize(tranceiver, offsetAddress);
 }
 
-ProgramReceiver::ProgramReceiver(const char* titles[],
-    RF24Tranceiver* tranceiver, uint64_t address): ProgramSticker(titles) {
-  initialize(tranceiver, address);
+ProgramReceiver::ProgramReceiver(char* titles[],
+    RF24Tranceiver* tranceiver, uint8_t offsetAddress): ProgramSticker(titles) {
+  initialize(tranceiver, offsetAddress);
 }
 
-void ProgramReceiver::initialize(RF24Tranceiver* tranceiver, uint64_t address) {
-  if (address != 0) {
-    _rf24Address = address;
+void ProgramReceiver::initialize(RF24Tranceiver* tranceiver, uint8_t offsetAddress) {
+  if (offsetAddress != 0) {
+    _rf24Address = offsetAddress;
   }
   _rf24Tranceiver = tranceiver;
 }
@@ -205,7 +206,8 @@ uint8_t ProgramReceiver::getId() {
 }
 
 int ProgramReceiver::begin() {
-  return _rf24Tranceiver->begin(RF24_RX, _rf24Address);
+  return _rf24Tranceiver->begin(RF24_RX,
+      (_rf24Address == DEFAULT_OFFSET_ADDRESS) ? RF24_DEFAULT_ADDRESS : RF24_BASE_ADDRESS + _rf24Address);
 }
 
 int ProgramReceiver::check(void* action, void* command) {

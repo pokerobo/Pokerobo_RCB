@@ -155,6 +155,7 @@ void DisplayHandler::splash(char* title, byte align) {
 }
 
 void DisplayHandler::render(ProgramCollection* programCollection) {
+  char titleBuffer[20];
   U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
   _u8g2->firstPage();
   do {
@@ -176,8 +177,6 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
       ProgramSticker* capsule = programCollection->getItem(i);
       char* title = capsule->getTitle();
       if (title == NULL) {
-        int len = capsule->getTitleLength();
-        char titleBuffer[1 + len + 1];
         titleBuffer[0] = ' ';
         titleBuffer[1] = 0;
         title = capsule->getTitle(titleBuffer);

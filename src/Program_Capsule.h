@@ -22,8 +22,7 @@ class ProgramSticker: public ProgramCapsule {
     char* getTitle(char *buffer);
     int getTitleLength();
   private:
-    void initialize();
-    void initialize(char* titles[]);
+    void initialize(char* titles[]=NULL);
     char* _title = NULL;
     char* _titles[PROGRAM_TITLE_PARTS];
 };

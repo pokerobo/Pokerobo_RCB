@@ -9,14 +9,12 @@ ProgramSticker::ProgramSticker(char* titles[]) {
   initialize(titles);
 }
 
-void ProgramSticker::initialize() {
-  for(byte i=0; i<PROGRAM_TITLE_PARTS; i++) {
-    _titles[i] = NULL;
-  }
-}
-
 void ProgramSticker::initialize(char* titles[]) {
   for(byte i=0; i<PROGRAM_TITLE_PARTS; i++) {
+    if (titles == NULL) {
+      _titles[i] = NULL;
+      continue;
+    }
     _titles[i] = titles[i];
   }
 }

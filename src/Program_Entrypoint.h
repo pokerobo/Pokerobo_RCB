@@ -14,18 +14,18 @@ class ProgramTransmitter: public ProgramSticker {
   public:
     ProgramTransmitter(char* title,
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
-      RF24Tranceiver* tranceiver, uint64_t address): ProgramTransmitter(title, NULL,
-        commandResolver, messageRenderer, tranceiver, address) {};
+      RF24Tranceiver* tranceiver, uint8_t offsetAddress): ProgramTransmitter(title, NULL,
+        commandResolver, messageRenderer, tranceiver, offsetAddress) {};
     ProgramTransmitter(char* title,
       CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
-      RF24Tranceiver* tranceiver, uint64_t address);
-    ProgramTransmitter(const char* titles[],
+      RF24Tranceiver* tranceiver, uint8_t offsetAddress);
+    ProgramTransmitter(char* titles[],
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
-      RF24Tranceiver* tranceiver, uint64_t address): ProgramTransmitter(titles, NULL,
-        commandResolver, messageRenderer, tranceiver, address) {};
-    ProgramTransmitter(const char* titles[],
+      RF24Tranceiver* tranceiver, uint8_t offsetAddress): ProgramTransmitter(titles, NULL,
+        commandResolver, messageRenderer, tranceiver, offsetAddress) {};
+    ProgramTransmitter(char* titles[],
       CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
-      RF24Tranceiver* tranceiver, uint64_t address);
+      RF24Tranceiver* tranceiver, uint8_t offsetAddress);
     #if MULTIPLE_SENDERS_SUPPORTED
     bool add(MessageSender* messageSender);
     #endif
@@ -41,10 +41,10 @@ class ProgramTransmitter: public ProgramSticker {
   protected:
     void initialize(CommandPacket* commandBuffer,
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
-      RF24Tranceiver* tranceiver, uint64_t address);
+      RF24Tranceiver* tranceiver, uint8_t offsetAddress);
   private:
     static const uint8_t _applicationId = 1;
-    uint64_t _rf24Address = RF24_DEFAULT_ADDRESS;
+    uint8_t _rf24Address = DEFAULT_OFFSET_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver = NULL;
     TransmissionCounter _counter;
     MessageSender* _messageSender = NULL;
@@ -60,18 +60,18 @@ class ProgramTransmitter: public ProgramSticker {
 class ProgramReceiver: public ProgramSticker {
   public:
     ProgramReceiver(char* title,
-      RF24Tranceiver* tranceiver, uint64_t address);
-    ProgramReceiver(const char* titles[],
-      RF24Tranceiver* tranceiver, uint64_t address);
+      RF24Tranceiver* tranceiver, uint8_t offsetAddress);
+    ProgramReceiver(char* titles[],
+      RF24Tranceiver* tranceiver, uint8_t offsetAddress);
     uint8_t getId();
     int begin();
     int check(void* action, void* command=NULL);
     int close();
   protected:
-    void initialize(RF24Tranceiver* tranceiver, uint64_t address);
+    void initialize(RF24Tranceiver* tranceiver, uint8_t offsetAddress);
   private:
     static const uint8_t _applicationId = 2;
-    uint64_t _rf24Address = RF24_DEFAULT_ADDRESS;
+    uint8_t _rf24Address = DEFAULT_OFFSET_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver;
 };
 
