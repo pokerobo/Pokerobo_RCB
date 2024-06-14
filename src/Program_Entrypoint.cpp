@@ -2,8 +2,19 @@
 
 ProgramTransmitter::ProgramTransmitter(char* title,
     CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
-    RF24Tranceiver* tranceiver, uint64_t address) {
-  _title = title;
+    RF24Tranceiver* tranceiver, uint64_t address): ProgramSticker(title) {
+  initialize(commandBuffer, commandResolver, messageRenderer, tranceiver, address);
+}
+
+ProgramTransmitter::ProgramTransmitter(const char* titles[],
+    CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
+    RF24Tranceiver* tranceiver, uint64_t address): ProgramSticker(titles) {
+  initialize(commandBuffer, commandResolver, messageRenderer, tranceiver, address);
+}
+
+void ProgramTransmitter::initialize(CommandPacket* commandBuffer,
+      CommandResolver* commandResolver, MessageRenderer* messageRenderer,
+      RF24Tranceiver* tranceiver, uint64_t address) {
   if (address != 0) {
     _rf24Address = address;
   }
@@ -161,10 +172,6 @@ uint8_t ProgramTransmitter::getId() {
   return _applicationId;
 }
 
-char* ProgramTransmitter::getTitle() {
-  return _title;
-}
-
 int ProgramTransmitter::begin() {
   return _rf24Tranceiver->begin(RF24_TX, _rf24Address);
 }
@@ -177,8 +184,16 @@ int ProgramTransmitter::close() {
 //-------------------------------------------------------------------------------------------------
 
 ProgramReceiver::ProgramReceiver(char* title,
-    RF24Tranceiver* tranceiver, uint64_t address) {
-  _title = title;
+    RF24Tranceiver* tranceiver, uint64_t address): ProgramSticker(title) {
+  initialize(tranceiver, address);
+}
+
+ProgramReceiver::ProgramReceiver(const char* titles[],
+    RF24Tranceiver* tranceiver, uint64_t address): ProgramSticker(titles) {
+  initialize(tranceiver, address);
+}
+
+void ProgramReceiver::initialize(RF24Tranceiver* tranceiver, uint64_t address) {
   if (address != 0) {
     _rf24Address = address;
   }
@@ -187,10 +202,6 @@ ProgramReceiver::ProgramReceiver(char* title,
 
 uint8_t ProgramReceiver::getId() {
   return _applicationId;
-}
-
-char* ProgramReceiver::getTitle() {
-  return _title;
 }
 
 int ProgramReceiver::begin() {

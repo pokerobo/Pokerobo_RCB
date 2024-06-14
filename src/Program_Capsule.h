@@ -12,9 +12,20 @@ class ProgramCapsule {
     virtual int close();
 };
 
-class ProgramWrapper: ProgramCapsule {
+#define   PROGRAM_TITLE_PARTS         3
+
+class ProgramSticker: public ProgramCapsule {
   public:
-    virtual char* getTitle();
+    ProgramSticker(char* title);
+    ProgramSticker(char* titles[]);
+    char* getTitle();
+    char* getTitle(char *buffer);
+    int getTitleLength();
+  private:
+    void initialize();
+    void initialize(char* titles[]);
+    char* _title = NULL;
+    char* _titles[PROGRAM_TITLE_PARTS];
 };
 
 #endif

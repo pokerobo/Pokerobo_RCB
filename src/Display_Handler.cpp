@@ -173,8 +173,15 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
     uint8_t end = programCollection->getFrameEnd();
     for(uint8_t i=begin; i<=end; i++) {
       uint16_t flags = U8G2_BTN_BW1;
-      ProgramCapsule* capsule = programCollection->getItem(i);
+      ProgramSticker* capsule = programCollection->getItem(i);
       char* title = capsule->getTitle();
+      if (title == NULL) {
+        int len = capsule->getTitleLength();
+        char titleBuffer[1 + len + 1];
+        titleBuffer[0] = ' ';
+        titleBuffer[1] = 0;
+        title = capsule->getTitle(titleBuffer);
+      }
       if (i == focus) {
         flags |= U8G2_BTN_INV;
       }

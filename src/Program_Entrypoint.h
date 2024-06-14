@@ -10,13 +10,20 @@
 
 #define MULTIPLE_SENDERS_SUPPORTED false
 
-class ProgramTransmitter: public ProgramCapsule {
+class ProgramTransmitter: public ProgramSticker {
   public:
     ProgramTransmitter(char* title,
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint64_t address): ProgramTransmitter(title, NULL,
         commandResolver, messageRenderer, tranceiver, address) {};
     ProgramTransmitter(char* title,
+      CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
+      RF24Tranceiver* tranceiver, uint64_t address);
+    ProgramTransmitter(const char* titles[],
+      CommandResolver* commandResolver, MessageRenderer* messageRenderer,
+      RF24Tranceiver* tranceiver, uint64_t address): ProgramTransmitter(titles, NULL,
+        commandResolver, messageRenderer, tranceiver, address) {};
+    ProgramTransmitter(const char* titles[],
       CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint64_t address);
     #if MULTIPLE_SENDERS_SUPPORTED
@@ -28,13 +35,15 @@ class ProgramTransmitter: public ProgramCapsule {
     void set(CommandPacket* commandBuffer);
     bool hasCommandBuffer();
     uint8_t getId();
-    char* getTitle();
     int begin();
     int check(void* action, void* command=NULL);
     int close();
+  protected:
+    void initialize(CommandPacket* commandBuffer,
+      CommandResolver* commandResolver, MessageRenderer* messageRenderer,
+      RF24Tranceiver* tranceiver, uint64_t address);
   private:
     static const uint8_t _applicationId = 1;
-    char* _title;
     uint64_t _rf24Address = RF24_DEFAULT_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver = NULL;
     TransmissionCounter _counter;
@@ -48,18 +57,20 @@ class ProgramTransmitter: public ProgramCapsule {
     CommandPacket* _commandBuffer = NULL;
 };
 
-class ProgramReceiver: public ProgramCapsule {
+class ProgramReceiver: public ProgramSticker {
   public:
     ProgramReceiver(char* title,
       RF24Tranceiver* tranceiver, uint64_t address);
+    ProgramReceiver(const char* titles[],
+      RF24Tranceiver* tranceiver, uint64_t address);
     uint8_t getId();
-    char* getTitle();
     int begin();
     int check(void* action, void* command=NULL);
     int close();
+  protected:
+    void initialize(RF24Tranceiver* tranceiver, uint64_t address);
   private:
     static const uint8_t _applicationId = 2;
-    char* _title;
     uint64_t _rf24Address = RF24_DEFAULT_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver;
 };
