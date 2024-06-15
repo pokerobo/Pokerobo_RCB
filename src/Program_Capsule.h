@@ -12,19 +12,23 @@ class ProgramCapsule {
     virtual int close();
 };
 
-#define   PROGRAM_TITLE_PARTS         3
+#ifndef PROGRAM_TITLE_PARTS
+#define PROGRAM_TITLE_PARTS         4
+#endif//PROGRAM_TITLE_PARTS
 
 class ProgramSticker: public ProgramCapsule {
   public:
     ProgramSticker(char* title);
-    ProgramSticker(char* titles[]);
+    ProgramSticker(char* titles[PROGRAM_TITLE_PARTS]);
     char* getTitle();
     char* getTitle(char *buffer);
     int getTitleLength();
+    static int getMaxTitleLength();
   private:
-    void initialize(char* titles[]=NULL);
+    void initialize(char* titles[PROGRAM_TITLE_PARTS]=NULL);
     char* _title = NULL;
     char* _titles[PROGRAM_TITLE_PARTS];
+    static int _maxTitleLength;
 };
 
 #endif

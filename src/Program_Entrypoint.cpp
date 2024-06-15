@@ -6,7 +6,7 @@ ProgramTransmitter::ProgramTransmitter(char* title,
   initialize(commandBuffer, commandResolver, messageRenderer, tranceiver, offsetAddress);
 }
 
-ProgramTransmitter::ProgramTransmitter(char* titles[],
+ProgramTransmitter::ProgramTransmitter(char* titles[PROGRAM_TITLE_PARTS],
     CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
     RF24Tranceiver* tranceiver, uint8_t offsetAddress): ProgramSticker(titles) {
   initialize(commandBuffer, commandResolver, messageRenderer, tranceiver, offsetAddress);
@@ -189,7 +189,7 @@ ProgramReceiver::ProgramReceiver(char* title,
   initialize(tranceiver, offsetAddress);
 }
 
-ProgramReceiver::ProgramReceiver(char* titles[],
+ProgramReceiver::ProgramReceiver(char* titles[PROGRAM_TITLE_PARTS],
     RF24Tranceiver* tranceiver, uint8_t offsetAddress): ProgramSticker(titles) {
   initialize(tranceiver, offsetAddress);
 }

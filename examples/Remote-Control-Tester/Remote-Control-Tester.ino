@@ -1,6 +1,6 @@
 #include <Pokerobo_RCB_master.h>
 
-const uint8_t address = 1;
+const uint8_t address = 1; // from 1 (0x01) -> 255 (0xFF)
 
 MovingDisplayHandler displayHandler;
 MovingMessageSerializer messageSerializer;
@@ -25,16 +25,16 @@ void setup() {
   programSelector.set(&displayHandler);
   programSelector.set(&joystickHandler);
 
-  programSelector.add(new ProgramTransmitter(" Car RC Dashboard",
+  programSelector.add(new ProgramTransmitter("Car RC Dashboard",
       &commandResolver, &displayHandler, &rf24Tranceiver, address));
-  programSelector.add(new ProgramTransmitter(" Car RC TX:default",
+  programSelector.add(new ProgramTransmitter("Car RC TX:default",
       &commandBuffer, &commandResolver, &displayHandler, &rf24Tranceiver, 0));
-  programSelector.add(new ProgramTransmitter(" Car RC TX:18580908",
-      &commandBuffer, &commandResolver, &displayHandler, &rf24Tranceiver, 8));
 
-  programSelector.add(new ProgramReceiver(" Car RC RX:default",
+  programSelector.add(new ProgramReceiver("Car RC RX:default",
       &rf24Tranceiver, 0));
-  programSelector.add(new ProgramReceiver(" Car RC RX:18580908",
+  programSelector.add(new ProgramReceiver("Car RC RX:18580907",
+      &rf24Tranceiver, 7));
+  programSelector.add(new ProgramReceiver("Car RC RX:18580908",
       &rf24Tranceiver, 8));
 
   programSelector.begin(PROGRAM_MODE_TESTER);

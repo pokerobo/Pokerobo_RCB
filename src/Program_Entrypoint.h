@@ -19,11 +19,11 @@ class ProgramTransmitter: public ProgramSticker {
     ProgramTransmitter(char* title,
       CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress);
-    ProgramTransmitter(char* titles[],
+    ProgramTransmitter(char* titles[PROGRAM_TITLE_PARTS],
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress): ProgramTransmitter(titles, NULL,
         commandResolver, messageRenderer, tranceiver, offsetAddress) {};
-    ProgramTransmitter(char* titles[],
+    ProgramTransmitter(char* titles[PROGRAM_TITLE_PARTS],
       CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress);
     #if MULTIPLE_SENDERS_SUPPORTED
@@ -61,7 +61,7 @@ class ProgramReceiver: public ProgramSticker {
   public:
     ProgramReceiver(char* title,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress);
-    ProgramReceiver(char* titles[],
+    ProgramReceiver(char* titles[PROGRAM_TITLE_PARTS],
       RF24Tranceiver* tranceiver, uint8_t offsetAddress);
     uint8_t getId();
     int begin();
