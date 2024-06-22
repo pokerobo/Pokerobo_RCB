@@ -67,6 +67,14 @@ uint16_t JoystickAction::getTogglingFlags() {
   return _togglingFlags;
 }
 
+bool JoystickAction::isButtonClicked(uint16_t button) {
+  return (_togglingFlags & button) == button;
+}
+
+bool JoystickAction::isButtonPressed(uint16_t button) {
+  return (_pressingFlags & button) == button;
+}
+
 uint16_t JoystickAction::getX() {
   return _x;
 }

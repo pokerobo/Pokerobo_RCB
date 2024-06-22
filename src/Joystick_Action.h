@@ -100,6 +100,8 @@ class JoystickAction: public MessageInterface {
     message_source_t getSource();
     uint16_t getPressingFlags();
     uint16_t getTogglingFlags();
+    bool isButtonClicked(uint16_t button);
+    bool isButtonPressed(uint16_t button);
     uint16_t getX();
     uint16_t getY();
     uint16_t getOriginX();
