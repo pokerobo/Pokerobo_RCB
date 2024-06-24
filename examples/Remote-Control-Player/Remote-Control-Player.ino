@@ -1,4 +1,4 @@
-#include <Pokerobo_RCB_master.h>
+#include <Pokerobo_RCB.h>
 
 const uint8_t address = 1;
 
@@ -14,12 +14,11 @@ void setup() {
   Serial.begin(57600);
 
   displayHandler.begin();
+  joystickHandler.begin();
 
   rf24Tranceiver.set(&displayHandler);
   rf24Tranceiver.set(&messageSerializer);
   rf24Tranceiver.begin(RF24_TX, address);
-
-  joystickHandler.begin();
 
   programSelector.set(&displayHandler);
   programSelector.set(&joystickHandler);
