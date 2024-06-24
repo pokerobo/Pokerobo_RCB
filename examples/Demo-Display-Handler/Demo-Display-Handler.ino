@@ -1,4 +1,4 @@
-#include <Pokerobo_RCB_master.h>
+#include <Pokerobo_RCB.h>
 
 class SimpleDisplayHandler: public DisplayHandler {
   public:
@@ -17,6 +17,8 @@ class SimpleDisplayHandler: public DisplayHandler {
 SimpleDisplayHandler displayHandler;
 JoystickHandler joystickHandler;
 
+int counter = 0;
+
 void setup() {
   Serial.begin(57600);
   displayHandler.begin();
@@ -24,6 +26,11 @@ void setup() {
 }
 
 void loop() {
+  if (counter < 1) {
+    counter++;
+    displayHandler.splash("Joystick Screen Demo");
+    delay(2000);
+  }
   JoystickAction joystickAction;
   displayHandler.render(joystickHandler.input(&joystickAction));
   delay(50);
