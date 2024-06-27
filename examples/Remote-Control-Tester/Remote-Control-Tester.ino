@@ -35,6 +35,8 @@ void setup() {
       &rf24Tranceiver, 7));
   programSelector.add(new ProgramReceiver("Car RC RX:18580908",
       &rf24Tranceiver, 8));
+  programSelector.add(new ProgramDeviceInfo("Device Information",
+      &displayHandler));
 
   programSelector.begin(PROGRAM_MODE_TESTER);
 }

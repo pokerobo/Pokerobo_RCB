@@ -29,6 +29,8 @@ void setup() {
       &commandResolver, &displayHandler, &rf24Tranceiver, 0));
   programSelector.add(new ProgramReceiver("Car RC RX:default",
       &rf24Tranceiver, 0));
+  programSelector.add(new ProgramDeviceInfo("Device Information",
+      &displayHandler));
 
   programSelector.begin(PROGRAM_MODE_PLAYER);
 }

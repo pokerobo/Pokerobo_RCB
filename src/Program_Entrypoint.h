@@ -3,6 +3,7 @@
 
 #include "Program_Capsule.h"
 #include "Joystick_Handler.h"
+#include "Display_X_Handler.h"
 #include "RF24_Tranceiver.h"
 #include "Message_Exchange.h"
 #include "Message_Renderer.h"
@@ -73,6 +74,20 @@ class ProgramReceiver: public ProgramSticker {
     static const uint8_t _applicationId = 2;
     uint8_t _rf24Address = DEFAULT_OFFSET_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver;
+};
+
+class ProgramDeviceInfo: public ProgramSticker {
+  public:
+    ProgramDeviceInfo(char* title, DeviceDisplayHandler *displayHandler);
+    ProgramDeviceInfo(char* titles[PROGRAM_TITLE_PARTS], DeviceDisplayHandler *displayHandler);
+    uint8_t getId();
+    int begin();
+    int check(void* action, void* command=NULL);
+    int close();
+  protected:
+    void initialize(DeviceDisplayHandler *displayHandler);
+  private:
+    DeviceDisplayHandler *_displayHandler;
 };
 
 #endif

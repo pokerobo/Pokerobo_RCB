@@ -127,6 +127,10 @@ void setup() {
       &commandBuffer, &commandResolver, &displayHandler, &rf24Tranceiver, 10));
   #endif
 
+  //---------------------------------------------------------------------------
+  titleDef[0] = "Device", titleDef[1] = " ", titleDef[2] = "Information", titleDef[3] = NULL;
+  programSelector.add(new ProgramDeviceInfo(titleDef, &displayHandler));
+
   programSelector.begin(PROGRAM_MODE_TESTER);
 }
 

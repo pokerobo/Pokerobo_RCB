@@ -2,8 +2,8 @@
 #define __POKEROBO_RCB_ROBOCAR_APPLICATION_H__
 
 #include "Commons.h"
-#include "Display_Handler.h"
 #include "Joystick_Action.h"
+#include "Display_X_Handler.h"
 #include "Message_Exchange.h"
 #include "Message_Serializer.h"
 #include "Message_Renderer.h"
@@ -53,7 +53,7 @@ class MovingMessageSerializer: public MessageSerializer {
     static const uint8_t messageSize;
 };
 
-class MovingDisplayHandler: public DisplayHandler {
+class MovingDisplayHandler: public DeviceDisplayHandler {
   protected:
     void renderCommandPacket_(uint8_t lx, uint8_t ty, MessageInterface* commandPacket);
 };

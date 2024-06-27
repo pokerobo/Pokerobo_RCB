@@ -218,3 +218,36 @@ int ProgramReceiver::close() {
   _rf24Tranceiver->reset(RF24_RX);
   return 0;
 }
+
+//-------------------------------------------------------------------------------------------------
+
+ProgramDeviceInfo::ProgramDeviceInfo(char* title,
+    DeviceDisplayHandler *displayHandler): ProgramSticker(title) {
+  initialize(displayHandler);
+}
+
+ProgramDeviceInfo::ProgramDeviceInfo(char* titles[PROGRAM_TITLE_PARTS],
+    DeviceDisplayHandler *displayHandler): ProgramSticker(titles) {
+  initialize(displayHandler);
+}
+
+void ProgramDeviceInfo::initialize(DeviceDisplayHandler *displayHandler) {
+  _displayHandler = displayHandler;
+}
+
+uint8_t ProgramDeviceInfo::getId() {
+  return 0;
+}
+
+int ProgramDeviceInfo::begin() {
+  return 0;
+}
+
+int ProgramDeviceInfo::check(void* action, void* command) {
+  _displayHandler->render((DeviceManifest*)NULL);
+  return 0;
+}
+
+int ProgramDeviceInfo::close() {
+  return 0;
+}
