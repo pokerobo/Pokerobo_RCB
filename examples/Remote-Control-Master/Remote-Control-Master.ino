@@ -81,10 +81,6 @@ void setup() {
   programSelector.add(new ProgramTransmitter(titleDef,
       &commandBuffer, &commandResolver, &displayHandler, &rf24Tranceiver, 7));
 
-  /*titleDef[1] = "TX:", titleDef[2] = "185809", */titleDef[3] = "08";
-  programSelector.add(new ProgramTransmitter(titleDef,
-      &commandBuffer, &commandResolver, &displayHandler, &rf24Tranceiver, 8));
-
   #ifdef __SAMPLE_PROGRAM_TRANSMITTERS__
   /*titleDef[1] = "TX:", titleDef[2] = "185809", */titleDef[3] = "01";
   programSelector.add(new ProgramTransmitter(titleDef,
@@ -131,7 +127,7 @@ void setup() {
   titleDef[0] = "Device", titleDef[1] = " ", titleDef[2] = "Information", titleDef[3] = NULL;
   programSelector.add(new ProgramDeviceInfo(titleDef, &displayHandler));
 
-  programSelector.begin(PROGRAM_MODE_TESTER);
+  programSelector.begin();
 }
 
 void loop() {

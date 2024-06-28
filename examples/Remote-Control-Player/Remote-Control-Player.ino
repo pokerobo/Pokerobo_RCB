@@ -32,7 +32,7 @@ void setup() {
   programSelector.add(new ProgramDeviceInfo("Device Information",
       &displayHandler));
 
-  programSelector.begin(PROGRAM_MODE_PLAYER);
+  programSelector.begin();
 }
 
 void loop() {

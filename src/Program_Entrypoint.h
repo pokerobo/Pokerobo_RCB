@@ -44,7 +44,6 @@ class ProgramTransmitter: public ProgramSticker {
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress);
   private:
-    static const uint8_t _applicationId = 1;
     uint8_t _rf24Address = DEFAULT_OFFSET_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver = NULL;
     TransmissionCounter _counter;
@@ -71,7 +70,6 @@ class ProgramReceiver: public ProgramSticker {
   protected:
     void initialize(RF24Tranceiver* tranceiver, uint8_t offsetAddress);
   private:
-    static const uint8_t _applicationId = 2;
     uint8_t _rf24Address = DEFAULT_OFFSET_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver;
 };

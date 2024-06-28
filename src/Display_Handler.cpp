@@ -84,6 +84,9 @@ u8g2_cb_t* convertDisplayRotation(lcd_pins_position_t pos) {
 }
 
 void DisplayHandler::initialize(DisplayOptions* options) {
+  if (_u8g2Ref != NULL) {
+    return;
+  }
   u8g2_cb_t *rotation = convertDisplayRotation(options->getLcdRotation());
   _u8g2Ref = new U8G2_ST7567_ENH_DG128064I_1_HW_I2C(rotation,
       LCD_PIN_SCL,

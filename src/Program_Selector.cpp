@@ -10,8 +10,7 @@ ProgramSelector::ProgramSelector() {
   _programCollection = &programCollection;
 }
 
-int ProgramSelector::begin(uint8_t mode) {
-  _mode = mode;
+int ProgramSelector::begin() {
   if (!_programCollection->isReady()) {
     exit(1);
   }

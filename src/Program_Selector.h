@@ -21,7 +21,7 @@
 class ProgramSelector {
   public:
     ProgramSelector();
-    int begin(uint8_t mode=PROGRAM_MODE_PLAYER);
+    int begin();
     void set(DisplayHandler* displayHandler);
     void set(JoystickHandler* joystickHandler);
     bool add(ProgramCapsule* programCapsule);
@@ -40,7 +40,6 @@ class ProgramSelector {
     int leaveProgram_(JoystickAction* action);
     void changeFlow_(uint8_t flow);
   private:
-    uint8_t _mode = PROGRAM_MODE_PLAYER;
     uint8_t _flow = DASHBOARD_FLOW_EXECUTION;
     ProgramCollection* _programCollection = NULL;
     DisplayHandler* _displayHandler = NULL;

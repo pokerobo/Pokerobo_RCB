@@ -94,7 +94,7 @@ int ProgramTransmitter::check(void* inputData, void* command) {
   if (_messageSender != NULL) {
     MasterContext* context = NULL;
     #if __JOYSTICK_MESSAGE_STRUCTURE__ == CONTROL_PACKET_V2
-    MasterContext contextPacket(_applicationId, false);
+    MasterContext contextPacket(getId(), false);
     context = &contextPacket;
     #endif
     MessagePacket packet(context, action, commandPacket);
@@ -169,7 +169,7 @@ byte ProgramTransmitter::invoke(MessageSender* messageSender, uint8_t index, con
 #endif//MULTIPLE_SENDERS_SUPPORTED
 
 uint8_t ProgramTransmitter::getId() {
-  return _applicationId;
+  return 1;
 }
 
 int ProgramTransmitter::begin() {
@@ -202,7 +202,7 @@ void ProgramReceiver::initialize(RF24Tranceiver* tranceiver, uint8_t offsetAddre
 }
 
 uint8_t ProgramReceiver::getId() {
-  return _applicationId;
+  return 2;
 }
 
 int ProgramReceiver::begin() {
@@ -236,7 +236,7 @@ void ProgramDeviceInfo::initialize(DeviceDisplayHandler *displayHandler) {
 }
 
 uint8_t ProgramDeviceInfo::getId() {
-  return 0;
+  return 3;
 }
 
 int ProgramDeviceInfo::begin() {
