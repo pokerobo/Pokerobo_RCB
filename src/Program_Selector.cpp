@@ -6,7 +6,10 @@
 
 ProgramCollection programCollection;
 
-ProgramSelector::ProgramSelector() {
+ProgramSelector::ProgramSelector(DisplayHandler* displayHandler,
+    JoystickHandler* joystickHandler) {
+  _displayHandler = displayHandler;
+  _joystickHandler = joystickHandler;
   _programCollection = &programCollection;
 }
 

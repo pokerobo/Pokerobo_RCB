@@ -20,7 +20,8 @@
 
 class ProgramSelector {
   public:
-    ProgramSelector();
+    ProgramSelector(DisplayHandler* displayHandler=NULL,
+        JoystickHandler* joystickHandler=NULL);
     int begin();
     void set(DisplayHandler* displayHandler);
     void set(JoystickHandler* joystickHandler);

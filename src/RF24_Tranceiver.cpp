@@ -62,6 +62,14 @@
 
 //-------------------------------------------------------------------------------------------------
 
+RF24Tranceiver::RF24Tranceiver(MessageRenderer* messageRenderer,
+    MessageSerializer* messageSerializer,
+    MessageProcessor* messageProcessor) {
+  set(messageRenderer);
+  set(messageSerializer);
+  set(messageProcessor);
+}
+
 void* RF24Tranceiver::getPrimaryRadio() {
   if (_radio == NULL) {
     _radio = new RF24(RF24_PRIMARY_PIN_CE, RF24_PRIMARY_PIN_CSN);

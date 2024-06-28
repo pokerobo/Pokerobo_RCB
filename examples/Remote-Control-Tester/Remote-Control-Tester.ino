@@ -2,27 +2,22 @@
 
 const uint8_t address = 1; // from 1 (0x01) -> 255 (0xFF)
 
+JoystickHandler joystickHandler;
 MovingDisplayHandler displayHandler;
 MovingMessageSerializer messageSerializer;
 MovingCommandResolver commandResolver(true);
 MovingCommandPacket commandBuffer;
 
-RF24Tranceiver rf24Tranceiver;
-JoystickHandler joystickHandler;
-ProgramSelector programSelector;
+RF24Tranceiver rf24Tranceiver(&displayHandler, &messageSerializer);
+ProgramSelector programSelector(&displayHandler, &joystickHandler);
 
 void setup() {
   Serial.begin(57600);
 
-  displayHandler.begin();
   joystickHandler.begin();
+  displayHandler.begin();
 
-  rf24Tranceiver.set(&displayHandler);
-  rf24Tranceiver.set(&messageSerializer);
   rf24Tranceiver.begin(RF24_TX, address);
-
-  programSelector.set(&displayHandler);
-  programSelector.set(&joystickHandler);
 
   programSelector.add(new ProgramTransmitter("Car RC Dashboard",
       &commandResolver, &displayHandler, &rf24Tranceiver, address));

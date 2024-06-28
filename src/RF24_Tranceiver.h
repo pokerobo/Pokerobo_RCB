@@ -69,6 +69,9 @@ class RF24Receiver: public MessageProcessor {
 
 class RF24Tranceiver: public RF24Transmitter, public RF24Receiver {
   public:
+    RF24Tranceiver(MessageRenderer* messageRenderer = NULL,
+        MessageSerializer* _messageSerializer = NULL,
+        MessageProcessor* _messageProcessor = NULL);
     int begin(tranceiver_t mode=RF24_TX, uint64_t address=RF24_DEFAULT_ADDRESS);
     void reset(tranceiver_t mode=RF24_TX);
   protected:
