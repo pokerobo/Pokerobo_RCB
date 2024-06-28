@@ -1,11 +1,13 @@
 #include "Refined-Command-Resolver.h"
+#include "Rotation-Command-Resolver.h"
 
 const uint8_t address = 1;
 
 JoystickHandler joystickHandler;
 MovingDisplayHandler displayHandler;
 MovingMessageSerializer messageSerializer;
-RefinedCommandResolver commandResolver;
+// RefinedCommandResolver commandResolver;
+RotationCommandResolver commandResolver;
 
 RF24Tranceiver rf24Tranceiver(&displayHandler, &messageSerializer);
 ProgramSelector programSelector(&displayHandler, &joystickHandler);

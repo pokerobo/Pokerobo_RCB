@@ -45,6 +45,15 @@ class MovingCommandResolver: public CommandResolver {
     CommandPacket* create();
     virtual CommandPacket* resolve(CommandPacket* command, JoystickAction* action);
     void release(CommandPacket* command);
+  protected:
+    virtual void onForward(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection);
+    virtual void onForwardLeft(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection);
+    virtual void onForwardRight(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection);
+    virtual void onLeft(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection);
+    virtual void onRight(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection);
+    virtual void onBackwardRight(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection);
+    virtual void onBackwardLeft(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection);
+    virtual void onBackward(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection);
   private:
     int _coefficient = 3;
     bool _rotatable = false;

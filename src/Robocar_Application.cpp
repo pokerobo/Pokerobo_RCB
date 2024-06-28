@@ -150,39 +150,32 @@ CommandPacket* MovingCommandResolver::resolve(CommandPacket* commandPacket, Joys
   uint8_t rd = 0;
   int enaVal = 0;
   int enbVal = 0;
-  int _coeff = getCoefficient();
 
   if (y > MOVING_COMMAND_BOUND_Y) {
     ld = rd = 1;
     if (x < -MOVING_COMMAND_BOUND_X) {
-      int r = int_min(int_abs(x), int_abs(y));
-      int dx = r * _coeff / 10;
-      enaVal = int_abs(y) - (r - dx);
-      enbVal = int_abs(y) - dx;
+      onForwardLeft(x, y, enaVal, ld, enbVal, rd);
     } else if (x >= -MOVING_COMMAND_BOUND_X && x <= MOVING_COMMAND_BOUND_X) {
-      enaVal = enbVal = int_abs(y);
+      onForward(x, y, enaVal, ld, enbVal, rd);
     } else {
-      int r = int_min(int_abs(x), int_abs(y));
-      int dx = r * _coeff / 10;
-      enaVal = int_abs(y) - dx;
-      enbVal = int_abs(y) - (r - dx);
+      onForwardRight(x, y, enaVal, ld, enbVal, rd);
     }
   } else if (y <= MOVING_COMMAND_BOUND_Y && y >= -MOVING_COMMAND_BOUND_Y) {
-    // do nothing
+    if (x < -MOVING_COMMAND_BOUND_X) {
+      onLeft(x, y, enaVal, ld, enbVal, rd);
+    } else if (x >= -MOVING_COMMAND_BOUND_X && x <= MOVING_COMMAND_BOUND_X) {
+      // do nothing
+    } else {
+      onRight(x, y, enaVal, ld, enbVal, rd);
+    }
   } else {
     ld = rd = 2;
     if (x < -MOVING_COMMAND_BOUND_X) {
-      int r = int_min(int_abs(x), int_abs(y));
-      int dx = r * _coeff / 10;
-      enaVal = int_abs(y) - (r - dx);
-      enbVal = int_abs(y) - dx;
+      onBackwardLeft(x, y, enaVal, ld, enbVal, rd);
     } else if (x >= -MOVING_COMMAND_BOUND_X && x <= MOVING_COMMAND_BOUND_X) {
-      enaVal = enbVal = int_abs(y);
+      onBackward(x, y, enaVal, ld, enbVal, rd);
     } else {
-      int r = int_min(int_abs(x), int_abs(y));
-      int dx = r * _coeff / 10;
-      enaVal = int_abs(y) - dx;
-      enbVal = int_abs(y) - (r - dx);
+      onBackwardRight(x, y, enaVal, ld, enbVal, rd);
     }
   }
 
@@ -208,6 +201,50 @@ void MovingCommandResolver::release(CommandPacket* command) {
   if (command == NULL) return;
   MovingCommandPacket* movingCommand = (MovingCommandPacket*) command;
   delete movingCommand;
+}
+
+void MovingCommandResolver::onForwardLeft(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection) {
+  int r = int_min(int_abs(x), int_abs(y));
+  int dx = r * getCoefficient() / 10;
+  leftSpeed = int_abs(y) - (r - dx);
+  rightSpeed = int_abs(y) - dx;
+}
+
+void MovingCommandResolver::onForward(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection) {
+  leftSpeed = rightSpeed = int_abs(y);
+}
+
+void MovingCommandResolver::onForwardRight(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection) {
+  int r = int_min(int_abs(x), int_abs(y));
+  int dx = r * getCoefficient() / 10;
+  leftSpeed = int_abs(y) - dx;
+  rightSpeed = int_abs(y) - (r - dx);
+}
+
+void MovingCommandResolver::onLeft(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection) {
+  // should be implemented
+}
+
+void MovingCommandResolver::onRight(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection) {
+  // should be implemented
+}
+
+void MovingCommandResolver::onBackwardRight(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection) {
+  int r = int_min(int_abs(x), int_abs(y));
+  int dx = r * getCoefficient() / 10;
+  leftSpeed = int_abs(y) - dx;
+  rightSpeed = int_abs(y) - (r - dx);
+}
+
+void MovingCommandResolver::onBackwardLeft(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection) {
+  int r = int_min(int_abs(x), int_abs(y));
+  int dx = r * getCoefficient() / 10;
+  leftSpeed = int_abs(y) - (r - dx);
+  rightSpeed = int_abs(y) - dx;
+}
+
+void MovingCommandResolver::onBackward(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection) {
+  leftSpeed = rightSpeed = int_abs(y);
 }
 
 //-------------------------------------------------------------------------------------------------
