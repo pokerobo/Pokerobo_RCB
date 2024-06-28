@@ -9,6 +9,8 @@
 #include "Message_Renderer.h"
 #include "Message_Resolver.h"
 
+#define MOVING_COMMAND_BOUND_X                40
+#define MOVING_COMMAND_BOUND_Y                40
 #define MOVING_COMMAND_WEIGHT_MAX             255
 
 class MovingCommandPacket: public CommandPacket {
@@ -36,11 +38,15 @@ class MovingCommandPacket: public CommandPacket {
 class MovingCommandResolver: public CommandResolver {
   public:
     MovingCommandResolver(bool reversed=false);
+    bool isReversed();
+    void setReversed(bool reversed);
+    int getCoefficient();
+    void setCoefficient(int coefficient);
     CommandPacket* create();
-    CommandPacket* resolve(CommandPacket* command, JoystickAction* action);
+    virtual CommandPacket* resolve(CommandPacket* command, JoystickAction* action);
     void release(CommandPacket* command);
   private:
-    int _coeff = 3;
+    int _coefficient = 3;
     bool _rotatable = false;
     bool _reversed = false;
 };
