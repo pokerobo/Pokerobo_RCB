@@ -57,10 +57,16 @@ bool ProgramCollection::setFocusAsCurrent() {
 }
 
 bool ProgramCollection::moveFocusUp() {
+  if (getFocusIndex() == 0) {
+    return setFocusIndex(_programCapsulesTotal - 1);
+  }
   return setFocusIndex(getFocusIndex() - 1);
 }
 
 bool ProgramCollection::moveFocusDown() {
+  if (getFocusIndex() == (_programCapsulesTotal - 1)) {
+    return setFocusIndex(0);
+  }
   return setFocusIndex(getFocusIndex() + 1);
 }
 
