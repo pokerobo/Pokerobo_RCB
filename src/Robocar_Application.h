@@ -9,8 +9,14 @@
 #include "Message_Renderer.h"
 #include "Message_Resolver.h"
 
+#ifndef MOVING_COMMAND_BOUND_X
 #define MOVING_COMMAND_BOUND_X                40
+#endif//MOVING_COMMAND_BOUND_X
+
+#ifndef MOVING_COMMAND_BOUND_Y
 #define MOVING_COMMAND_BOUND_Y                40
+#endif//MOVING_COMMAND_BOUND_Y
+
 #define MOVING_COMMAND_WEIGHT_MAX             255
 
 class MovingCommandPacket: public CommandPacket {
@@ -56,7 +62,6 @@ class MovingCommandResolver: public CommandResolver {
     virtual void onBackward(int x, int y, int &leftSpeed, byte &leftDirection, int &rightSpeed, byte &rightDirection);
   private:
     int _coefficient = 3;
-    bool _rotatable = false;
     bool _reversed = false;
 };
 

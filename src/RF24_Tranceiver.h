@@ -19,7 +19,10 @@
 #define DEFAULT_OFFSET_ADDRESS        0
 
 #define MESSAGE_RENDERERS_LIMIT       7
+
+#ifndef MULTIPLE_RENDERERS_SUPPORTED
 #define MULTIPLE_RENDERERS_SUPPORTED  false
+#endif//MULTIPLE_RENDERERS_SUPPORTED
 
 typedef enum { RF24_TX = 0, RF24_RX } tranceiver_t;
 typedef enum { ACK_OK = 0, ACK_FAILED, MESSAGE_NULL, TRANSMITTER_NULL } rf24_tx_status_t;

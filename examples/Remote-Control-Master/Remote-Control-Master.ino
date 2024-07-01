@@ -119,8 +119,10 @@ void setup() {
   #endif
 
   //---------------------------------------------------------------------------
+  #ifdef __SAMPLE_PROGRAM_DEVICE_INFORMATION__
   titleDef[0] = "Device", titleDef[1] = " ", titleDef[2] = "Information", titleDef[3] = NULL;
   programSelector.add(new ProgramDeviceInfo(titleDef, &displayHandler));
+  #endif
 
   programSelector.begin();
 }

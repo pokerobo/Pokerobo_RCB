@@ -58,7 +58,9 @@
 #define PIN_ANALOG_BUTTON 8 // JOYSTICK
 #endif
 
+#ifndef MESSAGE_EXCHANGE_MAX
 #define MESSAGE_EXCHANGE_MAX  7
+#endif//MESSAGE_EXCHANGE_MAX
 
 class JoystickHandler {
   static const int pinOfButtons[];

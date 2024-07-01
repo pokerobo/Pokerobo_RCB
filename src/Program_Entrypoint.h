@@ -9,7 +9,9 @@
 #include "Message_Renderer.h"
 #include "Message_Resolver.h"
 
+#ifndef MULTIPLE_SENDERS_SUPPORTED
 #define MULTIPLE_SENDERS_SUPPORTED false
+#endif//MULTIPLE_SENDERS_SUPPORTED
 
 class ProgramTransmitter: public ProgramSticker {
   public:
