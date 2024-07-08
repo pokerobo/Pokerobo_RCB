@@ -29,6 +29,8 @@ class ProgramTransmitter: public ProgramSticker {
     ProgramTransmitter(char* titles[PROGRAM_TITLE_PARTS],
       CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress);
+    TransmissionCounter* getTransmissionCounter();
+    void set(TransmissionCounter* counter);
     #if MULTIPLE_SENDERS_SUPPORTED
     bool add(MessageSender* messageSender);
     #endif
@@ -48,7 +50,7 @@ class ProgramTransmitter: public ProgramSticker {
   private:
     uint8_t _rf24Address = DEFAULT_OFFSET_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver = NULL;
-    TransmissionCounter _counter;
+    TransmissionCounter* _counter = NULL;
     MessageSender* _messageSender = NULL;
     #if MULTIPLE_SENDERS_SUPPORTED
     MessageSender* _messageSenders[MESSAGE_EXCHANGE_MAX] = {};

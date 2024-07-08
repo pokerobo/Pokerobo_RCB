@@ -25,6 +25,17 @@ void ProgramTransmitter::initialize(CommandPacket* commandBuffer,
   _commandBuffer = commandBuffer;
 }
 
+TransmissionCounter* ProgramTransmitter::getTransmissionCounter() {
+  if (_counter == NULL) {
+    _counter = new TransmissionCounter();
+  }
+  return _counter;
+}
+
+void ProgramTransmitter::set(TransmissionCounter* counter) {
+  _counter = counter;
+}
+
 void ProgramTransmitter::set(MessageSender* messageSender) {
   _messageSender = messageSender;
 }
@@ -68,8 +79,8 @@ bool ProgramTransmitter::hasCommandBuffer() {
 int ProgramTransmitter::check(void* inputData, void* command) {
   JoystickAction* action = (JoystickAction*) inputData;
 
-  _counter.ordinalNumber += 1;
-  _counter.packetLossTotal += 1;
+  getTransmissionCounter()->ordinalNumber += 1;
+  getTransmissionCounter()->packetLossTotal += 1;
 
   if (action == NULL) {
     return -1;
@@ -100,10 +111,10 @@ int ProgramTransmitter::check(void* inputData, void* command) {
     MessagePacket packet(context, action, commandPacket);
     bool ok = _messageSender->write(&packet);
     if (ok) {
-      _counter.continualLossCount = 0;
-      _counter.packetLossTotal -= 1;
+      getTransmissionCounter()->continualLossCount = 0;
+      getTransmissionCounter()->packetLossTotal -= 1;
     } else {
-      _counter.continualLossCount += 1;
+      getTransmissionCounter()->continualLossCount += 1;
     }
   }
 
@@ -123,10 +134,10 @@ int ProgramTransmitter::check(void* inputData, void* command) {
   #endif
 
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(action, commandPacket, &_counter);
+    _messageRenderer->render(action, commandPacket, getTransmissionCounter());
   }
 
-  _counter.adjust();
+  getTransmissionCounter()->adjust();
 
   if (_commandResolver != NULL) {
     if (!hasCommandBuffer()) {
@@ -150,7 +161,7 @@ byte ProgramTransmitter::invoke(MessageSender* messageSender, uint8_t index, con
     }
 
     #if __DEBUG_LOG_JOYSTICK_HANDLER__
-    Serial.print('#'), Serial.print(_counter.ordinalNumber), Serial.print("->"), Serial.print(index), Serial.print(": ");
+    Serial.print('#'), Serial.print(getTransmissionCounter()->ordinalNumber), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {
       Serial.println('v');
     } else {

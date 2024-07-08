@@ -14,10 +14,13 @@ typedef struct _TransmissionCounter {
   uint32_t packetLossTotal = 0;
   void adjust() {
     if (this->ordinalNumber >= 999999UL) {
-      this->ordinalNumber = 0;
-      this->continualLossCount = 0;
-      this->packetLossTotal = 0;
+      this->reset();
     }
+  }
+  void reset() {
+    this->ordinalNumber = 0;
+    this->continualLossCount = 0;
+    this->packetLossTotal = 0;
   }
 } TransmissionCounter;
 
