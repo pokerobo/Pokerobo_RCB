@@ -25,15 +25,29 @@ void ProgramTransmitter::initialize(CommandPacket* commandBuffer,
   _commandBuffer = commandBuffer;
 }
 
+bool ProgramTransmitter::isCounterBuiltin() {
+  return _counterBuiltin;
+}
+
+bool ProgramTransmitter::isCounterShared() {
+  return _counterShared;
+}
+
 TransmissionCounter* ProgramTransmitter::getTransmissionCounter() {
   if (_counter == NULL) {
     _counter = new TransmissionCounter();
+    _counterBuiltin = true;
   }
   return _counter;
 }
 
-void ProgramTransmitter::set(TransmissionCounter* counter) {
+void ProgramTransmitter::set(TransmissionCounter* counter, bool shared) {
+  if (_counterBuiltin && _counter != NULL) {
+    delete _counter;
+    _counterBuiltin = false;
+  }
   _counter = counter;
+  _counterShared = shared;
 }
 
 void ProgramTransmitter::set(MessageSender* messageSender) {
@@ -189,6 +203,13 @@ int ProgramTransmitter::begin() {
 }
 
 int ProgramTransmitter::close() {
+  if (isCounterBuiltin()) {
+    set((TransmissionCounter*)NULL);
+  } else {
+    if (isCounterShared()) {
+      getTransmissionCounter()->reset();
+    }
+  }
   _rf24Tranceiver->reset(RF24_TX);
   return 0;
 }
