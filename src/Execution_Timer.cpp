@@ -2,12 +2,17 @@
 
 void ExecutionTimer::start() {
   _beginTime = millis();
+  _endTime = 0;
 }
 
 uint32_t ExecutionTimer::finish() {
-  return (_endTime = millis()) - _beginTime;
+  if (_endTime == 0) {
+    _endTime = millis();
+  }
+  return _endTime - _beginTime;
 }
 
 uint32_t ExecutionTimer::remain(uint32_t stepTime) {
-  return int_max(stepTime - (_endTime - _beginTime), 0);
+  uint32_t elapsedTime = finish();
+  return (stepTime > elapsedTime) ? stepTime - elapsedTime : 0;
 }

@@ -11,6 +11,8 @@ MovingCommandPacket commandBuffer;
 RF24Tranceiver rf24Tranceiver(&displayHandler, &messageSerializer);
 ProgramSelector programSelector(&displayHandler, &joystickHandler);
 
+ExecutionTimer executionTimer;
+
 void setup() {
   Serial.begin(57600);
 
@@ -33,9 +35,13 @@ void setup() {
   programSelector.add(new ProgramDeviceInfo("Device Information",
       &displayHandler));
 
+  programSelector.setDelayAmount(0);
+
   programSelector.begin();
 }
 
 void loop() {
+  executionTimer.start();
   programSelector.check();
+  delay(executionTimer.remain(100));
 }

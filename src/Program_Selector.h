@@ -25,6 +25,7 @@ class ProgramSelector {
     ProgramSelector(DisplayHandler* displayHandler=NULL,
         JoystickHandler* joystickHandler=NULL);
     int begin();
+    void setDelayAmount(int amount);
     void set(DisplayHandler* displayHandler);
     void set(JoystickHandler* joystickHandler);
     bool add(ProgramCapsule* programCapsule);
@@ -43,6 +44,7 @@ class ProgramSelector {
     int leaveProgram_(JoystickAction* action);
     void changeFlow_(uint8_t flow);
   private:
+    int _delayAmount = 10;
     uint8_t _flow = DASHBOARD_FLOW_EXECUTION;
     ProgramCollection* _programCollection = NULL;
     DisplayHandler* _displayHandler = NULL;

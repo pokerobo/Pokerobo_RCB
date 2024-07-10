@@ -9,8 +9,8 @@ class ExecutionTimer {
     uint32_t finish();
     uint32_t remain(uint32_t stepTime=100);
   private:
-    uint32_t _beginTime;
-    uint32_t _endTime;
+    uint32_t _beginTime = 0;
+    uint32_t _endTime = 0;
 };
 
 #endif

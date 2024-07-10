@@ -25,7 +25,9 @@ int ProgramSelector::check() {
 }
 
 int ProgramSelector::wait_(int state) {
-  delay(10);
+  if (_delayAmount > 0) {
+    delay(_delayAmount);
+  }
   return state;
 }
 
@@ -115,6 +117,10 @@ void ProgramSelector::set(DisplayHandler* displayHandler) {
 
 void ProgramSelector::set(JoystickHandler* joystickHandler) {
   _joystickHandler = joystickHandler;
+}
+
+void ProgramSelector::setDelayAmount(int amount) {
+  _delayAmount = amount;
 }
 
 #if __DEVMODE_PROGRAM_SELECTOR__

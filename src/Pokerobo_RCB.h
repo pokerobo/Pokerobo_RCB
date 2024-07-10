@@ -8,5 +8,6 @@
 #include "Program_Entrypoint.h"
 #include "Program_Selector.h"
 #include "Robocar_Application.h"
+#include "Execution_Timer.h"
 
 #endif
