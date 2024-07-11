@@ -2,27 +2,11 @@
 #define __POKEROBO_RCB_MESSAGE_EXCHANGE_H__
 
 #include "Commons.h"
+#include "Message_Monitor.h"
 
 #ifndef MESSAGE_SIGNATURE
 #define MESSAGE_SIGNATURE         "JS"
 #endif//MESSAGE_SIGNATURE
-
-typedef struct _TransmissionCounter {
-  uint32_t baselineNumber = 0;
-  uint32_t ordinalNumber = 0;
-  uint32_t continualLossCount = 0;
-  uint32_t packetLossTotal = 0;
-  void adjust() {
-    if (this->ordinalNumber >= 999999UL) {
-      this->reset();
-    }
-  }
-  void reset() {
-    this->ordinalNumber = 0;
-    this->continualLossCount = 0;
-    this->packetLossTotal = 0;
-  }
-} TransmissionCounter;
 
 class MessageInterface {
   public:
