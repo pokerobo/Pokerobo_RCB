@@ -208,9 +208,12 @@ void RF24Receiver::reset() {
   // reset the _receiver
   reset_((RF24*)_receiver);
   // reset the _counter
-  _counter.baselineNumber = 0;
-  _counter.ordinalNumber = 0;
-  _counter.packetLossTotal = 0;
+  TransmissionCounter* _counter = getTransmissionCounter(false);
+  if (_counter != NULL) {
+    _counter->baselineNumber = 0;
+    _counter->ordinalNumber = 0;
+    _counter->packetLossTotal = 0;
+  }
   // clear the _messageRenderer
   if (_messageRenderer != NULL) {
     _messageRenderer->clear();
@@ -319,32 +322,33 @@ int RF24Receiver::process(MasterContext* context, JoystickAction* action, Messag
 
   uint32_t count = action->getExtras();
 
-  if (_counter.ordinalNumber == 0) {
-    _counter.baselineNumber = count;
-    _counter.packetLossTotal = 0;
+  TransmissionCounter* _counter = getTransmissionCounter();
+  if (_counter->ordinalNumber == 0) {
+    _counter->baselineNumber = count;
+    _counter->packetLossTotal = 0;
   } else {
-    if (count < _counter.ordinalNumber + 1) {
-      _counter.baselineNumber = count;
-      _counter.packetLossTotal = 0;
-    } else if (count == _counter.ordinalNumber + 1) {
-    } else if (count > _counter.ordinalNumber + 1) {
-      _counter.packetLossTotal += count - _counter.ordinalNumber - 1;
+    if (count < _counter->ordinalNumber + 1) {
+      _counter->baselineNumber = count;
+      _counter->packetLossTotal = 0;
+    } else if (count == _counter->ordinalNumber + 1) {
+    } else if (count > _counter->ordinalNumber + 1) {
+      _counter->packetLossTotal += count - _counter->ordinalNumber - 1;
     }
   }
-  _counter.ordinalNumber = count;
+  _counter->ordinalNumber = count;
 
   if (_messageProcessor != NULL) {
     _messageProcessor->process(context, action, commandPacket);
   }
 
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(action, commandPacket, &_counter);
+    _messageRenderer->render(action, commandPacket, _counter);
   }
 
   #if MULTIPLE_RENDERERS_SUPPORTED
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageRenderersTotal; i++) {
-    int8_t status = invoke(_messageRenderers[i], i+1, action, commandPacket, &_counter);
+    int8_t status = invoke(_messageRenderers[i], i+1, action, commandPacket, _counter);
     if (status > 0) {
       sumOk += status;
     } else if (status < 0) {

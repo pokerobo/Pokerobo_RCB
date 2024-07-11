@@ -24,7 +24,7 @@ class TransmissionMonitor {
   public:
     bool isCounterBuiltin();
     bool isCounterShared();
-    TransmissionCounter* getTransmissionCounter();
+    TransmissionCounter* getTransmissionCounter(bool createIfNotFound=true);
     void setTransmissionCounter(TransmissionCounter* counter, bool shared=true);
   private:
     TransmissionCounter* _counter = NULL;

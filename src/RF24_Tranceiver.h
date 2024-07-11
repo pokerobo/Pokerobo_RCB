@@ -61,7 +61,7 @@ class RF24Transmitter: public MessageSender {
     rf24_tx_status_t _status;
 };
 
-class RF24Receiver: public MessageProcessor {
+class RF24Receiver: public MessageProcessor, public TransmissionMonitor {
   public:
     int begin(uint64_t address=RF24_DEFAULT_ADDRESS, void* radio = NULL);
     int check();
@@ -81,7 +81,6 @@ class RF24Receiver: public MessageProcessor {
     #endif
   private:
     void* _receiver = NULL;
-    TransmissionCounter _counter;
     uint32_t _discontinuityCount = 0;
     MessageProcessor* _messageProcessor = NULL;
     MessageSerializer* _messageSerializer = NULL;

@@ -8,8 +8,8 @@ bool TransmissionMonitor::isCounterShared() {
   return _counterShared;
 }
 
-TransmissionCounter* TransmissionMonitor::getTransmissionCounter() {
-  if (_counter == NULL) {
+TransmissionCounter* TransmissionMonitor::getTransmissionCounter(bool createIfNotFound) {
+  if (_counter == NULL && createIfNotFound) {
     _counter = new TransmissionCounter();
     _counterBuiltin = true;
   }
