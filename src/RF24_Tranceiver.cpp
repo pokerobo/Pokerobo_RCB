@@ -40,26 +40,6 @@
 #define RF24_RECEIVER_DISCONTINUITY_MAX  5000
 #endif//RF24_RECEIVER_DISCONTINUITY_MAX
 
-#ifndef RF24_PRIMARY_PIN_CE
-#define RF24_PRIMARY_PIN_CE  9
-#endif//RF24_PRIMARY_PIN_CE
-
-#ifndef RF24_PRIMARY_PIN_CSN
-#define RF24_PRIMARY_PIN_CSN 10
-#endif//RF24_PRIMARY_PIN_CSN
-
-#ifndef RF24_SECONDARY_RADIO_ENABLED
-#define RF24_SECONDARY_RADIO_ENABLED  false
-#endif//RF24_SECONDARY_RADIO_ENABLED
-
-#ifndef RF24_SECONDARY_PIN_CE
-#define RF24_SECONDARY_PIN_CE           A3
-#endif//RF24_SECONDARY_PIN_CE
-
-#ifndef RF24_SECONDARY_PIN_CSN
-#define RF24_SECONDARY_PIN_CSN          A2
-#endif//RF24_SECONDARY_PIN_CSN
-
 //-------------------------------------------------------------------------------------------------
 
 RF24Tranceiver::RF24Tranceiver(MessageRenderer* messageRenderer,
@@ -78,14 +58,14 @@ void* RF24Tranceiver::getPrimaryRadio() {
 }
 
 void* RF24Tranceiver::getSecondaryRadio() {
+  #if RF24_SECONDARY_RADIO_ENABLED
   if (_radio2nd == NULL) {
-    #if RF24_SECONDARY_RADIO_ENABLED
     _radio2nd = new RF24(RF24_SECONDARY_PIN_CE, RF24_SECONDARY_PIN_CSN);
-    #else
-    _radio2nd = getPrimaryRadio();
-    #endif
   }
   return _radio2nd;
+  #else
+  return getPrimaryRadio();
+  #endif
 }
 
 int RF24Tranceiver::begin(tranceiver_t mode, uint64_t address) {

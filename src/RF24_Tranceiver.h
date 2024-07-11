@@ -8,6 +8,28 @@
 #include "Message_Serializer.h"
 #include "Message_Renderer.h"
 
+#ifndef RF24_PRIMARY_PIN_CE
+#define RF24_PRIMARY_PIN_CE  9
+#endif//RF24_PRIMARY_PIN_CE
+
+#ifndef RF24_PRIMARY_PIN_CSN
+#define RF24_PRIMARY_PIN_CSN 10
+#endif//RF24_PRIMARY_PIN_CSN
+
+#ifndef RF24_SECONDARY_RADIO_ENABLED
+#define RF24_SECONDARY_RADIO_ENABLED  false
+#endif//RF24_SECONDARY_RADIO_ENABLED
+
+#if RF24_SECONDARY_RADIO_ENABLED
+#ifndef RF24_SECONDARY_PIN_CE
+#define RF24_SECONDARY_PIN_CE           A3
+#endif//RF24_SECONDARY_PIN_CE
+
+#ifndef RF24_SECONDARY_PIN_CSN
+#define RF24_SECONDARY_PIN_CSN          A2
+#endif//RF24_SECONDARY_PIN_CSN
+#endif//RF24_SECONDARY_RADIO_ENABLED
+
 #ifndef RF24_BASE_ADDRESS
 #define RF24_BASE_ADDRESS             0x18580900LL
 #endif//RF24_BASE_ADDRESS
@@ -82,7 +104,9 @@ class RF24Tranceiver: public RF24Transmitter, public RF24Receiver {
     void* getSecondaryRadio();
   private:
     void* _radio = NULL;
+    #if RF24_SECONDARY_RADIO_ENABLED
     void* _radio2nd = NULL;
+    #endif
 };
 
 #endif
