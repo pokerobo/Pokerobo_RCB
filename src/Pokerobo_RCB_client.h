@@ -1,4 +1,6 @@
-#ifndef __POKEROBO_RC_CLIENT_H__
+#ifndef __POKEROBO_RCB_CLIENT_H__
+#define __POKEROBO_RCB_CLIENT_H__
+
 #define __POKEROBO_RC_CLIENT_H__
 
 #include "Commons.h"
