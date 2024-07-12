@@ -18,6 +18,21 @@ typedef struct _TransmissionCounter {
     this->continualLossCount = 0;
     this->packetLossTotal = 0;
   }
+  void update(uint32_t count) {
+    if (this->ordinalNumber == 0) {
+      this->baselineNumber = count;
+      this->packetLossTotal = 0;
+    } else {
+      if (count < this->ordinalNumber + 1) {
+        this->baselineNumber = count;
+        this->packetLossTotal = 0;
+      } else if (count == this->ordinalNumber + 1) {
+      } else if (count > this->ordinalNumber + 1) {
+        this->packetLossTotal += count - this->ordinalNumber - 1;
+      }
+    }
+    this->ordinalNumber = count;
+  }
 } TransmissionCounter;
 
 class TransmissionMonitor {

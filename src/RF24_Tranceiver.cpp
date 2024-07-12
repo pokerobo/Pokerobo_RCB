@@ -320,22 +320,8 @@ int RF24Receiver::check() {
 int RF24Receiver::process(MasterContext* context, JoystickAction* action, MessageInterface* commandPacket) {
   action->setSource(RX_MSG);
 
-  uint32_t count = action->getExtras();
-
   TransmissionCounter* _counter = getTransmissionCounter();
-  if (_counter->ordinalNumber == 0) {
-    _counter->baselineNumber = count;
-    _counter->packetLossTotal = 0;
-  } else {
-    if (count < _counter->ordinalNumber + 1) {
-      _counter->baselineNumber = count;
-      _counter->packetLossTotal = 0;
-    } else if (count == _counter->ordinalNumber + 1) {
-    } else if (count > _counter->ordinalNumber + 1) {
-      _counter->packetLossTotal += count - _counter->ordinalNumber - 1;
-    }
-  }
-  _counter->ordinalNumber = count;
+  _counter->update(action->getExtras());
 
   if (_messageProcessor != NULL) {
     _messageProcessor->process(context, action, commandPacket);
