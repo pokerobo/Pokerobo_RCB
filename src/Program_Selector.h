@@ -5,12 +5,8 @@
 #include "Joystick_Handler.h"
 #include "Program_Collection.h"
 
-#define PROGRAM_MODE_CLIENT                 2
-#define PROGRAM_MODE_PLAYER                 5
-#define PROGRAM_MODE_TESTER                 9
-
-#define DASHBOARD_FLOW_CONFIGURATION        1
-#define DASHBOARD_FLOW_EXECUTION            2
+#define SCREEN_FLOW_CONFIGURATION        1
+#define SCREEN_FLOW_APPLICATION          2
 
 #ifndef PROGRAM_MENU_TOGGLE_BUTTON
 #define PROGRAM_MENU_TOGGLE_BUTTON          MASK_ANALOG_BUTTON
@@ -45,7 +41,7 @@ class ProgramSelector {
     void changeFlow_(uint8_t flow);
   private:
     int _delayAmount = 10;
-    uint8_t _flow = DASHBOARD_FLOW_EXECUTION;
+    uint8_t _flow = SCREEN_FLOW_APPLICATION;
     ProgramCollection* _programCollection = NULL;
     DisplayHandler* _displayHandler = NULL;
     JoystickHandler* _joystickHandler = NULL;

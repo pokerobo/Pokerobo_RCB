@@ -38,21 +38,21 @@ int ProgramSelector::move_() {
   uint16_t togglingFlags = message.getTogglingFlags();
   if ((togglingFlags & PROGRAM_MENU_TOGGLE_BUTTON)) {
     switch(_flow) {
-      case DASHBOARD_FLOW_EXECUTION:
+      case SCREEN_FLOW_APPLICATION:
         leaveProgram_(&message);
-        changeFlow_(DASHBOARD_FLOW_CONFIGURATION);
+        changeFlow_(SCREEN_FLOW_CONFIGURATION);
         return enterDashboard_(&message);
-      case DASHBOARD_FLOW_CONFIGURATION:
+      case SCREEN_FLOW_CONFIGURATION:
         leaveDashboard_(&message);
-        changeFlow_(DASHBOARD_FLOW_EXECUTION);
+        changeFlow_(SCREEN_FLOW_APPLICATION);
         return enterProgram_(&message);
     }
   }
 
   switch(_flow) {
-    case DASHBOARD_FLOW_CONFIGURATION:
+    case SCREEN_FLOW_CONFIGURATION:
       return processDashboard_(&message);
-    case DASHBOARD_FLOW_EXECUTION:
+    case SCREEN_FLOW_APPLICATION:
       return executeProgram_(&message);
   }
 }
@@ -67,7 +67,7 @@ int ProgramSelector::enterDashboard_(JoystickAction* action) {
 int ProgramSelector::processDashboard_(JoystickAction* action) {
   uint8_t toggle = action->getTogglingFlags() >> 12;
   if (toggle & 0b0001) { // LEFT -> BACK
-    changeFlow_(DASHBOARD_FLOW_EXECUTION);
+    changeFlow_(SCREEN_FLOW_APPLICATION);
   } else
   if (toggle & 0b0010) { // UP -> PREV
     _programCollection->moveFocusUp();
