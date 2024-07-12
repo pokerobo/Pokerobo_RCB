@@ -68,8 +68,7 @@ bool ProgramTransmitter::hasCommandBuffer() {
 int ProgramTransmitter::check(void* inputData, void* command) {
   JoystickAction* action = (JoystickAction*) inputData;
 
-  getTransmissionCounter()->ordinalNumber += 1;
-  getTransmissionCounter()->packetLossTotal += 1;
+  getTransmissionCounter()->beginTransmission();
 
   if (action == NULL) {
     return -1;
@@ -100,10 +99,9 @@ int ProgramTransmitter::check(void* inputData, void* command) {
     MessagePacket packet(context, action, commandPacket);
     bool ok = _messageSender->write(&packet);
     if (ok) {
-      getTransmissionCounter()->continualLossCount = 0;
-      getTransmissionCounter()->packetLossTotal -= 1;
+      getTransmissionCounter()->confirmTransmissionSuccess();
     } else {
-      getTransmissionCounter()->continualLossCount += 1;
+      getTransmissionCounter()->confirmTransmissionFailure();
     }
   }
 

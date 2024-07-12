@@ -210,9 +210,7 @@ void RF24Receiver::reset() {
   // reset the _counter
   TransmissionCounter* _counter = getTransmissionCounter(false);
   if (_counter != NULL) {
-    _counter->baselineNumber = 0;
-    _counter->ordinalNumber = 0;
-    _counter->packetLossTotal = 0;
+    _counter->reset();
   }
   // clear the _messageRenderer
   if (_messageRenderer != NULL) {
