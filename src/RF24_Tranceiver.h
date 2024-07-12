@@ -4,6 +4,7 @@
 #include "Commons.h"
 #include "Joystick_Action.h"
 #include "Message_Exchange.h"
+#include "Message_Monitor.h"
 #include "Message_Processor.h"
 #include "Message_Serializer.h"
 #include "Message_Renderer.h"

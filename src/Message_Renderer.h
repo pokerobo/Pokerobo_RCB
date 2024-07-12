@@ -2,6 +2,7 @@
 #define __POKEROBO_RCB_MESSAGE_RENDERER_H__
 
 #include "Message_Exchange.h"
+#include "Message_Monitor.h"
 #include "Joystick_Action.h"
 
 class MessageRenderer {

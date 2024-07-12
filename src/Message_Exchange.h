@@ -2,7 +2,6 @@
 #define __POKEROBO_RCB_MESSAGE_EXCHANGE_H__
 
 #include "Commons.h"
-#include "Message_Monitor.h"
 
 #ifndef MESSAGE_SIGNATURE
 #define MESSAGE_SIGNATURE         "JS"

@@ -6,6 +6,7 @@
 #include "Display_X_Handler.h"
 #include "RF24_Tranceiver.h"
 #include "Message_Exchange.h"
+#include "Message_Monitor.h"
 #include "Message_Renderer.h"
 #include "Message_Resolver.h"
 

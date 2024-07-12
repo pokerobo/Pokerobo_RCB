@@ -3,6 +3,7 @@
 
 #include "Commons.h"
 #include "Message_Exchange.h"
+#include "Message_Monitor.h"
 #include "Message_Renderer.h"
 #include "Program_Collection.h"
 
