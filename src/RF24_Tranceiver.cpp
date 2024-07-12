@@ -261,7 +261,7 @@ bool RF24Receiver::available() {
         info[11] = '.';
         info[12] = '.';
         info[13] = '\0';
-        _messageRenderer->splash(info, 5);
+        _messageRenderer->notify(info, 5);
       }
     } else {
       info[ 0] = 'C';
@@ -278,17 +278,17 @@ bool RF24Receiver::available() {
       info[11] = '.';
       info[12] = '.';
       info[13] = '\0';
-      _messageRenderer->splash(info, 5);
+      _messageRenderer->notify(info, 5);
     }
     #else
     if (_tranceiver->isChipConnected()) {
       if (_discontinuityCount > RF24_RECEIVER_DISCONTINUITY_MAX) {
         char info[14] = { 'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0' };
-        _messageRenderer->splash(info, 5);
+        _messageRenderer->notify(info, 5);
       }
     } else {
       char info[14] = { 'C', 'o', 'n', 'n', 'e', 'c', 't', 'i', 'n', 'g', '.', '.', '.', '\0' };
-      _messageRenderer->splash(info, 5);
+      _messageRenderer->notify(info, 5);
     }
     #endif
   }

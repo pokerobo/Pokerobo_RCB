@@ -131,7 +131,7 @@ void DisplayHandler::clear() {
   _u8g2->clear();
 }
 
-void DisplayHandler::splash(char* title, byte align) {
+void DisplayHandler::notify(char* title, byte align) {
   if (title == NULL) return;
 
   U8G2 *_u8g2 = (U8G2*)_u8g2Ref;

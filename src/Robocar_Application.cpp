@@ -364,7 +364,7 @@ void MovingDisplayHandler::renderCommandPacket_(uint8_t lx, uint8_t ty, MessageI
 
 void MovingSerialConsole::clear() {}
 
-void MovingSerialConsole::splash(char* title, byte align) {}
+void MovingSerialConsole::notify(char* title, byte align) {}
 
 void MovingSerialConsole::render(JoystickAction* message, MessageInterface* commandPacket, TransmissionCounter* counter) {
   MovingCommandPacket* movingCommand = (MovingCommandPacket*) commandPacket;

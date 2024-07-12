@@ -37,7 +37,7 @@ class DisplayHandler: public MessageRenderer {
     DisplayOptions* getOptions();
     int begin();
     void clear();
-    void splash(char* title, byte align = 0);
+    void notify(char* title, byte align = 0);
     void render(JoystickAction* message, MessageInterface* commandPacket=NULL, TransmissionCounter* counter=NULL);
     void render(ProgramCollection* programCollection=NULL);
   protected:

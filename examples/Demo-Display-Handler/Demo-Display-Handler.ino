@@ -28,7 +28,7 @@ void setup() {
 void loop() {
   if (counter < 1) {
     counter++;
-    displayHandler.splash("Joystick Screen Demo");
+    displayHandler.notify("Joystick Screen Demo");
     delay(2000);
   }
   JoystickAction joystickAction;
