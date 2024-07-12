@@ -1,5 +1,21 @@
 #include "Message_Monitor.h"
 
+uint32_t TransmissionCounter::getBaselineNumber() {
+  return baselineNumber;
+}
+
+uint32_t TransmissionCounter::getOrdinalNumber() {
+  return ordinalNumber;
+}
+
+uint32_t TransmissionCounter::getContinualLossCount() {
+  return continualLossCount;
+}
+
+uint32_t TransmissionCounter::getPacketLossTotal() {
+  return packetLossTotal;
+}
+
 bool TransmissionMonitor::isCounterBuiltin() {
   return _counterBuiltin;
 }

@@ -292,7 +292,7 @@ void DisplayHandler::renderDirectionState_(char *title, message_source_t source,
   char arrow = (source == TX_MSG) ? '>' : '<';
 
   if (source == TX_MSG) {
-    if (counter != NULL && counter->continualLossCount > 9) {
+    if (counter != NULL && counter->getContinualLossCount() > 9) {
       switch (state) {
         case 0:
         case 1:
@@ -539,10 +539,10 @@ void DisplayHandler::renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t 
   char format[6] = { '%', ' ', '7', 'l', 'd', '\0' };
   #endif
 
-  sprintf(line, format, counter->ordinalNumber - counter->baselineNumber);
+  sprintf(line, format, counter->getOrdinalNumber() - counter->getBaselineNumber());
   _u8g2->drawStr(lx, ty + 1 + _maxCharHeight, line);
 
-  sprintf(line, format, counter->packetLossTotal);
+  sprintf(line, format, counter->getPacketLossTotal());
   _u8g2->drawStr(lx, ty + 1 + _maxCharHeight * 2, line);
 }
 
