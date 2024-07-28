@@ -8,7 +8,7 @@ int ProgramCapsule::begin() {
   return 0;
 }
 
-int ProgramCapsule::check(void* control, void* command=NULL) {
+int ProgramCapsule::check(void* control, void* command) {
   return 0;
 }
 
@@ -54,8 +54,8 @@ char* ProgramSticker::getTitle(char *buffer) {
     if (_title != NULL) {
       return _title;
     }
-    if (_title[0] != NULL) {
-      return _title[0];
+    if (_titles[0] != NULL) {
+      return _titles[0];
     }
   }
   if (_title != NULL) {

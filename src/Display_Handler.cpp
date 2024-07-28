@@ -45,8 +45,7 @@ char idleButtonIcon_(uint16_t offs, uint16_t buttons, uint16_t mask, char icon) 
   return ((offs & mask) ? '-' : (buttons & mask) ? '*' : icon);
 }
 
-DisplayOptions::DisplayOptions(
-    lcd_pins_position_t pos=LCD_PINS_ON_BOTTOM) {
+DisplayOptions::DisplayOptions(lcd_pins_position_t pos) {
   this->_lcdRotation = pos;
 }
 
@@ -65,19 +64,19 @@ DisplayHandler::DisplayHandler(DisplayOptions* opts) {
 }
 
 u8g2_cb_t* convertDisplayRotation(lcd_pins_position_t pos) {
-  u8g2_cb_t *rotation = U8G2_R2;
+  u8g2_cb_t *rotation = const_cast<u8g2_cb_t*>(U8G2_R2);
   switch(pos) {
     case LCD_PINS_ON_TOP:
-      rotation = U8G2_R0;
+      rotation = const_cast<u8g2_cb_t*>(U8G2_R0);
       break;
     case LCD_PINS_ON_BOTTOM:
-      rotation = U8G2_R2;
+      rotation = const_cast<u8g2_cb_t*>(U8G2_R2);
       break;
     case LCD_PINS_ON_RIGHT:
-      rotation = U8G2_R1;
+      rotation = const_cast<u8g2_cb_t*>(U8G2_R1);
       break;
     case LCD_PINS_ON_LEFT:
-      rotation = U8G2_R3;
+      rotation = const_cast<u8g2_cb_t*>(U8G2_R3);
       break;
   }
   return rotation;
@@ -94,16 +93,21 @@ void DisplayHandler::initialize(DisplayOptions* options) {
       U8X8_PIN_NONE);
 }
 
+void DisplayHandler::initWire() {
+  Wire.begin();
+  #if defined(WIRE_HAS_TIMEOUT)
+  Wire.setWireTimeout(3000, true); // Wire.setWireTimeout(timeout, reset_on_timeout)
+  #endif
+}
+
 DisplayOptions* DisplayHandler::getOptions() {
   return _options;
 }
 
 int DisplayHandler::begin() {
+  initWire();
+
   U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
-  Wire.begin();
-  #if defined(WIRE_HAS_TIMEOUT)
-  Wire.setWireTimeout(3000, true); // Wire.setWireTimeout(timeout, reset_on_timeout)
-  #endif
   _u8g2->setI2CAddress(0x3F * 2);
   // _u8g2->setBusClock(200000);
   _u8g2->setContrast(200);

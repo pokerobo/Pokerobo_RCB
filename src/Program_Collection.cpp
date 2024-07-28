@@ -1,11 +1,11 @@
 #include "Program_Collection.h"
 
 bool ProgramCollection::isReady() {
-  return _programCapsulesTotal > 0 && _programIndex < PROGRAM_COLLECTION_LIMIT;
+  return _programPointersTotal > 0 && _programIndex < PROGRAM_COLLECTION_LIMIT;
 }
 
 uint8_t ProgramCollection::getTotal() {
-  return _programCapsulesTotal;
+  return _programPointersTotal;
 }
 
 uint8_t ProgramCollection::getCurrentIndex() {
@@ -13,14 +13,14 @@ uint8_t ProgramCollection::getCurrentIndex() {
 }
 
 bool ProgramCollection::setCurrentIndex(uint8_t j) {
-  if (j >= _programCapsulesTotal) {
+  if (j >= _programPointersTotal) {
     return false;
   }
   if (j == _programIndex) {
     return true;
   }
-  ProgramCapsule* currentItem = getItem(_programIndex);
-  ProgramCapsule* newItem = getItem(j);
+  ProgramSticker* currentItem = getItem(_programIndex);
+  ProgramSticker* newItem = getItem(j);
   if (currentItem != NULL) {
     currentItem->close();
   }
@@ -36,7 +36,7 @@ uint8_t ProgramCollection::getFocusIndex() {
 }
 
 bool ProgramCollection::setFocusIndex(uint8_t j) {
-  if (j >= _programCapsulesTotal) {
+  if (j >= _programPointersTotal) {
     return false;
   }
   if (j == _focusIndex) {
@@ -58,43 +58,43 @@ bool ProgramCollection::setFocusAsCurrent() {
 
 bool ProgramCollection::moveFocusUp() {
   if (getFocusIndex() == 0) {
-    return setFocusIndex(_programCapsulesTotal - 1);
+    return setFocusIndex(_programPointersTotal - 1);
   }
   return setFocusIndex(getFocusIndex() - 1);
 }
 
 bool ProgramCollection::moveFocusDown() {
-  if (getFocusIndex() == (_programCapsulesTotal - 1)) {
+  if (getFocusIndex() == (_programPointersTotal - 1)) {
     return setFocusIndex(0);
   }
   return setFocusIndex(getFocusIndex() + 1);
 }
 
-ProgramCapsule* ProgramCollection::getItem(uint8_t i) {
-  if (i >= _programCapsulesTotal) {
+ProgramSticker* ProgramCollection::getItem(uint8_t i) {
+  if (i >= _programPointersTotal) {
     return NULL;
   }
-  return _programCapsules[i];
+  return _programPointers[i];
 }
 
-ProgramCapsule* ProgramCollection::getCurrentItem() {
+ProgramSticker* ProgramCollection::getCurrentItem() {
   return getItem(getCurrentIndex());
 }
 
-bool ProgramCollection::add(ProgramCapsule* programCapsule) {
-  if (programCapsule == NULL) {
+bool ProgramCollection::add(ProgramSticker* programPointer) {
+  if (programPointer == NULL) {
     return false;
   }
-  if (_programCapsulesTotal > PROGRAM_COLLECTION_LIMIT) {
+  if (_programPointersTotal > PROGRAM_COLLECTION_LIMIT) {
     return false;
   }
-  for(int i=0; i<_programCapsulesTotal; i++) {
-    if (_programCapsules[i] == programCapsule) {
+  for(int i=0; i<_programPointersTotal; i++) {
+    if (_programPointers[i] == programPointer) {
       return false;
     }
   }
-  _programCapsules[_programCapsulesTotal++] = programCapsule;
-  if (_programCapsulesTotal == 1) {
+  _programPointers[_programPointersTotal++] = programPointer;
+  if (_programPointersTotal == 1) {
     setFrameBegin(0);
     setCurrentIndex(0);
     setFocusIndex(0);
@@ -109,7 +109,7 @@ uint8_t ProgramCollection::getFrameBegin() {
 }
 
 bool ProgramCollection::setFrameBegin(uint8_t pos) {
-  if (pos >= _programCapsulesTotal) {
+  if (pos >= _programPointersTotal) {
     return false;
   }
   _frameBegin = pos;
@@ -118,14 +118,14 @@ bool ProgramCollection::setFrameBegin(uint8_t pos) {
 
 uint8_t ProgramCollection::getFrameEnd() {
   uint8_t frameEnd = _frameBegin + frameHeight - 1;
-  if (frameEnd >= _programCapsulesTotal) {
-    frameEnd = _programCapsulesTotal - 1;
+  if (frameEnd >= _programPointersTotal) {
+    frameEnd = _programPointersTotal - 1;
   }
   return frameEnd;
 }
 
 bool ProgramCollection::setFrameEnd(uint8_t pos) {
-  if (pos >= _programCapsulesTotal) {
+  if (pos >= _programPointersTotal) {
     return false;
   }
   uint8_t frameEnd = _frameBegin + frameHeight - 1;
