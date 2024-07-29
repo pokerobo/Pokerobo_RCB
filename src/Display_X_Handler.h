@@ -5,8 +5,14 @@
 #include <Pokerobo_ABC.h>
 #include <Pokerobo_Dev.h>
 
-class DeviceDisplayHandler: public DisplayHandler {
+class ConfigDisplayHandler: public DisplayHandler {
   public:
+    using DisplayHandler::DisplayHandler;
+};
+
+class DeviceDisplayHandler: public ConfigDisplayHandler {
+  public:
+    using ConfigDisplayHandler::ConfigDisplayHandler;
     void render(DeviceManifest *manifest);
 };
 

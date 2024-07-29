@@ -226,6 +226,34 @@ int ProgramReceiver::close() {
 
 //-------------------------------------------------------------------------------------------------
 
+ProgramConfigForm::ProgramConfigForm(char* title,
+    ConfigDisplayHandler *displayHandler): ProgramSticker(title) {
+  _displayHandler = displayHandler;
+}
+
+ProgramConfigForm::ProgramConfigForm(char* titles[PROGRAM_TITLE_PARTS],
+    ConfigDisplayHandler *displayHandler): ProgramSticker(titles) {
+  _displayHandler = displayHandler;
+}
+
+uint8_t ProgramConfigForm::getId() {
+  return 4;
+}
+
+int ProgramConfigForm::begin() {
+  return 0;
+}
+
+int ProgramConfigForm::check(void* action, void* command) {
+  return 0;
+}
+
+int ProgramConfigForm::close() {
+  return 0;
+}
+
+//-------------------------------------------------------------------------------------------------
+
 ProgramDeviceInfo::ProgramDeviceInfo(char* title,
     DeviceDisplayHandler *displayHandler): ProgramSticker(title) {
   initialize(displayHandler);

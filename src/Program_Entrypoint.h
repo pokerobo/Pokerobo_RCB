@@ -79,6 +79,18 @@ class ProgramReceiver: public ProgramSticker {
     RF24Tranceiver* _rf24Tranceiver;
 };
 
+class ProgramConfigForm: public ProgramSticker {
+  public:
+    ProgramConfigForm(char* title, ConfigDisplayHandler *displayHandler);
+    ProgramConfigForm(char* titles[PROGRAM_TITLE_PARTS], ConfigDisplayHandler *displayHandler);
+    uint8_t getId();
+    int begin();
+    int check(void* action, void* command=NULL);
+    int close();
+  private:
+    ConfigDisplayHandler *_displayHandler;
+};
+
 class ProgramDeviceInfo: public ProgramSticker {
   public:
     ProgramDeviceInfo(char* title, DeviceDisplayHandler *displayHandler);
