@@ -1,6 +1,7 @@
 #include <Pokerobo_RCB.h>
 
 const uint8_t address = 1;
+const uint8_t friendAddress = 0;
 
 JoystickHandler joystickHandler;
 MovingDisplayHandler displayHandler;
@@ -25,8 +26,8 @@ void setup() {
       &commandResolver, &displayHandler, &rf24Tranceiver, address));
 
   //---------------------------------------------------------------------------
-  titleDef[1] = "RX:", titleDef[2] = "default", titleDef[3] = NULL;
-  programSelector.add(new ProgramReceiver(titleDef, &rf24Tranceiver, 0));
+  titleDef[1] = "RX:", titleDef[2] = "friend", titleDef[3] = NULL;
+  programSelector.add(new ProgramReceiver(titleDef, &rf24Tranceiver, friendAddress));
 
   //---------------------------------------------------------------------------
   titleDef[1] = "RX:", titleDef[2] = "185809", titleDef[3] = NULL;
@@ -65,9 +66,9 @@ void setup() {
   #endif
 
   //---------------------------------------------------------------------------
-  titleDef[1] = "TX:", titleDef[2] = "default", titleDef[3] = NULL;
+  titleDef[1] = "TX:", titleDef[2] = "friend", titleDef[3] = NULL;
   programSelector.add(new ProgramTransmitter(titleDef,
-      &commandBuffer, &commandResolver, &displayHandler, &rf24Tranceiver, 0));
+      &commandBuffer, &commandResolver, &displayHandler, &rf24Tranceiver, friendAddress));
 
   //---------------------------------------------------------------------------
   titleDef[1] = "TX:", titleDef[2] = "185809", titleDef[3] = NULL;
