@@ -95,6 +95,7 @@ class JoystickAction: public MessageInterface {
     void update(uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras);
     JoystickAction(uint16_t x=0, uint16_t y=0, uint16_t pressingFlags=0, uint16_t togglingFlags=0, uint32_t extras=0);
     void update(uint16_t x, uint16_t y, uint16_t pressingFlags, uint16_t togglingFlags, uint32_t extras);
+    void update(uint16_t x, uint16_t y);
     void setOrigin(uint16_t x, uint16_t y);
     void setSource(message_source_t source);
     message_source_t getSource();

@@ -46,6 +46,11 @@ void JoystickAction::update(uint16_t x, uint16_t y, uint16_t pressingFlags, uint
   _extras = extras;
 }
 
+void JoystickAction::update(uint16_t x, uint16_t y) {
+  _x = x;
+  _y = y;
+}
+
 void JoystickAction::setOrigin(uint16_t x, uint16_t y) {
   _originX = x;
   _originY = y;

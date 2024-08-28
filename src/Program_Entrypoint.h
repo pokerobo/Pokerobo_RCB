@@ -39,9 +39,9 @@ class ProgramTransmitter: public ProgramSticker, public TransmissionMonitor {
     void set(CommandPacket* commandBuffer);
     bool hasCommandBuffer();
     uint8_t getId();
-    int begin();
-    int check(void* action, void* command=NULL);
-    int close();
+    virtual int begin();
+    virtual int check(void* action, void* command=NULL);
+    virtual int close();
   protected:
     void initialize(CommandPacket* commandBuffer,
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
