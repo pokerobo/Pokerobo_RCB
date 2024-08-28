@@ -1,6 +1,8 @@
-#include "MPU6050_Reader.h"
+#include "MPU6050_Handler.h"
 
-void AcceGyroReader::begin() {
+const int MPU = 0x68; // MPU6050 I2C address
+
+void MPU6050Handler::begin() {
   Wire.begin();                      // Initialize comunication
   Wire.beginTransmission(MPU);       // Start communication with MPU6050 // MPU=0x68
   Wire.write(0x6B);                  // Talk to the register 6B
@@ -15,7 +17,7 @@ void AcceGyroReader::begin() {
   //*/
 }
 
-void AcceGyroReader::read() {
+void MPU6050Handler::read() {
   Wire.beginTransmission(MPU);
   Wire.write(0x3B); // Start with register 0x3B (ACCEL_XOUT_H)
   Wire.endTransmission(false);
@@ -40,10 +42,10 @@ void AcceGyroReader::read() {
   pitch = accAngleY;
 }
 
-float AcceGyroReader::getRoll() {
+float MPU6050Handler::getRoll() {
   return roll;
 }
 
-float AcceGyroReader::getPitch() {
+float MPU6050Handler::getPitch() {
   return pitch;
 }

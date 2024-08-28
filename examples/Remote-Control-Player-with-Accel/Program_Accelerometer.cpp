@@ -1,10 +1,10 @@
 #include "Program_Accelerometer.h"
 
 int ProgramAccelerometer::check(void* action_, void* command=NULL) {
-  getAcceGyroReader()->read();
+  getAccelerometerHandler()->read();
 
-  float roll = getAcceGyroReader()->getRoll();
-  float pitch = getAcceGyroReader()->getPitch();
+  float roll = getAccelerometerHandler()->getRoll();
+  float pitch = getAccelerometerHandler()->getPitch();
 
   uint16_t y = 0;
   if (roll < -70.0) {
@@ -36,12 +36,14 @@ int ProgramAccelerometer::check(void* action_, void* command=NULL) {
   JoystickAction* action = (JoystickAction*) action_;
   action->update(x, y);
 
-  return ProgramTransmitter::check(action, command);
+  return ProgramTransmitter::check(action_, command);
 }
 
-AcceGyroReader* ProgramAccelerometer::getAcceGyroReader() {
-  if (_acceGyroReader == NULL) {
-    _acceGyroReader = new AcceGyroReader();
-  }
-  return _acceGyroReader;
+ProgramAccelerometer* ProgramAccelerometer::setAccelerometerHandler(AccelerometerHandler* handler) {
+  _accelerometerHandler = handler;
+  return this;
+}
+
+AccelerometerHandler* ProgramAccelerometer::getAccelerometerHandler() {
+  return _accelerometerHandler;
 }
