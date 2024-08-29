@@ -7,7 +7,7 @@
 class AccelerometerHandler {
   public:
     virtual void begin();
-    virtual void read();
+    virtual void check();
     virtual float getRoll();
     virtual float getPitch();
 };

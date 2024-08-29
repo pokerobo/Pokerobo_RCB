@@ -17,7 +17,7 @@ void MPU6050Handler::begin() {
   //*/
 }
 
-void MPU6050Handler::read() {
+void MPU6050Handler::check() {
   Wire.beginTransmission(MPU);
   Wire.write(0x3B); // Start with register 0x3B (ACCEL_XOUT_H)
   Wire.endTransmission(false);
@@ -27,12 +27,7 @@ void MPU6050Handler::read() {
   AccY = (Wire.read() << 8 | Wire.read()) / 16384.0; // Y-axis value
   AccZ = (Wire.read() << 8 | Wire.read()) / 16384.0; // Z-axis value
   //
-  float swap;
-  swap = AccX;
-  AccX = AccY;
-  AccY = swap;
-  //
-  AccY = -AccY;
+  float swap = AccX; AccX = AccY; AccY = -swap;
   //
   // Calculating Roll and Pitch from the accelerometer data
   accAngleX = (atan(AccY / sqrt(pow(AccX, 2) + pow(AccZ, 2))) * 180 / PI);

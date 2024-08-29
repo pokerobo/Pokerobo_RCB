@@ -35,7 +35,7 @@ void ADXL345Handler::begin() {
   delay(10);
 }
 
-void ADXL345Handler::read() {
+void ADXL345Handler::check() {
   Wire.beginTransmission(ADXL345);
   Wire.write(0x32); // Start with register 0x32 (ACCEL_XOUT_H)
   Wire.endTransmission(false);

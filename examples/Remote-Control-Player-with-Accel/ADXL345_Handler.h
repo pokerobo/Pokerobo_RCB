@@ -6,7 +6,7 @@
 class ADXL345Handler: public AccelerometerHandler {
   public:
     void begin();
-    void read();
+    void check();
     float getRoll();
     float getPitch();
   private:
