@@ -23,18 +23,18 @@ void MPU6050Handler::check() {
   Wire.endTransmission(false);
   Wire.requestFrom(MPU, 6, true); // Read 6 registers total, each axis value is stored in 2 registers
   //For a range of +-2g, we need to divide the raw values by 16384, according to the datasheet
-  AccX = (Wire.read() << 8 | Wire.read()) / 16384.0; // X-axis value
-  AccY = (Wire.read() << 8 | Wire.read()) / 16384.0; // Y-axis value
-  AccZ = (Wire.read() << 8 | Wire.read()) / 16384.0; // Z-axis value
+  _acceX = (Wire.read() << 8 | Wire.read()) / 16384.0; // X-axis value
+  _acceY = (Wire.read() << 8 | Wire.read()) / 16384.0; // Y-axis value
+  _acceZ = (Wire.read() << 8 | Wire.read()) / 16384.0; // Z-axis value
   //
-  float swap = AccX; AccX = AccY; AccY = -swap;
+  float swap = _acceX; _acceX = _acceY; _acceY = -swap;
   //
   // Calculating Roll and Pitch from the accelerometer data
-  accAngleX = (atan(AccY / sqrt(pow(AccX, 2) + pow(AccZ, 2))) * 180 / PI);
-  accAngleY = (atan(-1 * AccX / sqrt(pow(AccY, 2) + pow(AccZ, 2))) * 180 / PI);
+  _accAngleX = (atan(_acceY / sqrt(pow(_acceX, 2) + pow(_acceZ, 2))) * 180 / PI);
+  _accAngleY = (atan(-1 * _acceX / sqrt(pow(_acceY, 2) + pow(_acceZ, 2))) * 180 / PI);
 
-  roll = accAngleX;
-  pitch = accAngleY;
+  roll = _accAngleX;
+  pitch = _accAngleY;
 }
 
 float MPU6050Handler::getRoll() {

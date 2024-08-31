@@ -16,6 +16,7 @@ RF24Tranceiver rf24Tranceiver(&displayHandler, &messageSerializer);
 ProgramSelector programSelector(&displayHandler, &joystickHandler);
 
 MPU6050Handler accelerometerHandler;
+// ADXL345Handler accelerometerHandler;
 
 void setup() {
   Serial.begin(57600);

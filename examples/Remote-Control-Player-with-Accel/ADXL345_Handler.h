@@ -10,8 +10,9 @@ class ADXL345Handler: public AccelerometerHandler {
     float getRoll();
     float getPitch();
   private:
-    float X_out, Y_out, Z_out;
-    float roll, pitch, rollF, pitchF=0;
+    float _accelX, _accelY, _accelZ;
+    float _accAngleX, _accAngleY;
+    float _roll=0, _pitch=0;
 };
 
 #endif
