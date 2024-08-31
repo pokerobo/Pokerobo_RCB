@@ -25,6 +25,8 @@ void setup() {
 
   rf24Tranceiver.begin(RF24_TX, address);
 
+  accelerometerHandler.begin();
+
   programSelector.add(new ProgramTransmitter("Car RC Dashboard",
       &commandResolver, &displayHandler, &rf24Tranceiver, address));
   programSelector.add(new ProgramAccelerometer("Car RC Accelerometer",
