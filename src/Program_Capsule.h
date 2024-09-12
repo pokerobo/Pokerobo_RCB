@@ -40,7 +40,7 @@ class ProgramSticker: public ProgramCapsule {
 
 class ProgramPagelet: public ProgramCapsule {
   public:
-    ProgramPagelet(char* titleTmpl,
+    ProgramPagelet(char* titleOrTemplate,
         uint16_t minIndex=0, uint16_t maxIndex=0xff, uint16_t index=1);
     bool isTypeOf(byte label);
     char* getTitle(char *buffer);

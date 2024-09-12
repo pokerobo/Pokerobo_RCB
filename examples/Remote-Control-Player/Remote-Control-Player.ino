@@ -1,7 +1,7 @@
 #include <Pokerobo_RCB.h>
 
 const uint8_t address = 1;
-const uint8_t friendAddress = 0;
+const uint8_t friendAddress = 10;
 
 JoystickHandler joystickHandler;
 MovingDisplayHandler displayHandler;

@@ -99,9 +99,9 @@ int ProgramSticker::getTitleLength() {
 
 //-------------------------------------------------------------------------------------------------
 
-ProgramPagelet::ProgramPagelet(char* titleTmpl,
+ProgramPagelet::ProgramPagelet(char* titleOrTemplate,
         uint16_t minIndex, uint16_t maxIndex, uint16_t index) {
-  _titleTemplate = titleTmpl;
+  _titleTemplate = titleOrTemplate;
   _minIndex = minIndex;
   _maxIndex = maxIndex;
   _currentIndex = index;
@@ -114,12 +114,12 @@ bool ProgramPagelet::isTypeOf(byte label) {
 }
 
 char* ProgramPagelet::getTitle(char *buffer) {
-  sprintf(buffer + strlen(buffer), _titleTemplate, _currentFocus); // "%04X"
+  sprintf(buffer + strlen(buffer), _titleTemplate, _currentFocus);
   return buffer;
 }
 
 int ProgramPagelet::getTitleLength() {
-  return strlen(_titleTemplate) + 3;
+  return strlen(_titleTemplate) + 5 - 4; // "2^16-1 = 65535" / "%04X"
 }
 
 bool ProgramPagelet::hasChanged() {
