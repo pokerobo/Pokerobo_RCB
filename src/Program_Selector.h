@@ -24,7 +24,7 @@ class ProgramSelector {
     void setDelayAmount(int amount);
     void set(DisplayHandler* displayHandler);
     void set(JoystickHandler* joystickHandler);
-    bool add(ProgramSticker* programPointer);
+    bool add(ProgramCapsule* programPointer);
     int check();
     #if __DEVMODE_PROGRAM_SELECTOR__
     void showMenu();

@@ -107,7 +107,7 @@ void ProgramSelector::changeFlow_(uint8_t flow) {
   _displayHandler->clear();
 }
 
-bool ProgramSelector::add(ProgramSticker* programPointer) {
+bool ProgramSelector::add(ProgramCapsule* programPointer) {
   return _programCollection->add(programPointer);
 }
 

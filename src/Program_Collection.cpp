@@ -19,8 +19,8 @@ bool ProgramCollection::setCurrentIndex(uint8_t j) {
   if (j == _programIndex) {
     return true;
   }
-  ProgramSticker* currentItem = getItem(_programIndex);
-  ProgramSticker* newItem = getItem(j);
+  ProgramCapsule* currentItem = getItem(_programIndex);
+  ProgramCapsule* newItem = getItem(j);
   if (currentItem != NULL) {
     currentItem->close();
   }
@@ -70,18 +70,18 @@ bool ProgramCollection::moveFocusDown() {
   return setFocusIndex(getFocusIndex() + 1);
 }
 
-ProgramSticker* ProgramCollection::getItem(uint8_t i) {
+ProgramCapsule* ProgramCollection::getItem(uint8_t i) {
   if (i >= _programPointersTotal) {
     return NULL;
   }
   return _programPointers[i];
 }
 
-ProgramSticker* ProgramCollection::getCurrentItem() {
+ProgramCapsule* ProgramCollection::getCurrentItem() {
   return getItem(getCurrentIndex());
 }
 
-bool ProgramCollection::add(ProgramSticker* programPointer) {
+bool ProgramCollection::add(ProgramCapsule* programPointer) {
   if (programPointer == NULL) {
     return false;
   }

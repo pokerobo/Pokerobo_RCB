@@ -4,6 +4,14 @@ uint8_t ProgramCapsule::getId() {
   return 0;
 }
 
+char* ProgramCapsule::getTitle() {
+  return NULL;
+}
+
+char* ProgramCapsule::getTitle(char* buffer) {
+  return buffer;
+}
+
 int ProgramCapsule::begin() {
   return 0;
 }
@@ -18,9 +26,9 @@ int ProgramCapsule::close() {
 
 //-------------------------------------------------------------------------------------------------
 
-int ProgramSticker::_maxTitleLength = 0;
+int ProgramCapsule::_maxTitleLength = 0;
 
-int ProgramSticker::getMaxTitleLength() {
+int ProgramCapsule::getMaxTitleLength() {
   return _maxTitleLength;
 }
 

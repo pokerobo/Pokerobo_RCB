@@ -18,16 +18,16 @@ class ProgramCollection {
     bool setFocusAsCurrent();
     bool moveFocusUp();
     bool moveFocusDown();
-    ProgramSticker* getItem(uint8_t i);
-    ProgramSticker* getCurrentItem();
-    bool add(ProgramSticker* programPointer);
+    ProgramCapsule* getItem(uint8_t i);
+    ProgramCapsule* getCurrentItem();
+    bool add(ProgramCapsule* programPointer);
     uint8_t getFrameBegin();
     bool setFrameBegin(uint8_t pos);
     uint8_t getFrameEnd();
     bool setFrameEnd(uint8_t pos);
     static const uint8_t frameHeight;
   private:
-    ProgramSticker* _programPointers[PROGRAM_COLLECTION_LIMIT] = {};
+    ProgramCapsule* _programPointers[PROGRAM_COLLECTION_LIMIT] = {};
     uint8_t _programPointersTotal = 0;
     uint8_t _programIndex = PROGRAM_COLLECTION_LIMIT;
     uint8_t _focusIndex = PROGRAM_COLLECTION_LIMIT;

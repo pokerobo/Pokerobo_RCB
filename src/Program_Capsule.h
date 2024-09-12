@@ -7,9 +7,13 @@ class ProgramCapsule {
   public:
     virtual uint8_t getId();
     virtual char* getTitle();
+    virtual char* getTitle(char* buffer);
     virtual int begin();
     virtual int check(void* control, void* command=NULL);
     virtual int close();
+    static int getMaxTitleLength();
+  protected:
+    static int _maxTitleLength;
 };
 
 #ifndef PROGRAM_TITLE_PARTS
@@ -22,13 +26,11 @@ class ProgramSticker: public ProgramCapsule {
     ProgramSticker(char* titles[PROGRAM_TITLE_PARTS]);
     char* getTitle();
     char* getTitle(char *buffer);
-    int getTitleLength();
-    static int getMaxTitleLength();
   private:
     void initialize(char* titles[PROGRAM_TITLE_PARTS]=NULL);
+    int getTitleLength();
     char* _title = NULL;
     char* _titles[PROGRAM_TITLE_PARTS];
-    static int _maxTitleLength;
 };
 
 #endif

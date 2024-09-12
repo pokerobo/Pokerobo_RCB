@@ -162,7 +162,7 @@ void DisplayHandler::notify(char* title, byte align) {
 }
 
 void DisplayHandler::render(ProgramCollection* programCollection) {
-  int maxTitleLength = ProgramSticker::getMaxTitleLength();
+  int maxTitleLength = ProgramCapsule::getMaxTitleLength();
   char titleBuffer[1 + maxTitleLength + 1];
   U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
   _u8g2->firstPage();
@@ -181,7 +181,7 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
     uint8_t end = programCollection->getFrameEnd();
     for(uint8_t i=begin; i<=end; i++) {
       uint16_t flags = U8G2_BTN_BW1;
-      ProgramSticker* capsule = programCollection->getItem(i);
+      ProgramCapsule* capsule = programCollection->getItem(i);
       titleBuffer[0] = (i == current) ? '>' : ' ';
       titleBuffer[1] = 0;
       char* title = capsule->getTitle(titleBuffer);
