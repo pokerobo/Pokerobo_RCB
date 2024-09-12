@@ -226,6 +226,42 @@ int ProgramReceiver::close() {
 
 //-------------------------------------------------------------------------------------------------
 
+CarCmdConsumer::CarCmdConsumer(char* title,
+    RF24Tranceiver* tranceiver, uint8_t offsetAddress): ProgramPagelet(title, 0, 0xff, offsetAddress) {
+  initialize(tranceiver, offsetAddress);
+}
+
+void CarCmdConsumer::initialize(RF24Tranceiver* tranceiver, uint8_t offsetAddress) {
+  if (offsetAddress != 0) {
+    _rf24Address = offsetAddress;
+  }
+  _rf24Tranceiver = tranceiver;
+}
+
+uint8_t CarCmdConsumer::getId() {
+  return 2;
+}
+
+int CarCmdConsumer::begin() {
+  return _rf24Tranceiver->begin(RF24_RX,
+      (_rf24Address == DEFAULT_OFFSET_ADDRESS) ? RF24_DEFAULT_ADDRESS : RF24_BASE_ADDRESS + _rf24Address);
+}
+
+int CarCmdConsumer::check(void* action, void* command) {
+  return _rf24Tranceiver->check();
+}
+
+int CarCmdConsumer::close() {
+  _rf24Tranceiver->reset(RF24_RX);
+  return 0;
+}
+
+void CarCmdConsumer::onChanged(uint16_t currentIndex, uint16_t currentFocus) {
+  _rf24Address = currentFocus;
+}
+
+//-------------------------------------------------------------------------------------------------
+
 ProgramConfigForm::ProgramConfigForm(char* title,
     ConfigDisplayHandler *displayHandler): ProgramSticker(title) {
   _displayHandler = displayHandler;

@@ -23,7 +23,7 @@ void setup() {
       &commandResolver, &displayHandler, &rf24Tranceiver, address));
   programSelector.add(new ProgramTransmitter("Car RC TX:friend",
       &commandResolver, &displayHandler, &rf24Tranceiver, friendAddress));
-  programSelector.add(new ProgramReceiver("Car RC RX:friend",
+  programSelector.add(new CarCmdConsumer("Car RC RX: %02X",
       &rf24Tranceiver, friendAddress));
   programSelector.add(new ProgramDeviceInfo("Device Information",
       &displayHandler));

@@ -18,6 +18,8 @@ class ProgramCollection {
     bool setFocusAsCurrent();
     bool moveFocusUp();
     bool moveFocusDown();
+    void decreaseItemIndex();
+    void increaseItemIndex();
     ProgramCapsule* getItem(uint8_t i);
     ProgramCapsule* getCurrentItem();
     bool add(ProgramCapsule* programPointer);

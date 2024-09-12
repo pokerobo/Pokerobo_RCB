@@ -81,6 +81,16 @@ int ProgramSelector::processDashboard_(JoystickAction* action) {
     _programCollection->setFocusAsCurrent();
     _displayHandler->render(_programCollection);
   }
+
+  if (action->isButtonClicked(MASK_LEFT_BUTTON)) {
+    _programCollection->decreaseItemIndex();
+    _displayHandler->render(_programCollection);
+  } else
+  if (action->isButtonClicked(MASK_RIGHT_BUTTON)) {
+    _programCollection->increaseItemIndex();
+    _displayHandler->render(_programCollection);
+  }
+
   return 0;
 }
 

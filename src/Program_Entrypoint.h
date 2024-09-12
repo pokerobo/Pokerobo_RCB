@@ -79,6 +79,21 @@ class ProgramReceiver: public ProgramSticker {
     RF24Tranceiver* _rf24Tranceiver;
 };
 
+class CarCmdConsumer: public ProgramPagelet {
+  public:
+    CarCmdConsumer(char* title, RF24Tranceiver* tranceiver, uint8_t offsetAddress);
+    uint8_t getId();
+    int begin();
+    int check(void* action, void* command=NULL);
+    int close();
+  protected:
+    void onChanged(uint16_t currentIndex, uint16_t currentFocus);
+    void initialize(RF24Tranceiver* tranceiver, uint8_t offsetAddress);
+  private:
+    uint8_t _rf24Address = DEFAULT_OFFSET_ADDRESS;
+    RF24Tranceiver* _rf24Tranceiver;
+};
+
 class ProgramConfigForm: public ProgramSticker {
   public:
     ProgramConfigForm(char* title, ConfigDisplayHandler *displayHandler);

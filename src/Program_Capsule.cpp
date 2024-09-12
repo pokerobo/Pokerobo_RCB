@@ -1,5 +1,9 @@
 #include "Program_Capsule.h"
 
+bool ProgramCapsule::isTypeOf(byte label) {
+  return false;
+}
+
 uint8_t ProgramCapsule::getId() {
   return 0;
 }
@@ -24,13 +28,13 @@ int ProgramCapsule::close() {
   return 0;
 }
 
-//-------------------------------------------------------------------------------------------------
-
 int ProgramCapsule::_maxTitleLength = 0;
 
 int ProgramCapsule::getMaxTitleLength() {
   return _maxTitleLength;
 }
+
+//-------------------------------------------------------------------------------------------------
 
 ProgramSticker::ProgramSticker(char* title) {
   _title = title;
@@ -51,6 +55,10 @@ void ProgramSticker::initialize(char* titles[PROGRAM_TITLE_PARTS]) {
     }
     _titles[i] = titles[i];
   }
+}
+
+bool ProgramSticker::isTypeOf(byte label) {
+  return label == PROGRAM_TYPE_1;
 }
 
 char* ProgramSticker::getTitle() {
@@ -88,3 +96,61 @@ int ProgramSticker::getTitleLength() {
   }
   return total;
 }
+
+//-------------------------------------------------------------------------------------------------
+
+ProgramPagelet::ProgramPagelet(char* titleTmpl,
+        uint16_t minIndex, uint16_t maxIndex, uint16_t index) {
+  _titleTemplate = titleTmpl;
+  _minIndex = minIndex;
+  _maxIndex = maxIndex;
+  _currentIndex = index;
+  _currentFocus = _currentIndex;
+  _maxTitleLength = max(_maxTitleLength, getTitleLength());
+}
+
+bool ProgramPagelet::isTypeOf(byte label) {
+  return label == PROGRAM_TYPE_2;
+}
+
+char* ProgramPagelet::getTitle(char *buffer) {
+  sprintf(buffer + strlen(buffer), _titleTemplate, _currentFocus); // "%04X"
+  return buffer;
+}
+
+int ProgramPagelet::getTitleLength() {
+  return strlen(_titleTemplate) + 3;
+}
+
+bool ProgramPagelet::hasChanged() {
+  return _currentFocus != _currentIndex;
+}
+
+bool ProgramPagelet::change() {
+  bool changed = _currentFocus != _currentIndex;
+  onChanged(_currentIndex, _currentFocus);
+  _currentIndex = _currentFocus;
+  return changed;
+}
+
+uint16_t ProgramPagelet::getIndex() {
+  return _currentIndex;
+}
+
+void ProgramPagelet::next() {
+  if (_currentFocus == _maxIndex) {
+    _currentFocus = _minIndex;
+  } else {
+    _currentFocus += 1;
+  }
+}
+
+void ProgramPagelet::prev() {
+  if (_currentFocus == _minIndex) {
+    _currentFocus = _maxIndex;
+  } else {
+    _currentFocus -= 1;
+  }
+}
+
+void ProgramPagelet::onChanged(uint16_t currentIndex, uint16_t currentFocus) { }
