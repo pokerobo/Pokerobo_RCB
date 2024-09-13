@@ -79,6 +79,48 @@ class ProgramReceiver: public ProgramSticker {
     RF24Tranceiver* _rf24Tranceiver;
 };
 
+class CarCmdProducer: public ProgramPagelet, public TransmissionMonitor {
+  public:
+    CarCmdProducer(char* titleOrTemplate,
+      CommandResolver* commandResolver, MessageRenderer* messageRenderer,
+      RF24Tranceiver* tranceiver, uint8_t offsetAddress): CarCmdProducer(titleOrTemplate, NULL,
+        commandResolver, messageRenderer, tranceiver, offsetAddress) {};
+    CarCmdProducer(char* titleOrTemplate,
+      CommandPacket* commandBuffer, CommandResolver* commandResolver, MessageRenderer* messageRenderer,
+      RF24Tranceiver* tranceiver, uint8_t offsetAddress);
+    #if MULTIPLE_SENDERS_SUPPORTED
+    bool add(MessageSender* messageSender);
+    #endif
+    void set(MessageSender* messageSender);
+    void set(MessageRenderer* messageRenderer);
+    void set(CommandResolver* commandResolver);
+    void set(CommandPacket* commandBuffer);
+    bool hasCommandBuffer();
+    uint8_t getId();
+    virtual int begin();
+    virtual int check(void* action, void* command=NULL);
+    virtual int close();
+  protected:
+    void onChanged(uint16_t currentIndex, uint16_t currentFocus);
+    void initialize(CommandPacket* commandBuffer,
+      CommandResolver* commandResolver, MessageRenderer* messageRenderer,
+      RF24Tranceiver* tranceiver, uint8_t offsetAddress);
+  private:
+    uint8_t _rf24Address = DEFAULT_OFFSET_ADDRESS;
+    RF24Tranceiver* _rf24Tranceiver = NULL;
+    TransmissionCounter* _counter = NULL;
+    bool _counterBuiltin = false;
+    bool _counterShared = true;
+    MessageSender* _messageSender = NULL;
+    #if MULTIPLE_SENDERS_SUPPORTED
+    MessageSender* _messageSenders[MESSAGE_EXCHANGE_MAX] = {};
+    uint8_t _messageSendersTotal = 0;
+    #endif//MULTIPLE_SENDERS_SUPPORTED
+    MessageRenderer* _messageRenderer = NULL;
+    CommandResolver* _commandResolver = NULL;
+    CommandPacket* _commandBuffer = NULL;
+};
+
 class CarCmdConsumer: public ProgramPagelet {
   public:
     CarCmdConsumer(char* title, RF24Tranceiver* tranceiver, uint8_t offsetAddress);

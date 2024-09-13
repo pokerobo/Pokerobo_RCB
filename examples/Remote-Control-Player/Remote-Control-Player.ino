@@ -1,7 +1,7 @@
 #include <Pokerobo_RCB.h>
 
 const uint8_t address = 1;
-const uint8_t friendAddress = 10;
+const uint8_t friendAddress = 0;
 
 JoystickHandler joystickHandler;
 MovingDisplayHandler displayHandler;
@@ -19,10 +19,8 @@ void setup() {
 
   rf24Tranceiver.begin(RF24_TX, address);
 
-  programSelector.add(new ProgramTransmitter("Car RC Dashboard",
+  programSelector.add(new CarCmdProducer("Car RC TX: %02X",
       &commandResolver, &displayHandler, &rf24Tranceiver, address));
-  programSelector.add(new ProgramTransmitter("Car RC TX:friend",
-      &commandResolver, &displayHandler, &rf24Tranceiver, friendAddress));
   programSelector.add(new CarCmdConsumer("Car RC RX: %02X",
       &rf24Tranceiver, friendAddress));
   programSelector.add(new ProgramDeviceInfo("Device Information",
