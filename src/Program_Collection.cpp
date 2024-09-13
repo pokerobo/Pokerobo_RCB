@@ -86,8 +86,8 @@ void ProgramCollection::decreaseItemIndex() {
   if (!capsule->isTypeOf(PROGRAM_TYPE_2)) {
     return;
   }
-  ProgramPagelet* program = (ProgramPagelet*) capsule;
-  program->prev();
+  ProgramPagelet* pointer = (ProgramPagelet*) capsule;
+  pointer->prev();
 }
 
 void ProgramCollection::increaseItemIndex() {
@@ -95,8 +95,8 @@ void ProgramCollection::increaseItemIndex() {
   if (!capsule->isTypeOf(PROGRAM_TYPE_2)) {
     return;
   }
-  ProgramPagelet* program = (ProgramPagelet*) capsule;
-  program->next();
+  ProgramPagelet* pointer = (ProgramPagelet*) capsule;
+  pointer->next();
 }
 
 ProgramCapsule* ProgramCollection::getItem(uint8_t i) {

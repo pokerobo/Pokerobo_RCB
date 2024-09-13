@@ -99,8 +99,8 @@ int ProgramSticker::getTitleLength() {
 
 //-------------------------------------------------------------------------------------------------
 
-ProgramPagelet::ProgramPagelet(char* titleOrTemplate,
-        uint16_t minIndex, uint16_t maxIndex, uint16_t index) {
+ProgramPagelet::ProgramPagelet(char* titleOrTemplate, uint16_t index,
+        uint16_t minIndex, uint16_t maxIndex) {
   _titleTemplate = titleOrTemplate;
   _minIndex = minIndex;
   _maxIndex = maxIndex;

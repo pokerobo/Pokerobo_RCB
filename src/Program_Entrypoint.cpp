@@ -226,12 +226,12 @@ int ProgramReceiver::close() {
 
 //-------------------------------------------------------------------------------------------------
 
-CarCmdProducer::CarCmdProducer(char* title,
+CarCmdProducer::CarCmdProducer(char* titleOrTemplate,
     CommandPacket* commandBuffer,
     CommandResolver* commandResolver,
     MessageRenderer* messageRenderer,
     RF24Tranceiver* tranceiver,
-    uint8_t offsetAddress): ProgramPagelet(title, 0, 0xff, offsetAddress) {
+    uint8_t offsetAddress): ProgramPagelet(titleOrTemplate, offsetAddress, 0, 0xff) {
   initialize(commandBuffer, commandResolver, messageRenderer, tranceiver, offsetAddress);
 }
 
@@ -417,7 +417,8 @@ int CarCmdProducer::close() {
 //-------------------------------------------------------------------------------------------------
 
 CarCmdConsumer::CarCmdConsumer(char* title,
-    RF24Tranceiver* tranceiver, uint8_t offsetAddress): ProgramPagelet(title, 0, 0xff, offsetAddress) {
+    RF24Tranceiver* tranceiver,
+    uint8_t offsetAddress): ProgramPagelet(title, offsetAddress, 0, 0xff) {
   initialize(tranceiver, offsetAddress);
 }
 
