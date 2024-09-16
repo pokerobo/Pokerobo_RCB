@@ -19,9 +19,9 @@ void setup() {
 
   rf24Tranceiver.begin(RF24_TX, address);
 
-  programSelector.add(new CarCmdProducer("Car RC TX: %02X",
+  programSelector.add(new CarCmdProducer("Car RC Commander: %02X",
       &commandResolver, &displayHandler, &rf24Tranceiver, address));
-  programSelector.add(new CarCmdConsumer("Car RC RX: %02X",
+  programSelector.add(new CarCmdConsumer("Car RC Subscriber: %02X",
       &rf24Tranceiver, friendAddress));
   programSelector.add(new ProgramDeviceInfo("Device Information",
       &displayHandler));
