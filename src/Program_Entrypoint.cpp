@@ -348,7 +348,9 @@ int CarCmdProducer::check(void* inputData, void* command) {
   #endif
 
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(action, commandPacket, getTransmissionCounter());
+    TransmissionProfile tmProfile;
+    tmProfile.rf24Address = _rf24Address;
+    _messageRenderer->render(action, commandPacket, getTransmissionCounter(), &tmProfile);
   }
 
   getTransmissionCounter()->adjust();

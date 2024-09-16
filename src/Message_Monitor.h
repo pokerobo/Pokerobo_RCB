@@ -23,6 +23,11 @@ typedef struct _TransmissionCounter {
     void update(uint32_t count);
 } TransmissionCounter;
 
+struct TransmissionProfile {
+  public:
+    uint8_t rf24Address = 0;
+};
+
 class TransmissionMonitor {
   public:
     bool isCounterBuiltin();

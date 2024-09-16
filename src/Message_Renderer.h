@@ -9,7 +9,8 @@ class MessageRenderer {
   public:
     virtual void clear();
     virtual void notify(char* title, byte align = 0);
-    virtual void render(JoystickAction* message, MessageInterface* commandPacket=NULL, TransmissionCounter* counter=NULL);
+    virtual void render(JoystickAction* message, MessageInterface* commandPacket=NULL,
+        TransmissionCounter* counter=NULL, TransmissionProfile* tmProfile=NULL);
 };
 
 #endif

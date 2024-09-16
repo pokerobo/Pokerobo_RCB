@@ -38,12 +38,14 @@ class DisplayHandler: public MessageRenderer {
     int begin();
     void clear();
     void notify(char* title, byte align = 0);
-    void render(JoystickAction* message, MessageInterface* commandPacket=NULL, TransmissionCounter* counter=NULL);
+    void render(JoystickAction* message, MessageInterface* commandPacket=NULL,
+        TransmissionCounter* counter=NULL, TransmissionProfile* tmProfile=NULL);
     void render(ProgramCollection* programCollection=NULL);
   protected:
     void initialize(DisplayOptions* options);
     virtual void initWire();
-    void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source, TransmissionCounter* counter);
+    void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source,
+        TransmissionCounter* counter, TransmissionProfile* tmProfile);
     void renderDirectionState_(char *title, message_source_t source, TransmissionCounter* counter, uint8_t &_directionState, uint8_t &_directionTotal);
     void renderTitle_(uint8_t lx, uint8_t ty, char* title);
     void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, char lines[][JOYSTICK_INFO_COLUMNS]);
