@@ -79,7 +79,7 @@ class ProgramReceiver: public ProgramSticker {
     RF24Tranceiver* _rf24Tranceiver;
 };
 
-class CarCmdProducer: public ProgramPagelet, public TransmissionMonitor {
+class CarCmdProducer: public ProgramPagelet, public TransmissionContext, public TransmissionMonitor {
   public:
     CarCmdProducer(char* titleOrTemplate,
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
@@ -106,7 +106,6 @@ class CarCmdProducer: public ProgramPagelet, public TransmissionMonitor {
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress);
   private:
-    uint8_t _rf24Address = DEFAULT_OFFSET_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver = NULL;
     TransmissionCounter* _counter = NULL;
     bool _counterBuiltin = false;

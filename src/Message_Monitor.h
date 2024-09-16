@@ -3,6 +3,34 @@
 
 #include "Commons.h"
 
+#ifndef RF24_BASE_ADDRESS
+#define RF24_BASE_ADDRESS             0x18580900LL
+#endif//RF24_BASE_ADDRESS
+
+#ifndef RF24_DEFAULT_ADDRESS
+#define RF24_DEFAULT_ADDRESS          0x123456789ABCDEF0LL
+#endif//RF24_DEFAULT_ADDRESS
+
+#define DEFAULT_OFFSET_ADDRESS        0
+
+struct TransmissionProfile {
+  public:
+    TransmissionProfile(uint8_t offsetAddress);
+    void setOffsetAddress(uint8_t offsetAddress);
+    uint8_t getOffsetAddress();
+    uint64_t getRF24Address();
+    uint64_t getBaseAddress();
+  private:
+    uint8_t _offsetAddress = DEFAULT_OFFSET_ADDRESS;
+};
+
+class TransmissionContext {
+  public:
+    TransmissionProfile* getTransmissionProfile();
+  private:
+    TransmissionProfile* _profile = NULL;
+};
+
 typedef struct _TransmissionCounter {
   private:
     uint32_t baselineNumber = 0;
@@ -22,11 +50,6 @@ typedef struct _TransmissionCounter {
     void confirmTransmissionFailure();
     void update(uint32_t count);
 } TransmissionCounter;
-
-struct TransmissionProfile {
-  public:
-    uint8_t rf24Address = 0;
-};
 
 class TransmissionMonitor {
   public:

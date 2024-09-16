@@ -1,5 +1,36 @@
 #include "Message_Monitor.h"
 
+TransmissionProfile::TransmissionProfile(uint8_t offsetAddress) {
+  _offsetAddress = offsetAddress;
+}
+
+void TransmissionProfile::setOffsetAddress(uint8_t offsetAddress) {
+  _offsetAddress = offsetAddress;
+}
+
+uint8_t TransmissionProfile::getOffsetAddress() {
+  return _offsetAddress;
+}
+
+uint64_t TransmissionProfile::getRF24Address() {
+  return (_offsetAddress == DEFAULT_OFFSET_ADDRESS) ? RF24_DEFAULT_ADDRESS : RF24_BASE_ADDRESS + _offsetAddress;
+}
+
+uint64_t TransmissionProfile::getBaseAddress() {
+  return (_offsetAddress == DEFAULT_OFFSET_ADDRESS) ? RF24_DEFAULT_ADDRESS - _offsetAddress : RF24_BASE_ADDRESS;
+}
+
+//-------------------------------------------------------------------------------------------------
+
+TransmissionProfile* TransmissionContext::getTransmissionProfile() {
+  if (_profile == NULL) {
+    _profile = new TransmissionProfile(DEFAULT_OFFSET_ADDRESS);
+  }
+  return _profile;
+}
+
+//-------------------------------------------------------------------------------------------------
+
 uint32_t TransmissionCounter::getBaselineNumber() {
   return baselineNumber;
 }
@@ -58,6 +89,8 @@ void TransmissionCounter::update(uint32_t count) {
   }
   this->ordinalNumber = count;
 }
+
+//-------------------------------------------------------------------------------------------------
 
 bool TransmissionMonitor::isCounterBuiltin() {
   return _counterBuiltin;

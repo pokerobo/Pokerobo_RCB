@@ -369,7 +369,7 @@ void DisplayHandler::renderDirectionState_(char *title, message_source_t source,
 
 void replaceTransmissionProfile(char* title, message_source_t source, TransmissionProfile* tmProfile) {
   if (tmProfile != NULL) {
-    uint8_t addr = tmProfile->rf24Address;
+    uint8_t addr = tmProfile->getOffsetAddress();
     char* s = title + 3;
     if (source == TX_MSG) {
       s[0] = 'T';

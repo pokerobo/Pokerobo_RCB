@@ -236,15 +236,13 @@ CarCmdProducer::CarCmdProducer(char* titleOrTemplate,
 }
 
 void CarCmdProducer::onChanged(uint16_t currentIndex, uint16_t currentFocus) {
-  _rf24Address = currentFocus;
+  getTransmissionProfile()->setOffsetAddress(currentFocus);
 }
 
 void CarCmdProducer::initialize(CommandPacket* commandBuffer,
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress) {
-  if (offsetAddress != 0) {
-    _rf24Address = offsetAddress;
-  }
+  getTransmissionProfile()->setOffsetAddress(offsetAddress);
   _rf24Tranceiver = tranceiver;
   _messageSender = tranceiver;
   _messageRenderer = messageRenderer;
@@ -348,9 +346,7 @@ int CarCmdProducer::check(void* inputData, void* command) {
   #endif
 
   if (_messageRenderer != NULL) {
-    TransmissionProfile tmProfile;
-    tmProfile.rf24Address = _rf24Address;
-    _messageRenderer->render(action, commandPacket, getTransmissionCounter(), &tmProfile);
+    _messageRenderer->render(action, commandPacket, getTransmissionCounter(), getTransmissionProfile());
   }
 
   getTransmissionCounter()->adjust();
@@ -400,8 +396,7 @@ uint8_t CarCmdProducer::getId() {
 }
 
 int CarCmdProducer::begin() {
-  return _rf24Tranceiver->begin(RF24_TX,
-      (_rf24Address == DEFAULT_OFFSET_ADDRESS) ? RF24_DEFAULT_ADDRESS : RF24_BASE_ADDRESS + _rf24Address);
+  return _rf24Tranceiver->begin(RF24_TX, getTransmissionProfile()->getRF24Address());
 }
 
 int CarCmdProducer::close() {
