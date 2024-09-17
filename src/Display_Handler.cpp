@@ -367,14 +367,15 @@ void DisplayHandler::renderDirectionState_(char *title, message_source_t source,
   }
 }
 
-void replaceTransmissionProfile(char* title, message_source_t source, TransmissionProfile* tmProfile) {
+void replaceTransmissionProfile(char* title, TransmissionProfile* tmProfile) {
   if (tmProfile != NULL) {
+    tranceiver_t mode = tmProfile->getMode();
     uint8_t addr = tmProfile->getOffsetAddress();
     char* s = title + 3;
-    if (source == TX_MSG) {
+    if (mode == RF24_TX) {
       s[0] = 'T';
     }
-    if (source == RX_MSG) {
+    if (mode == RF24_RX) {
       s[0] = 'R';
     }
     s[1] = 'X';
@@ -418,7 +419,7 @@ void DisplayHandler::renderTitle_(uint8_t lx, uint8_t ty, message_source_t sourc
     title[10] = '<';
     title[11] = '<';
   }
-  replaceTransmissionProfile(title, source, tmProfile);
+  replaceTransmissionProfile(title, tmProfile);
   renderDirectionState_(title, source, counter, _directionState, _directionTotal);
   renderTitle_(lx, ty, title);
   #else//__OPTIMIZING_DYNAMIC_MEMORY__
@@ -437,20 +438,20 @@ void DisplayHandler::renderTitle_(uint8_t lx, uint8_t ty, message_source_t sourc
     title[10] = '<';
     title[11] = '<';
   }
-  replaceTransmissionProfile(title, source, tmProfile);
+  replaceTransmissionProfile(title, tmProfile);
   renderDirectionState_(title, source, counter, _directionState, _directionTotal);
   renderTitle_(lx, ty, title);
   #endif//__OPTIMIZING_DYNAMIC_MEMORY__
   #else//__SPACE_SAVING_MODE__
   if (source == RX_MSG) {
     char title[13] = { '<', '<', ' ', 'T', 'E', 'S', 'T', 'E', 'R', ' ', '<', '<', '\0' };
-    replaceTransmissionProfile(title, source, tmProfile);
+    replaceTransmissionProfile(title, tmProfile);
     renderDirectionState_(title, source, counter, _directionState, _directionTotal);
     renderTitle_(lx, ty, title);
     return;
   }
   char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
-  replaceTransmissionProfile(title, source, tmProfile);
+  replaceTransmissionProfile(title, tmProfile);
   renderDirectionState_(title, source, counter, _directionState, _directionTotal);
   renderTitle_(lx, ty, title);
   #endif//__SPACE_SAVING_MODE__

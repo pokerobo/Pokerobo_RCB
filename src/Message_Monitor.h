@@ -13,19 +13,24 @@
 
 #define DEFAULT_OFFSET_ADDRESS        0
 
+typedef enum { RF24_TX = 0, RF24_RX } tranceiver_t;
+
 struct TransmissionProfile {
   public:
-    TransmissionProfile(uint8_t offsetAddress);
+    TransmissionProfile(tranceiver_t mode, uint8_t offsetAddress);
+    tranceiver_t getMode();
     void setOffsetAddress(uint8_t offsetAddress);
     uint8_t getOffsetAddress();
     uint64_t getRF24Address();
     uint64_t getBaseAddress();
   private:
+    tranceiver_t _mode = RF24_TX;
     uint8_t _offsetAddress = DEFAULT_OFFSET_ADDRESS;
 };
 
 class TransmissionContext {
   public:
+    void setTransmissionProfile(TransmissionProfile* profile);
     TransmissionProfile* getTransmissionProfile();
   private:
     TransmissionProfile* _profile = NULL;

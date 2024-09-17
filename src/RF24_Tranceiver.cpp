@@ -68,6 +68,19 @@ void* RF24Tranceiver::getSecondaryRadio() {
   #endif
 }
 
+int RF24Tranceiver::begin(TransmissionProfile* profile) {
+  setTransmissionProfile(profile);
+
+  if (profile != NULL && profile->getMode() == RF24_TX) {
+    return RF24Transmitter::begin(profile->getRF24Address(), getPrimaryRadio());
+  }
+  if (profile != NULL && profile->getMode() == RF24_RX) {
+    return RF24Receiver::begin(profile->getRF24Address(), getSecondaryRadio());
+  }
+
+  return -1;
+}
+
 int RF24Tranceiver::begin(tranceiver_t mode, uint64_t address) {
   if (mode == RF24_TX) {
     return RF24Transmitter::begin(address, getPrimaryRadio());

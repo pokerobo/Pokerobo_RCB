@@ -37,7 +37,6 @@
 #define MULTIPLE_RENDERERS_SUPPORTED  false
 #endif//MULTIPLE_RENDERERS_SUPPORTED
 
-typedef enum { RF24_TX = 0, RF24_RX } tranceiver_t;
 typedef enum { ACK_OK = 0, ACK_FAILED, MESSAGE_NULL, TRANSMITTER_NULL } rf24_tx_status_t;
 
 class RF24Transmitter: public MessageSender {
@@ -52,7 +51,7 @@ class RF24Transmitter: public MessageSender {
     rf24_tx_status_t _status;
 };
 
-class RF24Receiver: public MessageProcessor, public TransmissionMonitor {
+class RF24Receiver: public MessageProcessor, public TransmissionContext, public TransmissionMonitor {
   public:
     int begin(uint64_t address=RF24_DEFAULT_ADDRESS, void* radio = NULL);
     int check();
@@ -87,6 +86,7 @@ class RF24Tranceiver: public RF24Transmitter, public RF24Receiver {
     RF24Tranceiver(MessageRenderer* messageRenderer = NULL,
         MessageSerializer* _messageSerializer = NULL,
         MessageProcessor* _messageProcessor = NULL);
+    int begin(TransmissionProfile* transmissionProfile);
     int begin(tranceiver_t mode=RF24_TX, uint64_t address=RF24_DEFAULT_ADDRESS);
     void reset(tranceiver_t mode=RF24_TX);
   protected:

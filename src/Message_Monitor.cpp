@@ -1,7 +1,12 @@
 #include "Message_Monitor.h"
 
-TransmissionProfile::TransmissionProfile(uint8_t offsetAddress) {
+TransmissionProfile::TransmissionProfile(tranceiver_t mode, uint8_t offsetAddress) {
+  _mode = mode;
   _offsetAddress = offsetAddress;
+}
+
+tranceiver_t TransmissionProfile::getMode() {
+  return _mode;
 }
 
 void TransmissionProfile::setOffsetAddress(uint8_t offsetAddress) {
@@ -22,10 +27,11 @@ uint64_t TransmissionProfile::getBaseAddress() {
 
 //-------------------------------------------------------------------------------------------------
 
+void TransmissionContext::setTransmissionProfile(TransmissionProfile* profile) {
+  _profile = profile;
+}
+
 TransmissionProfile* TransmissionContext::getTransmissionProfile() {
-  if (_profile == NULL) {
-    _profile = new TransmissionProfile(DEFAULT_OFFSET_ADDRESS);
-  }
   return _profile;
 }
 

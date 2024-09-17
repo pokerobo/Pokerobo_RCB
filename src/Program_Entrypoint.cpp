@@ -242,7 +242,7 @@ void CarCmdProducer::onChanged(uint16_t currentIndex, uint16_t currentFocus) {
 void CarCmdProducer::initialize(CommandPacket* commandBuffer,
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress) {
-  getTransmissionProfile()->setOffsetAddress(offsetAddress);
+  setTransmissionProfile(new TransmissionProfile(RF24_TX, offsetAddress));
   _rf24Tranceiver = tranceiver;
   _messageSender = tranceiver;
   _messageRenderer = messageRenderer;
@@ -396,7 +396,7 @@ uint8_t CarCmdProducer::getId() {
 }
 
 int CarCmdProducer::begin() {
-  return _rf24Tranceiver->begin(RF24_TX, getTransmissionProfile()->getRF24Address());
+  return _rf24Tranceiver->begin(getTransmissionProfile());
 }
 
 int CarCmdProducer::close() {
@@ -420,7 +420,7 @@ CarCmdConsumer::CarCmdConsumer(char* title,
 }
 
 void CarCmdConsumer::initialize(RF24Tranceiver* tranceiver, uint8_t offsetAddress) {
-  getTransmissionProfile()->setOffsetAddress(offsetAddress);
+  setTransmissionProfile(new TransmissionProfile(RF24_RX, offsetAddress));
   _rf24Tranceiver = tranceiver;
 }
 
@@ -429,7 +429,7 @@ uint8_t CarCmdConsumer::getId() {
 }
 
 int CarCmdConsumer::begin() {
-  return _rf24Tranceiver->begin(RF24_RX, getTransmissionProfile()->getRF24Address());
+  return _rf24Tranceiver->begin(getTransmissionProfile());
 }
 
 int CarCmdConsumer::check(void* action, void* command) {
