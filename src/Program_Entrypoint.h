@@ -120,7 +120,7 @@ class CarCmdProducer: public ProgramPagelet, public TransmissionContext, public 
     CommandPacket* _commandBuffer = NULL;
 };
 
-class CarCmdConsumer: public ProgramPagelet {
+class CarCmdConsumer: public ProgramPagelet, public TransmissionContext {
   public:
     CarCmdConsumer(char* title, RF24Tranceiver* tranceiver, uint8_t offsetAddress);
     uint8_t getId();
@@ -131,7 +131,6 @@ class CarCmdConsumer: public ProgramPagelet {
     void onChanged(uint16_t currentIndex, uint16_t currentFocus);
     void initialize(RF24Tranceiver* tranceiver, uint8_t offsetAddress);
   private:
-    uint8_t _rf24Address = DEFAULT_OFFSET_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver;
 };
 

@@ -420,9 +420,7 @@ CarCmdConsumer::CarCmdConsumer(char* title,
 }
 
 void CarCmdConsumer::initialize(RF24Tranceiver* tranceiver, uint8_t offsetAddress) {
-  if (offsetAddress != 0) {
-    _rf24Address = offsetAddress;
-  }
+  getTransmissionProfile()->setOffsetAddress(offsetAddress);
   _rf24Tranceiver = tranceiver;
 }
 
@@ -431,8 +429,7 @@ uint8_t CarCmdConsumer::getId() {
 }
 
 int CarCmdConsumer::begin() {
-  return _rf24Tranceiver->begin(RF24_RX,
-      (_rf24Address == DEFAULT_OFFSET_ADDRESS) ? RF24_DEFAULT_ADDRESS : RF24_BASE_ADDRESS + _rf24Address);
+  return _rf24Tranceiver->begin(RF24_RX, getTransmissionProfile()->getRF24Address());
 }
 
 int CarCmdConsumer::check(void* action, void* command) {
@@ -445,7 +442,7 @@ int CarCmdConsumer::close() {
 }
 
 void CarCmdConsumer::onChanged(uint16_t currentIndex, uint16_t currentFocus) {
-  _rf24Address = currentFocus;
+  getTransmissionProfile()->setOffsetAddress(currentFocus);
 }
 
 //-------------------------------------------------------------------------------------------------
