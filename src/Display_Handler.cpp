@@ -383,8 +383,10 @@ void replaceTransmissionProfile(char* title, TransmissionProfile* tmProfile) {
     s[1] = 'X';
     s[2] = ':';
     s[3] = ' ';
-    s[4] = '0' + (addr >> 4);
-    s[5] = '0' + (addr & 0xF);
+    uint8_t d0 = (addr >> 4);
+    uint8_t d1 = (addr & 0xF);
+    s[4] = (d0 < 10) ? '0' + d0 : 'A' + (d0 - 10);
+    s[5] = (d1 < 10) ? '0' + d1 : 'A' + (d1 - 10);
   }
 }
 
@@ -424,7 +426,7 @@ void DisplayHandler::renderTitle_(uint8_t lx, uint8_t ty,
   }
   replaceTransmissionProfile(title, tmProfile);
   renderDirectionState_(title, counter, tmProfile, _directionState, _directionTotal);
-  renderTitle_(lx, ty, title);
+  renderLabel_(lx, ty, title);
   #else//__OPTIMIZING_DYNAMIC_MEMORY__
   char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
   if (mode == RF24_RX) {
@@ -443,24 +445,24 @@ void DisplayHandler::renderTitle_(uint8_t lx, uint8_t ty,
   }
   replaceTransmissionProfile(title, tmProfile);
   renderDirectionState_(title, counter, tmProfile, _directionState, _directionTotal);
-  renderTitle_(lx, ty, title);
+  renderLabel_(lx, ty, title);
   #endif//__OPTIMIZING_DYNAMIC_MEMORY__
   #else//__SPACE_SAVING_MODE__
   if (mode == RF24_RX) {
     char title[13] = { '<', '<', ' ', 'T', 'E', 'S', 'T', 'E', 'R', ' ', '<', '<', '\0' };
     replaceTransmissionProfile(title, tmProfile);
     renderDirectionState_(title, counter, tmProfile, _directionState, _directionTotal);
-    renderTitle_(lx, ty, title);
+    renderLabel_(lx, ty, title);
     return;
   }
   char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
   replaceTransmissionProfile(title, tmProfile);
   renderDirectionState_(title, counter, tmProfile, _directionState, _directionTotal);
-  renderTitle_(lx, ty, title);
+  renderLabel_(lx, ty, title);
   #endif//__SPACE_SAVING_MODE__
 }
 
-void DisplayHandler::renderTitle_(uint8_t lx, uint8_t ty, char* title) {
+void DisplayHandler::renderLabel_(uint8_t lx, uint8_t ty, char* title) {
   if (title == NULL) return;
   U8G2 *_u8g2 = (U8G2*)_u8g2Ref;
   _u8g2->setFontDirection(3);

@@ -49,7 +49,7 @@ class DisplayHandler: public MessageRenderer {
     void renderDirectionState_(char *title,
         TransmissionCounter* counter, TransmissionProfile* tmProfile,
         uint8_t &_directionState, uint8_t &_directionTotal);
-    void renderTitle_(uint8_t lx, uint8_t ty, char* title);
+    void renderLabel_(uint8_t lx, uint8_t ty, char* title);
     void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth,
         char lines[][JOYSTICK_INFO_COLUMNS]);
     void renderTransmissionCounter_(uint8_t lx, uint8_t ty,
