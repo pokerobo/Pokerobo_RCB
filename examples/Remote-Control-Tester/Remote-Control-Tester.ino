@@ -20,19 +20,14 @@ void setup() {
   joystickHandler.begin();
   displayHandler.begin();
 
-  rf24Tranceiver.begin(RF24_TX, address);
-
   programSelector.add(new ProgramTransmitter("Car RC Dashboard",
       &commandResolver, &displayHandler, &rf24Tranceiver, address));
+
   programSelector.add(new ProgramTransmitter("Car RC TX:friend",
       &commandBuffer, &commandResolver, &displayHandler, &rf24Tranceiver, friendAddress));
-
   programSelector.add(new ProgramReceiver("Car RC RX:friend",
       &rf24Tranceiver, friendAddress));
-  programSelector.add(new ProgramReceiver("Car RC RX:18580907",
-      &rf24Tranceiver, 7));
-  programSelector.add(new ProgramReceiver("Car RC RX:18580908",
-      &rf24Tranceiver, 8));
+
   programSelector.add(new ProgramDeviceInfo("Device Information",
       &displayHandler));
 

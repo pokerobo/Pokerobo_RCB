@@ -18,8 +18,6 @@ void setup() {
   joystickHandler.begin();
   displayHandler.begin();
 
-  rf24Tranceiver.begin(RF24_TX, address);
-
   const char* titleDef[PROGRAM_TITLE_PARTS] = { "Car RC ", "Dashboard", NULL, NULL };
 
   programSelector.add(new ProgramTransmitter(titleDef,

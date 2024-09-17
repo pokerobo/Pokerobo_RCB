@@ -13,7 +13,7 @@ void setup() {
 
   rf24Receiver.set(&displayHandler);
   rf24Receiver.set(&messageSerializer);
-  rf24Receiver.begin(RF24_RX, RF24_BASE_ADDRESS + address);
+  rf24Receiver.begin(new TransmissionProfile(RF24_RX, address));
 }
 
 void loop() {

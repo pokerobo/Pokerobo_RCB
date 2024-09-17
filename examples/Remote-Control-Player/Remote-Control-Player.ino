@@ -17,8 +17,6 @@ void setup() {
   joystickHandler.begin();
   displayHandler.begin();
 
-  rf24Tranceiver.begin(RF24_TX, address);
-
   programSelector.add(new CarCmdProducer("Car RC Commander: %02X",
       &commandResolver, &displayHandler, &rf24Tranceiver, address));
   programSelector.add(new CarCmdConsumer("Car RC Subscriber: %02X",

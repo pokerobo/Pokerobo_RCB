@@ -1,6 +1,6 @@
 #include <Pokerobo_RCB.h>
 
-const uint64_t address = 0x18580901LL;
+const uint8_t address = 1;
 
 JoystickAction joystickAction;
 JoystickHandler joystickHandler;
@@ -13,7 +13,7 @@ void setup() {
   joystickHandler.begin();
   displayHandler.begin();
 
-  rf24Transmitter.begin(RF24_TX, address);  
+  rf24Transmitter.begin(new TransmissionProfile(RF24_TX, address));
 }
 
 void loop() {
