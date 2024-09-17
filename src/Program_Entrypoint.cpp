@@ -15,9 +15,7 @@ ProgramTransmitter::ProgramTransmitter(char* titles[PROGRAM_TITLE_PARTS],
 void ProgramTransmitter::initialize(CommandPacket* commandBuffer,
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress) {
-  if (offsetAddress != 0) {
-    _rf24Address = offsetAddress;
-  }
+  setTransmissionProfile(new TransmissionProfile(RF24_TX, offsetAddress));
   _rf24Tranceiver = tranceiver;
   _messageSender = tranceiver;
   _messageRenderer = messageRenderer;
@@ -121,7 +119,7 @@ int ProgramTransmitter::check(void* inputData, void* command) {
   #endif
 
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(action, commandPacket, getTransmissionCounter());
+    _messageRenderer->render(action, commandPacket, getTransmissionCounter(), getTransmissionProfile());
   }
 
   getTransmissionCounter()->adjust();
@@ -171,8 +169,7 @@ uint8_t ProgramTransmitter::getId() {
 }
 
 int ProgramTransmitter::begin() {
-  return _rf24Tranceiver->begin(RF24_TX,
-      (_rf24Address == DEFAULT_OFFSET_ADDRESS) ? RF24_DEFAULT_ADDRESS : RF24_BASE_ADDRESS + _rf24Address);
+  return _rf24Tranceiver->begin(getTransmissionProfile());
 }
 
 int ProgramTransmitter::close() {
@@ -200,9 +197,7 @@ ProgramReceiver::ProgramReceiver(char* titles[PROGRAM_TITLE_PARTS],
 }
 
 void ProgramReceiver::initialize(RF24Tranceiver* tranceiver, uint8_t offsetAddress) {
-  if (offsetAddress != 0) {
-    _rf24Address = offsetAddress;
-  }
+  setTransmissionProfile(new TransmissionProfile(RF24_RX, offsetAddress));
   _rf24Tranceiver = tranceiver;
 }
 
@@ -211,8 +206,7 @@ uint8_t ProgramReceiver::getId() {
 }
 
 int ProgramReceiver::begin() {
-  return _rf24Tranceiver->begin(RF24_RX,
-      (_rf24Address == DEFAULT_OFFSET_ADDRESS) ? RF24_DEFAULT_ADDRESS : RF24_BASE_ADDRESS + _rf24Address);
+  return _rf24Tranceiver->begin(getTransmissionProfile());
 }
 
 int ProgramReceiver::check(void* action, void* command) {

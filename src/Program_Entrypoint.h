@@ -14,7 +14,7 @@
 #define MULTIPLE_SENDERS_SUPPORTED false
 #endif//MULTIPLE_SENDERS_SUPPORTED
 
-class ProgramTransmitter: public ProgramSticker, public TransmissionMonitor {
+class ProgramTransmitter: public ProgramSticker, public TransmissionContext, public TransmissionMonitor {
   public:
     ProgramTransmitter(char* title,
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
@@ -47,7 +47,6 @@ class ProgramTransmitter: public ProgramSticker, public TransmissionMonitor {
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress);
   private:
-    uint8_t _rf24Address = DEFAULT_OFFSET_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver = NULL;
     TransmissionCounter* _counter = NULL;
     bool _counterBuiltin = false;
@@ -62,7 +61,7 @@ class ProgramTransmitter: public ProgramSticker, public TransmissionMonitor {
     CommandPacket* _commandBuffer = NULL;
 };
 
-class ProgramReceiver: public ProgramSticker {
+class ProgramReceiver: public ProgramSticker, public TransmissionContext {
   public:
     ProgramReceiver(char* title,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress);
@@ -75,7 +74,6 @@ class ProgramReceiver: public ProgramSticker {
   protected:
     void initialize(RF24Tranceiver* tranceiver, uint8_t offsetAddress);
   private:
-    uint8_t _rf24Address = DEFAULT_OFFSET_ADDRESS;
     RF24Tranceiver* _rf24Tranceiver;
 };
 

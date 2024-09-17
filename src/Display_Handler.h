@@ -46,10 +46,15 @@ class DisplayHandler: public MessageRenderer {
     virtual void initWire();
     void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source,
         TransmissionCounter* counter, TransmissionProfile* tmProfile);
-    void renderDirectionState_(char *title, message_source_t source, TransmissionCounter* counter, uint8_t &_directionState, uint8_t &_directionTotal);
+    void renderDirectionState_(char *title, message_source_t source,
+        TransmissionCounter* counter, TransmissionProfile* tmProfile,
+        uint8_t &_directionState, uint8_t &_directionTotal);
     void renderTitle_(uint8_t lx, uint8_t ty, char* title);
-    void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, char lines[][JOYSTICK_INFO_COLUMNS]);
-    void renderTransmissionCounter_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth, TransmissionCounter* counter);
+    void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth,
+        char lines[][JOYSTICK_INFO_COLUMNS]);
+    void renderTransmissionCounter_(uint8_t lx, uint8_t ty,
+        uint8_t _maxCharHeight, uint8_t _maxCharWidth,
+        TransmissionCounter* counter);
     void renderJoystickAction_(uint8_t Ox, uint8_t Oy, JoystickAction* action);
     void renderJoystickPad_(uint8_t Ox, uint8_t Oy, uint8_t r, uint8_t ir, int x, int y);
     void renderJoystickPoint_(uint8_t Ox, uint8_t Oy, int x, int y);

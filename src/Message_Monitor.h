@@ -13,7 +13,7 @@
 
 #define DEFAULT_OFFSET_ADDRESS        0
 
-typedef enum { RF24_TX = 0, RF24_RX } tranceiver_t;
+typedef enum { RF24_NO=0, RF24_TX, RF24_RX } tranceiver_t;
 
 struct TransmissionProfile {
   public:

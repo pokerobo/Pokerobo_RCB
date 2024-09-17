@@ -339,13 +339,14 @@ int RF24Receiver::process(MasterContext* context, JoystickAction* action, Messag
   }
 
   if (_messageRenderer != NULL) {
-    _messageRenderer->render(action, commandPacket, _counter);
+    _messageRenderer->render(action, commandPacket, _counter, getTransmissionProfile());
   }
 
   #if MULTIPLE_RENDERERS_SUPPORTED
+  TransmissionProfile* _profile = getTransmissionProfile();
   int8_t countNulls = 0, sumFails = 0, sumOk = 0;
   for(int i=0; i<_messageRenderersTotal; i++) {
-    int8_t status = invoke(_messageRenderers[i], i+1, action, commandPacket, _counter);
+    int8_t status = invoke(_messageRenderers[i], i+1, action, commandPacket, _counter, _profile);
     if (status > 0) {
       sumOk += status;
     } else if (status < 0) {
@@ -391,10 +392,10 @@ bool RF24Receiver::add(MessageRenderer* messageRenderer) {
 
 #if MULTIPLE_RENDERERS_SUPPORTED
 byte RF24Receiver::invoke(MessageRenderer* messageRenderer, uint8_t index, JoystickAction* message,
-      MessageInterface* commandPacket, TransmissionCounter* counter) {
+      MessageInterface* commandPacket, TransmissionCounter* counter, TransmissionProfile* tmProfile) {
   if (messageRenderer != NULL) {
     uint8_t code = 1 << index;
-    bool ok = messageRenderer->render(message, commandPacket, counter);
+    bool ok = messageRenderer->render(message, commandPacket, counter, tmProfile);
     #if __DEBUG_LOG_RF24_TRANCEIVER__
     Serial.print('#'), Serial.print(message->getExtras()), Serial.print("->"), Serial.print(index), Serial.print(": ");
     if (ok) {
