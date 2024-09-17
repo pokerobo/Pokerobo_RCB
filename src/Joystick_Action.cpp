@@ -56,14 +56,6 @@ void JoystickAction::setOrigin(uint16_t x, uint16_t y) {
   _originY = y;
 }
 
-void JoystickAction::setSource(message_source_t source) {
-  _source = source;
-}
-
-message_source_t JoystickAction::getSource() {
-  return _source;
-}
-
 uint16_t JoystickAction::getPressingFlags() {
   return _pressingFlags;
 }

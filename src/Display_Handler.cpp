@@ -201,7 +201,7 @@ void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPa
   int nX = message->getCenterBasedX();
   int nY = message->getCenterBasedY();
 
-  message_source_t source = message->getSource();
+  message_source_t source = TX_MSG;
   tranceiver_t mode = (tmProfile != NULL) ? tmProfile->getMode() : RF24_NO;
 
   uint16_t buttonOffs = (mode == RF24_RX) ? 0 : JOYSTICK_DISABLED_BUTTONS;

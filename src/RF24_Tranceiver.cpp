@@ -329,8 +329,6 @@ int RF24Receiver::check() {
 }
 
 int RF24Receiver::process(MasterContext* context, JoystickAction* action, MessageInterface* commandPacket) {
-  action->setSource(RX_MSG);
-
   TransmissionCounter* _counter = getTransmissionCounter();
   _counter->update(action->getExtras());
 

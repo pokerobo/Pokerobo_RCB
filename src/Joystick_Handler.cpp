@@ -141,7 +141,6 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
     _maxY = y;
   }
 
-  action->setSource(TX_MSG);
   action->setOrigin(x, y);
 
   #if __SPACE_SAVING_MODE__
