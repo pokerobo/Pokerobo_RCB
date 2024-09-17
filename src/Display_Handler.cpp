@@ -201,7 +201,6 @@ void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPa
   int nX = message->getCenterBasedX();
   int nY = message->getCenterBasedY();
 
-  message_source_t source = TX_MSG;
   tranceiver_t mode = (tmProfile != NULL) ? tmProfile->getMode() : RF24_NO;
 
   uint16_t buttonOffs = (mode == RF24_RX) ? 0 : JOYSTICK_DISABLED_BUTTONS;
@@ -279,11 +278,11 @@ void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPa
     renderJoystickAction_(_virtualPadLx, 0, message);
     renderCommandPacket_(_speedMeterLx, 0, commandPacket);
     renderTransmissionCounter_(_statsLx, _counterTy, _maxCharHeight, _maxCharWidth, counter);
-    renderTitle_(_maxCharHeight - 2, displayHeight - 2, source, counter, tmProfile);
+    renderTitle_(_maxCharHeight - 2, displayHeight - 2, counter, tmProfile);
   } while (_u8g2->nextPage());
 }
 
-void DisplayHandler::renderDirectionState_(char *title, message_source_t source,
+void DisplayHandler::renderDirectionState_(char *title,
     TransmissionCounter* counter, TransmissionProfile* tmProfile,
     uint8_t &_directionState, uint8_t &_directionTotal) {
   _directionTotal += 1;
@@ -389,7 +388,7 @@ void replaceTransmissionProfile(char* title, TransmissionProfile* tmProfile) {
   }
 }
 
-void DisplayHandler::renderTitle_(uint8_t lx, uint8_t ty, message_source_t source,
+void DisplayHandler::renderTitle_(uint8_t lx, uint8_t ty,
     TransmissionCounter* counter, TransmissionProfile* tmProfile) {
   tranceiver_t mode = (tmProfile != NULL) ? tmProfile->getMode() : RF24_NO;
   #if __SPACE_SAVING_MODE__
@@ -424,7 +423,7 @@ void DisplayHandler::renderTitle_(uint8_t lx, uint8_t ty, message_source_t sourc
     title[11] = '<';
   }
   replaceTransmissionProfile(title, tmProfile);
-  renderDirectionState_(title, source, counter, tmProfile, _directionState, _directionTotal);
+  renderDirectionState_(title, counter, tmProfile, _directionState, _directionTotal);
   renderTitle_(lx, ty, title);
   #else//__OPTIMIZING_DYNAMIC_MEMORY__
   char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
@@ -443,20 +442,20 @@ void DisplayHandler::renderTitle_(uint8_t lx, uint8_t ty, message_source_t sourc
     title[11] = '<';
   }
   replaceTransmissionProfile(title, tmProfile);
-  renderDirectionState_(title, source, counter, tmProfile, _directionState, _directionTotal);
+  renderDirectionState_(title, counter, tmProfile, _directionState, _directionTotal);
   renderTitle_(lx, ty, title);
   #endif//__OPTIMIZING_DYNAMIC_MEMORY__
   #else//__SPACE_SAVING_MODE__
   if (mode == RF24_RX) {
     char title[13] = { '<', '<', ' ', 'T', 'E', 'S', 'T', 'E', 'R', ' ', '<', '<', '\0' };
     replaceTransmissionProfile(title, tmProfile);
-    renderDirectionState_(title, source, counter, tmProfile, _directionState, _directionTotal);
+    renderDirectionState_(title, counter, tmProfile, _directionState, _directionTotal);
     renderTitle_(lx, ty, title);
     return;
   }
   char title[13] = { '>', '>', ' ', 'P', 'L', 'A', 'Y', 'E', 'R', ' ', '>', '>', '\0' };
   replaceTransmissionProfile(title, tmProfile);
-  renderDirectionState_(title, source, counter, tmProfile, _directionState, _directionTotal);
+  renderDirectionState_(title, counter, tmProfile, _directionState, _directionTotal);
   renderTitle_(lx, ty, title);
   #endif//__SPACE_SAVING_MODE__
 }

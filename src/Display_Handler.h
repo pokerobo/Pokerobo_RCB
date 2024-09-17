@@ -44,9 +44,9 @@ class DisplayHandler: public MessageRenderer {
   protected:
     void initialize(DisplayOptions* options);
     virtual void initWire();
-    void renderTitle_(uint8_t lx, uint8_t ty, message_source_t source,
+    void renderTitle_(uint8_t lx, uint8_t ty,
         TransmissionCounter* counter, TransmissionProfile* tmProfile);
-    void renderDirectionState_(char *title, message_source_t source,
+    void renderDirectionState_(char *title,
         TransmissionCounter* counter, TransmissionProfile* tmProfile,
         uint8_t &_directionState, uint8_t &_directionTotal);
     void renderTitle_(uint8_t lx, uint8_t ty, char* title);

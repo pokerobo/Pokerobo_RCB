@@ -84,8 +84,6 @@
 #define MAX_BOUND_Y      512 + 160
 #endif//MAX_BOUND_Y
 
-typedef enum { TX_MSG = 0, RX_MSG } message_source_t;
-
 class JoystickAction: public MessageInterface {
   public:
     static const uint8_t messageSize;
