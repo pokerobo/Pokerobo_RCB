@@ -63,7 +63,7 @@
 #endif//MESSAGE_EXCHANGE_MAX
 
 class JoystickHandler {
-  static const int pinOfButtons[];
+  static int pinOfButtons[];
   #if __STRICT_MODE__
   static void verify();
   #endif

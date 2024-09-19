@@ -38,13 +38,13 @@ int ProgramCapsule::getMaxTitleLength() {
 
 ProgramSticker::ProgramSticker(char* title) {
   _title = title;
-  _maxTitleLength = max(_maxTitleLength, strlen(_title));
+  _maxTitleLength = int_max(_maxTitleLength, strlen(_title));
   initialize();
 }
 
 ProgramSticker::ProgramSticker(char* titles[PROGRAM_TITLE_PARTS]) {
   initialize(titles);
-  _maxTitleLength = max(_maxTitleLength, getTitleLength());
+  _maxTitleLength = int_max(_maxTitleLength, getTitleLength());
 }
 
 void ProgramSticker::initialize(char* titles[PROGRAM_TITLE_PARTS]) {
@@ -106,7 +106,7 @@ ProgramPagelet::ProgramPagelet(char* titleOrTemplate, uint16_t index,
   _maxIndex = maxIndex;
   _currentIndex = index;
   _currentFocus = _currentIndex;
-  _maxTitleLength = max(_maxTitleLength, getTitleLength());
+  _maxTitleLength = int_max(_maxTitleLength, getTitleLength());
 }
 
 bool ProgramPagelet::isTypeOf(byte label) {

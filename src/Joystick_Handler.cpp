@@ -28,7 +28,7 @@
 #define JOYSTICK_TOGGLE_BOUND     255
 #endif//JOYSTICK_TOGGLE_BOUND
 
-const int JoystickHandler::pinOfButtons[] = {
+int JoystickHandler::pinOfButtons[] = {
   PIN_UP_BUTTON,
   PIN_RIGHT_BUTTON,
   PIN_DOWN_BUTTON,
@@ -92,7 +92,7 @@ int JoystickHandler::begin() {
     if (!((JOYSTICK_HIGH_LEVEL_PINS >> i) & 1)) {
       continue;
     }
-    #if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+    #if __PLATFORM_TYPE__ & __PLATFORM_ESP32__
     pinMode(pinOfButtons[i], INPUT_PULLUP);
     continue;
     #endif

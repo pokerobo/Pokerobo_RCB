@@ -3,12 +3,15 @@
 
 #include <Arduino.h>
 
-#define __PLATFORM_NANO__                 1
-#define __PLATFORM_UNO__                  2
-#define __PLATFORM_xNO__                  3
-#define __PLATFORM_MEGA2560__             4
-#define __PLATFORM_ESP32__                8
-#define __PLATFORM_WEMOS_D1_R32__        16
+#define __PLATFORM_NANO__                 0b0001
+#define __PLATFORM_UNO__                  0b0010
+#define __PLATFORM_MEGA2560__             0b0100
+#define __PLATFORM_xNO__                  __PLATFORM_NANO__ | __PLATFORM_UNO__
+#define __PLATFORM_ARDUINO__              __PLATFORM_xNO__ | __PLATFORM_MEGA2560__
+
+#define __PLATFORM_DOIT_ESP32_V1__        0b100000
+#define __PLATFORM_WEMOS_D1_R32__         0b010000
+#define __PLATFORM_ESP32__                __PLATFORM_DOIT_ESP32_V1__ | __PLATFORM_WEMOS_D1_R32__
 
 #ifndef __PLATFORM_TYPE__
 #define __PLATFORM_TYPE__                 __PLATFORM_UNO__
@@ -77,18 +80,18 @@
 #define RF24_RECEIVER_DISCONTINUITY_MAX  40
 #endif
 
-//-------------------------------------------------------------------------------------------------
-
-#if __PLATFORM_TYPE__ != __PLATFORM_ESP32__
+#if __PLATFORM_TYPE__ & __PLATFORM_ARDUINO__
 #define WIRE_HAS_TIMEOUT                  1
 #endif
 
-#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+//-------------------------------------------------------------------------------------------------
+
+#if __PLATFORM_TYPE__ == __PLATFORM_DOIT_ESP32_V1__
 #define RF24_PRIMARY_PIN_CE  4
 #define RF24_PRIMARY_PIN_CSN 5
 #endif
 
-#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+#if __PLATFORM_TYPE__ == __PLATFORM_DOIT_ESP32_V1__
 #define JOYSTICK_PIN_X_AXIS   36
 #define JOYSTICK_PIN_Y_AXIS   39
 #define PIN_UP_BUTTON     27 // A
@@ -100,12 +103,12 @@
 #define PIN_ANALOG_BUTTON 32 // JOYSTICK
 #endif
 
-#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+#if __PLATFORM_TYPE__ == __PLATFORM_DOIT_ESP32_V1__
 #define JOYSTICK_HIGH_LEVEL_PINS  0b1000000
 #define JOYSTICK_DISABLED_BUTTONS 0b0111111
 #endif
 
-#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+#if __PLATFORM_TYPE__ == __PLATFORM_DOIT_ESP32_V1__
 // with Vin ~ 3V3
 #define JOYSTICK_MID_X   1920   // 2810 (5V)
 #define JOYSTICK_MID_Y   1920   // 2810 (5V)
@@ -113,15 +116,11 @@
 #define JOYSTICK_MAX_Y   4095
 #endif
 
-#if __PLATFORM_TYPE__ == __PLATFORM_ESP32__
+#if __PLATFORM_TYPE__ == __PLATFORM_DOIT_ESP32_V1__
 #define RF24_RECEIVER_DISCONTINUITY_MAX  5000
 #endif
 
 //-------------------------------------------------------------------------------------------------
-
-#if __PLATFORM_TYPE__ != __PLATFORM_WEMOS_D1_R32__
-#define WIRE_HAS_TIMEOUT                  1
-#endif
 
 #if __PLATFORM_TYPE__ == __PLATFORM_WEMOS_D1_R32__
 #define RF24_PRIMARY_PIN_CE  13
@@ -151,8 +150,6 @@
 #define RF24_PRIMARY_PIN_CSN 49
 #endif//__PLATFORM_TYPE__
 
-#endif
-
 //-------------------------------------------------------------------------------------------------
 
 #define __DEVMODE_PROGRAM_SELECTOR__            1
@@ -160,3 +157,5 @@
 #ifndef RF24_TWO_WAY_ENABLED
 #define RF24_TWO_WAY_ENABLED                    0
 #endif//RF24_TWO_WAY_ENABLED
+
+#endif
