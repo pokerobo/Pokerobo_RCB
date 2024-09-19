@@ -132,12 +132,3 @@ void ProgramSelector::set(JoystickHandler* joystickHandler) {
 void ProgramSelector::setDelayAmount(int amount) {
   _delayAmount = amount;
 }
-
-#if __DEVMODE_PROGRAM_SELECTOR__
-void ProgramSelector::showMenu() {
-  if (_displayHandler == NULL) {
-    return;
-  }
-  _displayHandler->render(_programCollection);
-}
-#endif

@@ -12,10 +12,6 @@
 #define PROGRAM_MENU_TOGGLE_BUTTON          MASK_ANALOG_BUTTON
 #endif//PROGRAM_MENU_TOGGLE_BUTTON
 
-#ifndef __DEVMODE_PROGRAM_SELECTOR__
-#define __DEVMODE_PROGRAM_SELECTOR__        0
-#endif//__DEVMODE_PROGRAM_SELECTOR__
-
 class ProgramSelector {
   public:
     ProgramSelector(DisplayHandler* displayHandler=NULL,
@@ -26,9 +22,6 @@ class ProgramSelector {
     void set(JoystickHandler* joystickHandler);
     bool add(ProgramCapsule* programPointer);
     int check();
-    #if __DEVMODE_PROGRAM_SELECTOR__
-    void showMenu();
-    #endif
   protected:
     int wait_(int state);
     int move_();
