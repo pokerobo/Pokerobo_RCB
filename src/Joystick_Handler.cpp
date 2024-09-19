@@ -38,8 +38,7 @@ int JoystickHandler::pinOfButtons[] = {
   PIN_ANALOG_BUTTON
 };
 
-#if __STRICT_MODE__
-void JoystickHandler::verify() {
+JoystickHandler::JoystickHandler() {
   pinOfButtons[BIT_UP_BUTTON] = PIN_UP_BUTTON;
   pinOfButtons[BIT_RIGHT_BUTTON] = PIN_RIGHT_BUTTON;
   pinOfButtons[BIT_DOWN_BUTTON] = PIN_DOWN_BUTTON;
@@ -48,7 +47,6 @@ void JoystickHandler::verify() {
   pinOfButtons[BIT_SELECT_BUTTON] = PIN_SELECT_BUTTON;
   pinOfButtons[BIT_ANALOG_BUTTON] = PIN_ANALOG_BUTTON;
 }
-#endif
 
 void JoystickHandler::detect() {
   uint16_t middleX[JOYSTICK_DETECTION_TOTAL] = {};
@@ -85,9 +83,6 @@ void JoystickHandler::detect() {
 }
 
 int JoystickHandler::begin() {
-  #if __STRICT_MODE__
-  verify();
-  #endif
   for(int i=0; i < TOTAL_OF_BUTTONS; i++) {
     if (!((JOYSTICK_HIGH_LEVEL_PINS >> i) & 1)) {
       continue;

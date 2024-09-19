@@ -64,10 +64,8 @@
 
 class JoystickHandler {
   static int pinOfButtons[];
-  #if __STRICT_MODE__
-  static void verify();
-  #endif
   public:
+    JoystickHandler();
     int begin();
     JoystickAction input();
     JoystickAction* input(JoystickAction* packet);
