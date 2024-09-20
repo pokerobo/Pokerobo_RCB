@@ -100,6 +100,18 @@ void DisplayHandler::initWire() {
   #endif
 }
 
+#if defined(WIRE_HAS_TIMEOUT) && WIRE_HAS_TIMEOUT_ENABLED
+void DisplayHandler::checkWireTimeout() {
+  if (Wire.getWireTimeoutFlag()) {
+    _wireTimeoutCount++;
+    Wire.clearWireTimeoutFlag();
+    Serial.print("ERR[Wire timeout detected; count:");
+    Serial.print(_wireTimeoutCount);
+    Serial.println();
+  }
+}
+#endif
+
 DisplayOptions* DisplayHandler::getOptions() {
   return _options;
 }
@@ -197,6 +209,10 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
 void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPacket,
     TransmissionCounter* counter, TransmissionProfile* tmProfile) {
   if (message == NULL) return;
+
+  #if defined(WIRE_HAS_TIMEOUT) && WIRE_HAS_TIMEOUT_ENABLED
+  checkWireTimeout();
+  #endif
 
   int nX = message->getCenterBasedX();
   int nY = message->getCenterBasedY();

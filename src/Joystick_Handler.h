@@ -77,10 +77,10 @@ class JoystickHandler {
   private:
     uint32_t _ordinalNumber = 0;
     uint16_t _clickingTrail = 0;
-    int16_t _middleX = JOYSTICK_MID_X;
-    int16_t _middleY = JOYSTICK_MID_Y;
-    int16_t _maxX = JOYSTICK_MAX_X;
-    int16_t _maxY = JOYSTICK_MAX_Y;
+    static int16_t _middleX;
+    static int16_t _middleY;
+    static int16_t _maxX;
+    static int16_t _maxY;
     bool _arrowKeysToggleTrapped = true;
     uint8_t _arrowKeysToggleTrail = 0;
 };

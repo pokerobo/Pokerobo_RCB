@@ -44,6 +44,9 @@ class DisplayHandler: public MessageRenderer {
   protected:
     void initialize(DisplayOptions* options);
     virtual void initWire();
+    #if defined(WIRE_HAS_TIMEOUT) && WIRE_HAS_TIMEOUT_ENABLED
+    void checkWireTimeout();
+    #endif
     void renderTitle_(uint8_t lx, uint8_t ty,
         TransmissionCounter* counter, TransmissionProfile* tmProfile);
     void renderDirectionState_(char *title,
@@ -78,6 +81,9 @@ class DisplayHandler: public MessageRenderer {
     uint8_t _directionState = 0;
     uint8_t _directionTotal = 0;
     lcd_joystick_point_t _joystickPointType = LCD_JOYSTICK_POINT_SQUARE;
+    #if defined(WIRE_HAS_TIMEOUT) && WIRE_HAS_TIMEOUT_ENABLED
+    uint16_t _wireTimeoutCount = 0;
+    #endif
 };
 
 #endif

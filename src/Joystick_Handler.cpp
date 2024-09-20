@@ -28,6 +28,11 @@
 #define JOYSTICK_TOGGLE_BOUND     255
 #endif//JOYSTICK_TOGGLE_BOUND
 
+int16_t JoystickHandler::_middleX = JOYSTICK_MID_X;
+int16_t JoystickHandler::_middleY = JOYSTICK_MID_Y;
+int16_t JoystickHandler::_maxX = JOYSTICK_MAX_X;
+int16_t JoystickHandler::_maxY = JOYSTICK_MAX_Y;
+
 int JoystickHandler::pinOfButtons[] = {
   PIN_UP_BUTTON,
   PIN_RIGHT_BUTTON,

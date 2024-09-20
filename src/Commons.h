@@ -68,7 +68,7 @@
 #endif//__JOYSTICK_MESSAGE_STRUCTURE__
 
 #if __PLATFORM_TYPE__ & __PLATFORM_ARDUINO__
-#define WIRE_HAS_TIMEOUT                  1
+#define WIRE_HAS_TIMEOUT_ENABLED          1
 #endif
 
 //-------------------------------------------------------------------------------------------------
@@ -155,10 +155,10 @@
 //-------------------------------------------------------------------------------------------------
 
 #if __JOYSTICK_FUNDUINO_SHIELD__
-#define JOYSTICK_MID_X   333
-#define JOYSTICK_MID_Y   333
-#define JOYSTICK_MAX_X   666
-#define JOYSTICK_MAX_Y   666
+#define JOYSTICK_MID_X   300
+#define JOYSTICK_MID_Y   300
+#define JOYSTICK_MAX_X   600
+#define JOYSTICK_MAX_Y   600
 #endif
 
 #ifndef RF24_TWO_WAY_ENABLED
