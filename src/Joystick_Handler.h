@@ -75,12 +75,12 @@ class JoystickHandler {
     uint16_t checkButtonClickingFlags(uint16_t pressingFlags);
     uint8_t checkArrowKeysToggle(uint16_t x, uint16_t y);
   private:
-    uint32_t _ordinalNumber = 0;
-    uint16_t _clickingTrail = 0;
     static int16_t _middleX;
     static int16_t _middleY;
     static int16_t _maxX;
     static int16_t _maxY;
+    uint32_t _ordinalNumber = 0;
+    uint16_t _clickingTrail = 0;
     bool _arrowKeysToggleTrapped = true;
     uint8_t _arrowKeysToggleTrail = 0;
 };
