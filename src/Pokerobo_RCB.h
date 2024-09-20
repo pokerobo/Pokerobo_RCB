@@ -4,6 +4,7 @@
 #define __POKEROBO_RC_MASTER_H__
 
 #include "Commons.h"
+#include "Configuration.h"
 #include "Display_Handler.h"
 #include "Joystick_Handler.h"
 #include "RF24_Tranceiver.h"

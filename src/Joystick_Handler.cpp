@@ -1,3 +1,4 @@
+#include "Configuration.h"
 #include "Joystick_Handler.h"
 
 #ifndef __DEBUG_LOG_JOYSTICK_HANDLER__
@@ -27,6 +28,20 @@
 #ifndef JOYSTICK_TOGGLE_BOUND
 #define JOYSTICK_TOGGLE_BOUND     255
 #endif//JOYSTICK_TOGGLE_BOUND
+
+#if POKEROBO_DYNAMIC_CONFIGURATION
+#define JOYSTICK_PIN_X_AXIS       Configuration::me->pinOfJoystickX
+#define JOYSTICK_PIN_Y_AXIS       Configuration::me->pinOfJoystickY
+#define PIN_UP_BUTTON             Configuration::me->pinOfUpButton
+#define PIN_RIGHT_BUTTON          Configuration::me->pinOfRightButton
+#define PIN_DOWN_BUTTON           Configuration::me->pinOfDownButton
+#define PIN_LEFT_BUTTON           Configuration::me->pinOfLeftButton
+#define PIN_START_BUTTON          Configuration::me->pinOfStartButton
+#define PIN_SELECT_BUTTON         Configuration::me->pinOfSelectButton
+#define PIN_ANALOG_BUTTON         Configuration::me->pinOfAnalogButton
+#define JOYSTICK_HIGH_LEVEL_PINS  Configuration::me->joystickHighLevelPins
+#define JOYSTICK_DISABLED_BUTTONS Configuration::me->joystickDisabledButtons
+#endif
 
 int16_t JoystickHandler::_middleX = JOYSTICK_MID_X;
 int16_t JoystickHandler::_middleY = JOYSTICK_MID_Y;

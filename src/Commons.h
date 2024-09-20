@@ -60,6 +60,8 @@
 
 //-------------------------------------------------------------------------------------------------
 
+#define POKEROBO_DYNAMIC_CONFIGURATION    0
+
 #define CONTROL_PACKET_V1                 1
 #define CONTROL_PACKET_V2                 2
 
@@ -161,8 +163,8 @@
 #define JOYSTICK_MAX_Y   600
 #endif
 
-#ifndef RF24_TWO_WAY_ENABLED
-#define RF24_TWO_WAY_ENABLED                    0
-#endif//RF24_TWO_WAY_ENABLED
+#ifndef RF24_DUPLEX_INTERACTION_ENABLED
+#define RF24_DUPLEX_INTERACTION_ENABLED                    0
+#endif//RF24_DUPLEX_INTERACTION_ENABLED
 
 #endif
