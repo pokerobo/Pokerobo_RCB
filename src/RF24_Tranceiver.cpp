@@ -126,8 +126,12 @@ int RF24Transmitter::begin(uint64_t address, void* radio) {
   _tranceiver->begin();
   _tranceiver->openWritingPipe(address);
   #if RF24_DUPLEX_INTERACTION_ENABLED
-  _tranceiver->openReadingPipe(1, 0xFFFFFFFFLL ^ address);
-  _tranceiver->startListening();
+  if (Configuration::me->rf24DuplexInteractionEnabled) {
+    _tranceiver->openReadingPipe(1, 0xFFFFFFFFLL ^ address);
+    _tranceiver->startListening();
+  } else {
+    _tranceiver->stopListening();
+  }
   #else
   _tranceiver->stopListening();
   #endif
@@ -157,25 +161,29 @@ bool RF24Transmitter::write(const void* buf, uint8_t len) {
   RF24* _tranceiver = (RF24*)_transmitter;
 
   #if RF24_DUPLEX_INTERACTION_ENABLED
-  #if RF24_TRANCEIVER_DELAY_BEFORE_STOP_LISTENING
-  delay(RF24_TRANCEIVER_DELAY_BEFORE_STOP_LISTENING);
-  #endif//RF24_TRANCEIVER_DELAY_BEFORE_STOP_LISTENING
-  _tranceiver->stopListening();
-  #if RF24_TRANCEIVER_DELAY_AFTER_STOP_LISTENING
-  delay(RF24_TRANCEIVER_DELAY_AFTER_STOP_LISTENING);
-  #endif//RF24_TRANCEIVER_DELAY_AFTER_STOP_LISTENING
+  if (Configuration::me->rf24DuplexInteractionEnabled) {
+    #if RF24_TRANCEIVER_DELAY_BEFORE_STOP_LISTENING
+    delay(RF24_TRANCEIVER_DELAY_BEFORE_STOP_LISTENING);
+    #endif//RF24_TRANCEIVER_DELAY_BEFORE_STOP_LISTENING
+    _tranceiver->stopListening();
+    #if RF24_TRANCEIVER_DELAY_AFTER_STOP_LISTENING
+    delay(RF24_TRANCEIVER_DELAY_AFTER_STOP_LISTENING);
+    #endif//RF24_TRANCEIVER_DELAY_AFTER_STOP_LISTENING
+  }
   #endif
 
   bool result = _tranceiver->write(buf, len);
 
   #if RF24_DUPLEX_INTERACTION_ENABLED
-  #if RF24_TRANCEIVER_DELAY_BEFORE_START_LISTENING
-  delay(RF24_TRANCEIVER_DELAY_BEFORE_START_LISTENING);
-  #endif//RF24_TRANCEIVER_DELAY_BEFORE_START_LISTENING
-  _tranceiver->startListening();
-  #if RF24_TRANCEIVER_DELAY_AFTER_START_LISTENING
-  delay(RF24_TRANCEIVER_DELAY_AFTER_START_LISTENING);
-  #endif//RF24_TRANCEIVER_DELAY_AFTER_START_LISTENING
+  if (Configuration::me->rf24DuplexInteractionEnabled) {
+    #if RF24_TRANCEIVER_DELAY_BEFORE_START_LISTENING
+    delay(RF24_TRANCEIVER_DELAY_BEFORE_START_LISTENING);
+    #endif//RF24_TRANCEIVER_DELAY_BEFORE_START_LISTENING
+    _tranceiver->startListening();
+    #if RF24_TRANCEIVER_DELAY_AFTER_START_LISTENING
+    delay(RF24_TRANCEIVER_DELAY_AFTER_START_LISTENING);
+    #endif//RF24_TRANCEIVER_DELAY_AFTER_START_LISTENING
+  }
   #endif
 
   if (!result) {
