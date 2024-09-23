@@ -138,25 +138,6 @@ bool JoystickAction::isChanged() {
 #endif
 
 char* buildJoystickActionLogStr(char* log, uint16_t buttons, uint16_t x, uint16_t y, uint32_t extras) {
-  #if __OPTIMIZING_DYNAMIC_MEMORY__
-  char fmt[12] = { 0 };
-  fmt[ 0] = '%';
-  fmt[ 1] = 'd';
-  fmt[ 2] = ',';
-  fmt[ 3] = '%';
-  fmt[ 4] = 'd';
-  fmt[ 5] = ',';
-  fmt[ 6] = '%';
-  fmt[ 7] = 'd';
-  fmt[ 8] = ',';
-  fmt[ 9] = '%';
-  fmt[10] = 'd';
-  fmt[11] = '\0';
-  #else
-  char fmt[12] = { '%', 'd', ',', '%', 'd', ',', '%', 'd', ',', '%', 'd', '\0' };
-  #endif
-
-  sprintf(log, fmt, buttons, x, y, extras);
-
+  sprintf(log, "%d,%d,%d,%d", buttons, x, y, extras);
   return log;
 }
