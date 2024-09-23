@@ -223,8 +223,12 @@ int RF24Receiver::begin(uint64_t address, void* radio) {
   RF24* _tranceiver = (RF24*)_receiver;
   _tranceiver->begin();
   #if RF24_DUPLEX_INTERACTION_ENABLED
-  _tranceiver->openWritingPipe(0xFFFFFFFFLL ^ address);
-  _tranceiver->openReadingPipe(1, address);
+  if (Configuration::me->rf24DuplexInteractionEnabled) {
+    _tranceiver->openWritingPipe(0xFFFFFFFFLL ^ address);
+    _tranceiver->openReadingPipe(1, address);
+  } else {
+    _tranceiver->openReadingPipe(0, address);
+  }
   #else
   _tranceiver->openReadingPipe(0, address);
   #endif
