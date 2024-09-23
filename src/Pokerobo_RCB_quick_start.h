@@ -1,7 +1,7 @@
-#include <Pokerobo_RCB.h>
+#ifndef __POKEROBO_RCB_QUICK_START_H__
+#define __POKEROBO_RCB_QUICK_START_H__
 
-const uint8_t address = 1; // from 1 (0x01) -> 255 (0xFF)
-const uint8_t friendAddress = 1;
+#include "Pokerobo_RCB_main_Uno.h"
 
 JoystickHandler joystickHandler;
 MovingDisplayHandler displayHandler;
@@ -11,9 +11,13 @@ MovingCommandResolver commandResolver;
 RF24Tranceiver rf24Tranceiver(&displayHandler, &messageSerializer);
 ProgramSelector programSelector(&displayHandler, &joystickHandler);
 
-void setup() {
-  Serial.begin(57600);
+class QuickStartLauncher {
+  public:
+    void begin(uint8_t address=1, uint8_t friendAddress=1);
+    void check();
+};
 
+void QuickStartLauncher::begin(uint8_t address, uint8_t friendAddress) {
   joystickHandler.begin();
   displayHandler.begin();
 
@@ -27,6 +31,8 @@ void setup() {
   programSelector.begin();
 }
 
-void loop() {
+void QuickStartLauncher::check() {
   programSelector.check();
 }
+
+#endif
