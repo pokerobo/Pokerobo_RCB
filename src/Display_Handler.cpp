@@ -399,10 +399,7 @@ void replaceTransmissionProfile(char* title, TransmissionProfile* tmProfile) {
     s[1] = 'X';
     s[2] = ':';
     s[3] = ' ';
-    uint8_t d0 = (addr >> 4);
-    uint8_t d1 = (addr & 0xF);
-    s[4] = (d0 < 10) ? '0' + d0 : 'A' + (d0 - 10);
-    s[5] = (d1 < 10) ? '0' + d1 : 'A' + (d1 - 10);
+    convertByteToHexString(addr, s + 4);
   }
 }
 

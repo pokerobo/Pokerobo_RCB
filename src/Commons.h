@@ -44,7 +44,7 @@
 #endif
 
 #define __SPACE_SAVING_MODE__             1
-#define __OPTIMIZING_DYNAMIC_MEMORY__     1
+#define __OPTIMIZING_DYNAMIC_MEMORY__     0
 
 #ifndef int_abs
 #define int_abs(x) ((x)>0?(x):-(x))
@@ -60,7 +60,7 @@
 
 //-------------------------------------------------------------------------------------------------
 
-#define POKEROBO_DYNAMIC_CONFIGURATION    0
+#define POKEROBO_DYNAMIC_CONFIGURATION    1
 
 #define CONTROL_PACKET_V1                 1
 #define CONTROL_PACKET_V2                 2
@@ -164,7 +164,7 @@
 #endif
 
 #ifndef RF24_DUPLEX_INTERACTION_ENABLED
-#define RF24_DUPLEX_INTERACTION_ENABLED                    0
+#define RF24_DUPLEX_INTERACTION_ENABLED                    1
 #endif//RF24_DUPLEX_INTERACTION_ENABLED
 
 #endif

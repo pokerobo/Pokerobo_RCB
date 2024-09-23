@@ -71,4 +71,6 @@ bool decodeMessage(uint8_t* msg, char* cmd,
     uint16_t* togglingFlags,
     uint32_t* extras);
 
+void convertByteToHexString(uint8_t addr, char* s);
+
 #endif

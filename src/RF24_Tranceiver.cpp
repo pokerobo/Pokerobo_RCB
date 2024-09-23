@@ -275,54 +275,18 @@ bool RF24Receiver::available() {
   _discontinuityCount++;
 
   if (!status && _messageRenderer != NULL) {
-    #if __OPTIMIZING_DYNAMIC_MEMORY__
-    char info[14] = { 0 };
+    TransmissionProfile* _profile = getTransmissionProfile();
     if (_tranceiver->isChipConnected()) {
       if (_discontinuityCount > RF24_RECEIVER_DISCONTINUITY_MAX) {
-        info[ 0] = 'L';
-        info[ 1] = 'i';
-        info[ 2] = 's';
-        info[ 3] = 't';
-        info[ 4] = 'e';
-        info[ 5] = 'n';
-        info[ 6] = 'n';
-        info[ 7] = 'i';
-        info[ 8] = 'n';
-        info[ 9] = 'g';
-        info[10] = '.';
-        info[11] = '.';
-        info[12] = '.';
-        info[13] = '\0';
-        _messageRenderer->notify(info, 5);
+        char info[18] = " Listening on #00";
+        convertByteToHexString(_profile->getOffsetAddress(), info + 15);
+        _messageRenderer->notify(info, 1);
       }
     } else {
-      info[ 0] = 'C';
-      info[ 1] = 'o';
-      info[ 2] = 'n';
-      info[ 3] = 'n';
-      info[ 4] = 'e';
-      info[ 5] = 'c';
-      info[ 6] = 't';
-      info[ 7] = 'i';
-      info[ 8] = 'n';
-      info[ 9] = 'g';
-      info[10] = '.';
-      info[11] = '.';
-      info[12] = '.';
-      info[13] = '\0';
-      _messageRenderer->notify(info, 5);
+      char info[18] = "Connecting to #00";
+      convertByteToHexString(_profile->getOffsetAddress(), info + 15);
+      _messageRenderer->notify(info, 1);
     }
-    #else
-    if (_tranceiver->isChipConnected()) {
-      if (_discontinuityCount > RF24_RECEIVER_DISCONTINUITY_MAX) {
-        char info[14] = { 'L', 'i', 's', 't', 'e', 'n', 'n', 'i', 'n', 'g', '.', '.', '.', '\0' };
-        _messageRenderer->notify(info, 5);
-      }
-    } else {
-      char info[14] = { 'C', 'o', 'n', 'n', 'e', 'c', 't', 'i', 'n', 'g', '.', '.', '.', '\0' };
-      _messageRenderer->notify(info, 5);
-    }
-    #endif
   }
   return status;
 }

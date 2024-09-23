@@ -282,3 +282,10 @@ bool decodeMessage(uint8_t* msg, char* cmd,
   *extras = decodeInteger(&msg[8], 4);
   return true;
 }
+
+void convertByteToHexString(uint8_t addr, char* s) {
+  uint8_t d0 = (addr >> 4);
+  uint8_t d1 = (addr & 0xF);
+  s[0] = (d0 < 10) ? '0' + d0 : 'A' + (d0 - 10);
+  s[1] = (d1 < 10) ? '0' + d1 : 'A' + (d1 - 10);
+}
