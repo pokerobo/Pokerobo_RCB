@@ -23,17 +23,17 @@ void DeviceDisplayHandler::render(DeviceManifest* manifest) {
     vendorCode = "(unknown vendor)";
   }
 
-  char deviceIdText[10 + 4 + 1] = "DeviceID: ----";
+  char deviceIdText[15] = "DeviceID: ----"; // 15 ~ 10 + 4 + 1
   if (_deviceSignature.deviceId != 0 && _deviceSignature.deviceId != 0xFFFF) {
     sprintf(deviceIdText + 10, "%04X", _deviceSignature.deviceId);
   }
 
-  char userIdText[8 + 4 + 1] = "UserID: ----";
+  char userIdText[13] = "UserID: ----"; // 13 ~ 8 + 4 + 1
   if (_userInformation.userId != 0 && _userInformation.userId != 0xFFFF) {
     sprintf(userIdText + 8, "%04X", _userInformation.userId);
   }
 
-  char usernameText[10 + 16 + 1] = "Username: ";
+  char usernameText[17] = "Username: "; // 17 ~ 10 + 16 + 1
   strcat(usernameText, _userInformation.getUserNameLength() > 0 ?
       _userInformation.getUserName() : "(unknown)");
 

@@ -164,7 +164,7 @@
 #endif
 
 #ifndef RF24_DUPLEX_INTERACTION_ENABLED
-#define RF24_DUPLEX_INTERACTION_ENABLED                    1
+#define RF24_DUPLEX_INTERACTION_ENABLED                    0
 #endif//RF24_DUPLEX_INTERACTION_ENABLED
 
 #endif
