@@ -249,6 +249,51 @@ void MovingCommandResolver::onBackward(int x, int y, int &leftSpeed, byte &leftD
 
 //-------------------------------------------------------------------------------------------------
 
+const uint8_t CtrlCarMessageSerializer::messageSize = MasterContext::messageSize +
+    JoystickAction::messageSize +
+    MovingCommandPacket::messageSize;
+
+uint8_t CtrlCarMessageSerializer::getSize() {
+  return messageSize;
+}
+
+int CtrlCarMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
+  uint8_t offset = 0;
+
+  MasterContext contextPacket;
+  if (contextPacket.deserialize(msg + offset) == NULL) {
+    return -1;
+  }
+  offset += contextPacket.length();
+  MasterContext* context = &contextPacket;
+
+  JoystickAction controlAction;
+  if (controlAction.deserialize(msg + offset) == NULL) {
+    return -1;
+  }
+  offset += controlAction.length();
+  JoystickAction* action = &controlAction;
+
+  #if __DEBUG_LOG_MESSAGE_SERIALIZER__
+  char log[32] = { 0 };
+  buildJoystickActionLogStr(log, action->getPressingFlags(), action->getX(), action->getY(), action->getExtras());
+  Serial.print("decode"), Serial.print('('), Serial.print(log), Serial.print(')'),
+      Serial.print(' '), Serial.print('-'), Serial.print('>'), Serial.print(' '), Serial.print(ok);
+  Serial.println();
+  #endif
+
+  MovingCommandPacket commandPacket;
+  MessageInterface* command = commandPacket.deserialize(msg + offset);
+
+  if (processor != NULL) {
+    return processor->process(context, action, command);
+  }
+
+  return 0;
+}
+
+//-------------------------------------------------------------------------------------------------
+
 const uint8_t MovingMessageSerializer::messageSize = strlen(MESSAGE_SIGNATURE) +
     JoystickAction::messageSize +
     MovingCommandPacket::messageSize;
@@ -283,6 +328,8 @@ int MovingMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
 
     return 0;
   }
+
+  #if __LEGACY_MESSAGE_SERIALIZER__
   uint8_t offset = 0;
 
   MasterContext contextPacket;
@@ -315,6 +362,9 @@ int MovingMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
   }
 
   return 0;
+  #else
+  return CtrlCarMessageSerializer::decode(msg, processor);
+  #endif
 }
 
 //-------------------------------------------------------------------------------------------------

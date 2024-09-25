@@ -65,7 +65,15 @@ class MovingCommandResolver: public CommandResolver {
     bool _reversed = false;
 };
 
-class MovingMessageSerializer: public MessageSerializer {
+class CtrlCarMessageSerializer: public MessageSerializer {
+  public:
+    virtual uint8_t getSize();
+    virtual int decode(uint8_t* msg, MessageProcessor *processor);
+  private:
+    static const uint8_t messageSize;
+};
+
+class MovingMessageSerializer: public CtrlCarMessageSerializer {
   public:
     uint8_t getSize();
     int decode(uint8_t* msg, MessageProcessor *processor);
