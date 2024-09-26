@@ -294,7 +294,7 @@ int CtrlCarMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) 
 
 //-------------------------------------------------------------------------------------------------
 
-const uint8_t MovingMessageSerializer::messageSize = strlen(MESSAGE_SIGNATURE) +
+const uint8_t MovingMessageSerializer::messageSize = MESSAGE_SIGNATURE_SIZE +
     JoystickAction::messageSize +
     MovingCommandPacket::messageSize;
 
@@ -305,7 +305,7 @@ uint8_t MovingMessageSerializer::getSize() {
 int MovingMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
   if (msg[0] == 'J' && msg[1] == 'S') {
     JoystickAction controlAction;
-    if (controlAction.deserialize(msg + strlen(MESSAGE_SIGNATURE)) == NULL) {
+    if (controlAction.deserialize(msg + MESSAGE_SIGNATURE_SIZE) == NULL) {
       return -1;
     }
     JoystickAction* action = &controlAction;
@@ -320,7 +320,7 @@ int MovingMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
 
     MovingCommandPacket movingCommandInstance;
     MessageInterface* commandPacket = movingCommandInstance.deserialize(
-        msg + strlen(MESSAGE_SIGNATURE) + JoystickAction::messageSize);
+        msg + MESSAGE_SIGNATURE_SIZE + JoystickAction::messageSize);
 
     if (processor != NULL) {
       return processor->process(NULL, action, commandPacket);

@@ -83,7 +83,7 @@ MessagePacket::MessagePacket(MessageInterface* context,
 }
 
 uint8_t MessagePacket::length() {
-  uint8_t len = strlen(MESSAGE_SIGNATURE); // 2 bytes header
+  uint8_t len = MESSAGE_SIGNATURE_SIZE; // 2 bytes header
   if (_context != NULL) {
     len = _context->length();
   }
@@ -97,6 +97,10 @@ uint8_t MessagePacket::length() {
 }
 
 uint8_t* MessagePacket::serialize(uint8_t* buf, uint8_t len) {
+  if (len < length()) {
+    return NULL;
+  }
+
   if (_context != NULL) {
     uint8_t offset = 0;
 
@@ -116,10 +120,6 @@ uint8_t* MessagePacket::serialize(uint8_t* buf, uint8_t len) {
     return buf;
   }
 
-  if (len < length()) {
-    return NULL;
-  }
-
   if (_control == NULL) {
     return NULL;
   }
@@ -127,10 +127,10 @@ uint8_t* MessagePacket::serialize(uint8_t* buf, uint8_t len) {
   buf[0] = _signature[0];
   buf[1] = _signature[1];
 
-  _control->serialize(buf + strlen(MESSAGE_SIGNATURE), _control->length());
+  _control->serialize(buf + MESSAGE_SIGNATURE_SIZE, _control->length());
 
   if (_command != NULL) {
-    _command->serialize(buf + strlen(MESSAGE_SIGNATURE) + _control->length(), _command->length());
+    _command->serialize(buf + MESSAGE_SIGNATURE_SIZE + _control->length(), _command->length());
   }
 
   return buf;

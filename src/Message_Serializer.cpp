@@ -1,6 +1,6 @@
 #include "Message_Serializer.h"
 
-const uint8_t JoystickMessageSerializer::messageSize = strlen(MESSAGE_SIGNATURE) +
+const uint8_t JoystickMessageSerializer::messageSize = MESSAGE_SIGNATURE_SIZE +
     JoystickAction::messageSize;
 
 uint8_t JoystickMessageSerializer::getSize() {
@@ -10,7 +10,7 @@ uint8_t JoystickMessageSerializer::getSize() {
 int JoystickMessageSerializer::decode(uint8_t* msg, MessageProcessor* processor) {
   if (msg[0] == 'J' && msg[1] == 'S') {
     JoystickAction controlAction;
-    if (controlAction.deserialize(msg + strlen(MESSAGE_SIGNATURE)) == NULL) {
+    if (controlAction.deserialize(msg + MESSAGE_SIGNATURE_SIZE) == NULL) {
       return -1;
     }
     JoystickAction* action = &controlAction;

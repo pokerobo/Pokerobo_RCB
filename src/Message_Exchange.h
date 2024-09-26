@@ -7,6 +7,8 @@
 #define MESSAGE_SIGNATURE         "JS"
 #endif//MESSAGE_SIGNATURE
 
+#define MESSAGE_SIGNATURE_SIZE    2 //strlen(MESSAGE_SIGNATURE)
+
 class MessageInterface {
   public:
     virtual uint8_t length();
