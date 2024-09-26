@@ -73,6 +73,15 @@ class CtrlCarMessageSerializer: public MessageSerializer {
     static const uint8_t messageSize;
 };
 
+#if __LEGACY_MESSAGE_SERIALIZER__
+class MovingMessageSerializer: public MessageSerializer {
+  public:
+    uint8_t getSize();
+    int decode(uint8_t* msg, MessageProcessor *processor);
+  private:
+    static const uint8_t messageSize;
+};
+#else
 class MovingMessageSerializer: public CtrlCarMessageSerializer {
   public:
     uint8_t getSize();
@@ -80,6 +89,7 @@ class MovingMessageSerializer: public CtrlCarMessageSerializer {
   private:
     static const uint8_t messageSize;
 };
+#endif
 
 class MovingDisplayHandler: public DeviceDisplayHandler {
   protected:
