@@ -125,7 +125,7 @@ int DisplayHandler::begin() {
   _u8g2->setContrast(200);
   _u8g2->begin();
 
-  _u8g2->setFont(u8g2_font_5x8_tf);
+  _u8g2->setFont(u8g2_font_5x8_tr);
 
   _maxCharHeight = _u8g2->getMaxCharHeight();
   _maxCharWidth = _u8g2->getMaxCharWidth();

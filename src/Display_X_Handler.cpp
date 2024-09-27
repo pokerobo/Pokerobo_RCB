@@ -38,17 +38,17 @@ void DeviceDisplayHandler::render(DeviceManifest* manifest) {
       _userInformation.getUserName() : "(unknown)");
 
   uint8_t _beginTextBlock = _displayHeight/2 - 12;
-  uint8_t _titleCharWidth = 6; // u8g2_font_6x13_tf
-  uint8_t _textCharWidth = 5; // u8g2_font_5x8_tf
+  uint8_t _titleCharWidth = 6; // u8g2_font_6x13_tr
+  uint8_t _textCharWidth = 5; // u8g2_font_5x8_tr
   uint8_t _paddingChars = 2;
 
   _u8g2->firstPage();
   do {
-    _u8g2->setFont(u8g2_font_6x13_tf);
+    _u8g2->setFont(u8g2_font_6x13_tr);
     _u8g2->drawStr((_displayWidth - strlen(vendorCode)*_titleCharWidth)/2,
         _beginTextBlock, vendorCode);
 
-    _u8g2->setFont(u8g2_font_5x8_tf);
+    _u8g2->setFont(u8g2_font_5x8_tr);
     _u8g2->drawStr(_displayWidth/2 - _textCharWidth*(_paddingChars + 9),
         _beginTextBlock + 1*(_charHeight + 2), deviceIdText);
     _u8g2->drawStr(_displayWidth/2 - _textCharWidth*(_paddingChars + 7),
