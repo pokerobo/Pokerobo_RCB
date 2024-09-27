@@ -53,6 +53,7 @@ class DisplayHandler: public MessageRenderer {
         TransmissionCounter* counter, TransmissionProfile* tmProfile,
         uint8_t &_directionState, uint8_t &_directionTotal);
     void renderLabel_(uint8_t lx, uint8_t ty, char* title);
+    void renderSignalStreams_(char *title, uint8_t head, char arrow, uint8_t state);
     void renderCoordinates_(uint8_t lx, uint8_t ty, uint8_t _maxCharHeight, uint8_t _maxCharWidth,
         char lines[][JOYSTICK_INFO_COLUMNS]);
     void renderTransmissionCounter_(uint8_t lx, uint8_t ty,

@@ -75,6 +75,8 @@
 #define WIRE_HAS_TIMEOUT_ENABLED          1
 #endif
 
+#define SCREEN_LEGACY_SIGNAL_STREAMS      0
+
 //-------------------------------------------------------------------------------------------------
 
 #if __PLATFORM_TYPE__ & __PLATFORM_NANO__

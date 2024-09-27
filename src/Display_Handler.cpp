@@ -298,6 +298,12 @@ void DisplayHandler::render(JoystickAction* message, MessageInterface* commandPa
   } while (_u8g2->nextPage());
 }
 
+void DisplayHandler::renderSignalStreams_(char *title, uint8_t head, char arrow, uint8_t state) {
+  title[head  ] = state == 0 || state == 1 ? arrow : ' ';
+  title[head+1] = state == 1 || state == 2 ? arrow : ' ';
+  title[head+2] = state == 2 || state == 3 ? arrow : ' ';
+}
+
 void DisplayHandler::renderDirectionState_(char *title,
     TransmissionCounter* counter, TransmissionProfile* tmProfile,
     uint8_t &_directionState, uint8_t &_directionTotal) {
@@ -314,6 +320,7 @@ void DisplayHandler::renderDirectionState_(char *title,
   uint8_t state = (mode == RF24_TX) ? _directionState : (4 - _directionState);
   char arrow = (mode == RF24_TX) ? '>' : '<';
 
+  #if SCREEN_LEGACY_SIGNAL_STREAMS
   if (mode == RF24_TX) {
     if (counter != NULL && counter->getContinualLossCount() > 9) {
       switch (state) {
@@ -383,6 +390,29 @@ void DisplayHandler::renderDirectionState_(char *title,
       title[11] = ' ';
       break;
   }
+  #elif SCREEN_METHOD_SIGNAL_STREAMS
+  renderSignalStreams_(title, 0, arrow, state);
+  renderSignalStreams_(title, 9, arrow, (state + 2) % 5);
+  #else
+  if (mode == RF24_TX) {
+    if (counter != NULL && counter->getContinualLossCount() > 9) {
+      title[ 0] = state == 0 || state == 1 ? ' ' : arrow;
+      title[ 1] = state == 0 || state == 1 ? ' ' : arrow;
+      title[ 2] = ' ';
+      title[ 9] = ' ';
+      title[10] = state == 0 || state == 1 ? ' ' : arrow;
+      title[11] = state == 0 || state == 1 ? ' ' : '|';
+      return;
+    }
+  }
+
+  title[ 0] = state == 0 || state == 1 ? arrow : ' ';
+  title[ 1] = state == 1 || state == 2 ? arrow : ' ';
+  title[ 2] = state == 2 || state == 3 ? arrow : ' ';
+  title[ 9] = state == 3 || state == 4 ? arrow : ' ';
+  title[10] = state == 4 || state == 0 ? arrow : ' ';
+  title[11] = state == 0 || state == 1 ? arrow : ' ';
+  #endif//SCREEN_LEGACY_SIGNAL_STREAMS
 }
 
 void replaceTransmissionProfile(char* title, TransmissionProfile* tmProfile) {
