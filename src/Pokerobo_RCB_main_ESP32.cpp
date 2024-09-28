@@ -2,7 +2,6 @@
 #include "Configuration.h"
 
 #if defined(ARDUINO_ARCH_ESP32)
-
 Configuration doitESP32Conf(
   36,         //JOYSTICK_PIN_X_AXIS
   39,         //JOYSTICK_PIN_Y_AXIS
@@ -21,5 +20,4 @@ Configuration doitESP32Conf(
   false,      //RF24_TWO_WAY_ENABLED
   true
 );
-
 #endif//ARDUINO_ARCH_ESP32

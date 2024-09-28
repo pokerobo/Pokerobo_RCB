@@ -30,8 +30,6 @@ class MasterContext: public MessageInterface {
     uint8_t* serialize(uint8_t* buf, uint8_t len);
     MessageInterface* deserialize(uint8_t* buf);
   private:
-    int _errorCode = 0;
-    bool _debugEnabled = true;
     uint8_t _applicationId = 0;
     bool _contextCheckBit = 0;
     bool _programCheckBit = 0;

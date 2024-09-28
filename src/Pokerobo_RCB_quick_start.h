@@ -1,7 +1,7 @@
 #ifndef __POKEROBO_RCB_QUICK_START_H__
 #define __POKEROBO_RCB_QUICK_START_H__
 
-#include "Pokerobo_RCB_main_Uno.h"
+#include "Pokerobo_RCB.h"
 
 JoystickHandler joystickHandler;
 MovingDisplayHandler displayHandler;
