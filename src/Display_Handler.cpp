@@ -192,14 +192,10 @@ void DisplayHandler::render(ProgramCollection* programCollection) {
     uint8_t begin = programCollection->getFrameBegin();
     uint8_t end = programCollection->getFrameEnd();
     for(uint8_t i=begin; i<=end; i++) {
-      uint16_t flags = U8G2_BTN_BW1;
-      ProgramCapsule* capsule = programCollection->getItem(i);
       titleBuffer[0] = (i == current) ? '>' : ' ';
       titleBuffer[1] = 0;
-      char* title = capsule->getTitle(titleBuffer);
-      if (i == focus) {
-        flags |= U8G2_BTN_INV;
-      }
+      char* title = programCollection->getItem(i)->getTitle(titleBuffer);
+      uint16_t flags = (i == focus) ? U8G2_BTN_BW1|U8G2_BTN_INV : U8G2_BTN_BW1;
       _u8g2->drawButtonUTF8(1, 1 + (i-begin+2) * (_maxCharHeight + 2), flags, 126,  0,  1, title);
     }
     #endif//__DEVMODE_DISPLAY_HANDLER__
