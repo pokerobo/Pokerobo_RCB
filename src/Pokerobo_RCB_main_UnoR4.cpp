@@ -1,8 +1,9 @@
 #include <Arduino.h>
 #include "Configuration.h"
 
+// The ARDUINO_UNOR4_MINIMA and ARDUINO_UNOR4_WIFI are defined in boards.txt
+//  https://github.com/arduino/ArduinoCore-renesas/blob/main/boards.txt
 #if defined(ARDUINO_UNOR4_WIFI)
-
 Configuration arduinoUnoR4Conf(
   A0,         //JOYSTICK_PIN_X_AXIS(A0)
   A1,         //JOYSTICK_PIN_Y_AXIS(A1)
@@ -21,5 +22,4 @@ Configuration arduinoUnoR4Conf(
   false,      //RF24_DUPLEX_INTERACTION_ENABLED
   true
 );
-
 #endif//ARDUINO_UNOR4_WIFI
