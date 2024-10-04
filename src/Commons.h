@@ -61,6 +61,7 @@
 //-------------------------------------------------------------------------------------------------
 
 #define POKEROBO_DYNAMIC_CONFIGURATION    1
+#define POKEROBO_WITH_EXECUTION_TIMER     0
 
 #define CONTROL_PACKET_V1                 1
 #define CONTROL_PACKET_V2                 2
