@@ -4,6 +4,7 @@ const int ADXL345 = 0x53; // The ADXL345 sensor I2C address
 
 void ADXL345Handler::begin() {
   Wire.begin(); // Initiate the Wire library
+
   // Set ADXL345 in measuring mode
   Wire.beginTransmission(ADXL345); // Start communicating with the device
   Wire.write(0x2D); // Access/ talk to POWER_CTL Register - 0x2D
@@ -41,10 +42,12 @@ void ADXL345Handler::check() {
   Wire.requestFrom(ADXL345, 6, true); // Read 6 registers total, each axis value is stored in 2 registers
 
   _accelX = ( Wire.read() | Wire.read() << 8); // X-axis value
-  _accelX = _accelX / 256; //For a range of +-2g, we need to divide the raw values by 256, according to the datasheet
   _accelY = ( Wire.read() | Wire.read() << 8); // Y-axis value
-  _accelY = _accelY / 256;
   _accelZ = ( Wire.read() | Wire.read() << 8); // Z-axis value
+
+  //For a range of +-2g, we need to divide the raw values by 256, according to the datasheet
+  _accelX = _accelX / 256;
+  _accelY = _accelY / 256;
   _accelZ = _accelZ / 256;
 
   // Calculate Roll and Pitch (rotation around X-axis, rotation around Y-axis)

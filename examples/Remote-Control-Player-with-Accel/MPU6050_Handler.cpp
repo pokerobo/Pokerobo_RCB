@@ -27,11 +27,11 @@ void MPU6050Handler::check() {
   _acceY = (Wire.read() << 8 | Wire.read()) / 16384.0; // Y-axis value
   _acceZ = (Wire.read() << 8 | Wire.read()) / 16384.0; // Z-axis value
   //
-  float swap = _acceX; _acceX = _acceY; _acceY = -swap;
+  float acceX_ = _acceY, acceY_ = -_acceX, acceZ_ = _acceZ;
   //
   // Calculating Roll and Pitch from the accelerometer data
-  _accAngleX = (atan(_acceY / sqrt(pow(_acceX, 2) + pow(_acceZ, 2))) * 180 / PI);
-  _accAngleY = (atan(-1 * _acceX / sqrt(pow(_acceY, 2) + pow(_acceZ, 2))) * 180 / PI);
+  _accAngleX = (atan(acceY_ / sqrt(pow(acceX_, 2) + pow(acceZ_, 2))) * 180 / PI);
+  _accAngleY = (atan(-1 * acceX_ / sqrt(pow(acceY_, 2) + pow(acceZ_, 2))) * 180 / PI);
 
   roll = _accAngleX;
   pitch = _accAngleY;
