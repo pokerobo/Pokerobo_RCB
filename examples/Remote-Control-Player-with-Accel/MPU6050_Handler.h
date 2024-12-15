@@ -12,7 +12,7 @@ class MPU6050Handler: public AccelerometerHandler {
   private:
     float _acceX, _acceY, _acceZ;
     float _accAngleX, _accAngleY;
-    float roll, pitch;
+    float roll = 0, pitch = 0;
 };
 
 #endif

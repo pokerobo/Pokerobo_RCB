@@ -4,12 +4,12 @@
 #include <Pokerobo_RCB.h>
 #include "Accelerometer_Handler.h"
 
-class ProgramAccelerometer: public ProgramTransmitter {
+class ProgramAccelerometer: public CarCmdProducer {
   public:
-    ProgramAccelerometer(char* title,
+    ProgramAccelerometer(char* titleOrTemplate,
       CommandResolver* commandResolver, MessageRenderer* messageRenderer,
       RF24Tranceiver* tranceiver, uint8_t offsetAddress,
-      AccelerometerHandler* handler): ProgramTransmitter(title,
+      AccelerometerHandler* handler): CarCmdProducer(titleOrTemplate,
         commandResolver, messageRenderer, tranceiver, offsetAddress) {
           this->_accelerometerHandler = handler;
         };

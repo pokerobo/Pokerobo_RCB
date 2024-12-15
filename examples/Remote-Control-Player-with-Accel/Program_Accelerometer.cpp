@@ -49,7 +49,7 @@ int ProgramAccelerometer::check(void* action_, void* command=NULL) {
   JoystickAction* action = (JoystickAction*) action_;
   action->update(x, y);
 
-  return ProgramTransmitter::check(action_, command);
+  return CarCmdProducer::check(action_, command);
 }
 
 ProgramAccelerometer* ProgramAccelerometer::setAccelerometerHandler(AccelerometerHandler* handler) {

@@ -28,11 +28,11 @@ void setup() {
 
   accelerometerHandler.begin();
 
-  programSelector.add(new ProgramTransmitter("Car RC Dashboard",
-      &commandResolver, &displayHandler, &rf24Tranceiver, address));
-  programSelector.add(new ProgramAccelerometer("Car RC Accelerometer",
+  programSelector.add(new ProgramAccelerometer("MPU6050 Commander: %02X",
       &commandResolver, &displayHandler, &rf24Tranceiver, address,
       &accelerometerHandler));
+  programSelector.add(new CarCmdConsumer("Car RC Subscriber: %02X",
+      &rf24Tranceiver, friendAddress));
 
   programSelector.begin();
 }
