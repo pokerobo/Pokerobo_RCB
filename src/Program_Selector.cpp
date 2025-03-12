@@ -67,29 +67,42 @@ int ProgramSelector::enterDashboard_(JoystickAction* action) {
 }
 
 int ProgramSelector::processDashboard_(JoystickAction* action) {
+  bool _refreshed = false;
+
   uint8_t toggle = action->getTogglingFlags() >> 12;
   if (toggle & 0b0001) { // LEFT -> BACK
     changeFlow_(SCREEN_FLOW_APPLICATION);
-  } else
+    return 0;
+  }
+
   if (toggle & 0b0010) { // UP -> PREV
     _programCollection->moveFocusUp();
-    _displayHandler->render(_programCollection);
+    _refreshed = true;
   } else
   if (toggle & 0b0100) { // DOWN -> NEXT
     _programCollection->moveFocusDown();
-    _displayHandler->render(_programCollection);
+    _refreshed = true;
   } else
   if (toggle & 0b1000) { // RIGHT -> SELECT
     _programCollection->setFocusAsCurrent();
-    _displayHandler->render(_programCollection);
+    _refreshed = true;
   }
 
   if (action->isButtonClicked(MASK_LEFT_BUTTON)) {
     _programCollection->decreaseItemIndex();
-    _displayHandler->render(_programCollection);
+    _refreshed = true;
   } else
   if (action->isButtonClicked(MASK_RIGHT_BUTTON)) {
     _programCollection->increaseItemIndex();
+    _refreshed = true;
+  }
+
+  if (_refreshed) {
+    _displayHandler->render(_programCollection);
+  }
+
+  if (_blank) {
+    _blank = false;
     _displayHandler->render(_programCollection);
   }
 

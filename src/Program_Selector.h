@@ -39,6 +39,7 @@ class ProgramSelector {
     ProgramCollection* _programCollection = NULL;
     DisplayHandler* _displayHandler = NULL;
     JoystickHandler* _joystickHandler = NULL;
+    bool _blank = true;
 };
 
 #endif
