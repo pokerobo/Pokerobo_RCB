@@ -7,10 +7,12 @@
 ProgramCollection programCollection;
 
 ProgramSelector::ProgramSelector(DisplayHandler* displayHandler,
-    JoystickHandler* joystickHandler) {
+    JoystickHandler* joystickHandler,
+    uint8_t initialMode) {
   _displayHandler = displayHandler;
   _joystickHandler = joystickHandler;
   _programCollection = &programCollection;
+  _flow = initialMode;
 }
 
 int ProgramSelector::begin() {

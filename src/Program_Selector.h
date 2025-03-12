@@ -15,7 +15,8 @@
 class ProgramSelector {
   public:
     ProgramSelector(DisplayHandler* displayHandler=NULL,
-        JoystickHandler* joystickHandler=NULL);
+        JoystickHandler* joystickHandler=NULL,
+        uint8_t initialMode = SCREEN_FLOW_APPLICATION);
     int begin();
     void setDelayAmount(int amount);
     void set(DisplayHandler* displayHandler);

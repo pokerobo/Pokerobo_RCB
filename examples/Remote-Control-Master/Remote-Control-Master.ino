@@ -10,7 +10,7 @@ MovingCommandResolver commandResolver(true);
 MovingCommandPacket commandBuffer;
 
 RF24Tranceiver rf24Tranceiver(&displayHandler, &messageSerializer);
-ProgramSelector programSelector(&displayHandler, &joystickHandler);
+ProgramSelector programSelector(&displayHandler, &joystickHandler, SCREEN_FLOW_CONFIGURATION);
 
 void setup() {
   Serial.begin(57600);
