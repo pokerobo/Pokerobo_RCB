@@ -97,13 +97,12 @@ int ProgramSelector::processDashboard_(JoystickAction* action) {
     _refreshed = true;
   }
 
-  if (_refreshed) {
+  if (_refreshed || _blank) {
     _displayHandler->render(_programCollection);
   }
 
   if (_blank) {
     _blank = false;
-    _displayHandler->render(_programCollection);
   }
 
   return 0;
