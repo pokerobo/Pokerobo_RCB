@@ -41,6 +41,11 @@
 #define MASK_SELECT_BUTTON 1U << BIT_SELECT_BUTTON
 #define MASK_ANALOG_BUTTON 1U << BIT_ANALOG_BUTTON
 
+#define MASK_THUMB_ON_LEFT    1U << 12
+#define MASK_THUMB_ON_RIGHT   1U << 15
+#define MASK_THUMB_ON_UP      1U << 13
+#define MASK_THUMB_ON_DOWN    1U << 14
+
 #define POS_UP_BUTTON         2
 #define POS_RIGHT_BUTTON      4
 #define POS_DOWN_BUTTON       3

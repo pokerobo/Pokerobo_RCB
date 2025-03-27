@@ -177,8 +177,10 @@ JoystickAction* JoystickHandler::input(JoystickAction* action) {
 
   uint16_t togglingFlags = checkButtonClickingFlags(pressingFlags);
 
-  uint16_t joystickTogglingFlags = checkArrowKeysToggle(x, y);
+  uint16_t joystickPressingFlags = checkArrowKeysPress(x, y);
+  uint16_t joystickTogglingFlags = checkArrowKeysToggle(joystickPressingFlags);
   togglingFlags |= (joystickTogglingFlags << 12);
+  pressingFlags |= (joystickPressingFlags << 12);
 
   #if __DEBUG_LOG_JOYSTICK_HANDLER__
   buildJoystickActionLogStr(log, pressingFlags, x, y, _ordinalNumber);
@@ -200,6 +202,10 @@ uint16_t adjustAxis(uint16_t z, uint16_t _middleZ, uint16_t _maxZ) {
 }
 
 uint8_t JoystickHandler::checkArrowKeysToggle(uint16_t x, uint16_t y) {
+  return checkArrowKeysToggle(checkArrowKeysPress(x, y));
+}
+
+uint8_t JoystickHandler::checkArrowKeysPress(uint16_t x, uint16_t y) {
   uint8_t pressed = 0;
   if (x < _middleX - JOYSTICK_TOGGLE_BOUND) {
     pressed |= 0b0001; // LEFT
@@ -211,7 +217,10 @@ uint8_t JoystickHandler::checkArrowKeysToggle(uint16_t x, uint16_t y) {
   } else if (y > _middleX + JOYSTICK_TOGGLE_BOUND) {
     pressed |= 0b0010; // UP
   }
+  return pressed;
+}
 
+uint8_t JoystickHandler::checkArrowKeysToggle(uint8_t pressed) {
   uint8_t clicked = pressed;
   for (int i = 0; i < 4; i++) {
     uint8_t mask = 1U << i;

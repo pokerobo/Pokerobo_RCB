@@ -73,6 +73,8 @@ class JoystickHandler {
     void detect();
     uint16_t readButtonStates();
     uint16_t checkButtonClickingFlags(uint16_t pressingFlags);
+    uint8_t checkArrowKeysPress(uint16_t x, uint16_t y);
+    uint8_t checkArrowKeysToggle(uint8_t pressingFlags);
     uint8_t checkArrowKeysToggle(uint16_t x, uint16_t y);
   private:
     static int16_t _middleX;
