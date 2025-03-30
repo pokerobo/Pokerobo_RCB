@@ -48,24 +48,9 @@ int16_t JoystickHandler::_middleY = JOYSTICK_MID_Y;
 int16_t JoystickHandler::_maxX = JOYSTICK_MAX_X;
 int16_t JoystickHandler::_maxY = JOYSTICK_MAX_Y;
 
-int JoystickHandler::pinOfButtons[] = {
-  PIN_UP_BUTTON,
-  PIN_RIGHT_BUTTON,
-  PIN_DOWN_BUTTON,
-  PIN_LEFT_BUTTON,
-  PIN_START_BUTTON,
-  PIN_SELECT_BUTTON,
-  PIN_ANALOG_BUTTON
-};
+int JoystickHandler::pinOfButtons[TOTAL_OF_BUTTONS] = { 0 };
 
 JoystickHandler::JoystickHandler() {
-  pinOfButtons[BIT_UP_BUTTON] = PIN_UP_BUTTON;
-  pinOfButtons[BIT_RIGHT_BUTTON] = PIN_RIGHT_BUTTON;
-  pinOfButtons[BIT_DOWN_BUTTON] = PIN_DOWN_BUTTON;
-  pinOfButtons[BIT_LEFT_BUTTON] = PIN_LEFT_BUTTON;
-  pinOfButtons[BIT_START_BUTTON] = PIN_START_BUTTON;
-  pinOfButtons[BIT_SELECT_BUTTON] = PIN_SELECT_BUTTON;
-  pinOfButtons[BIT_ANALOG_BUTTON] = PIN_ANALOG_BUTTON;
 }
 
 void JoystickHandler::detect() {
@@ -103,6 +88,14 @@ void JoystickHandler::detect() {
 }
 
 int JoystickHandler::begin() {
+  pinOfButtons[BIT_UP_BUTTON] = PIN_UP_BUTTON;
+  pinOfButtons[BIT_RIGHT_BUTTON] = PIN_RIGHT_BUTTON;
+  pinOfButtons[BIT_DOWN_BUTTON] = PIN_DOWN_BUTTON;
+  pinOfButtons[BIT_LEFT_BUTTON] = PIN_LEFT_BUTTON;
+  pinOfButtons[BIT_START_BUTTON] = PIN_START_BUTTON;
+  pinOfButtons[BIT_SELECT_BUTTON] = PIN_SELECT_BUTTON;
+  pinOfButtons[BIT_ANALOG_BUTTON] = PIN_ANALOG_BUTTON;
+
   for(int i=0; i < TOTAL_OF_BUTTONS; i++) {
     if (!((JOYSTICK_HIGH_LEVEL_PINS >> i) & 1)) {
       continue;
